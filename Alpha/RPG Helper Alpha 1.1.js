@@ -151,7 +151,7 @@ var RPGHelper = function () {
 		ColorOut: function (Sec, Delay, Color) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
-				Style.innerHTML = "@keyframes BlackOut {0% {" + Color + "} 100% {BackGround: Transparent;}}";
+				Style.innerHTML = "@keyframes BlackOut {0% {BackGround: " + Color + ";} 100% {BackGround: Transparent;}}";
 				
 				document.head.appendChild(Style);
 				
