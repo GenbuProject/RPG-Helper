@@ -120,7 +120,7 @@ var RPGHelper = function () {
 				
 			if (WillDelete) {
 				setTimeout(function () {
-					this.Canvas.removeChild(Effecter);
+					Effecter.parentElement.removeChild(Effecter);
 					document.head.removeChild(Style);
 				}, Sec * 1000);
 			}
