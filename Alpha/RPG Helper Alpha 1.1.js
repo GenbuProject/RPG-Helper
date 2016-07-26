@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.1
+ *#RPG Helper Alpha 1.1 [Last Updated: 2016/07/26]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -104,7 +104,7 @@ var RPGHelper = function () {
 	this.Effect = {
 		Canvas: this.Canvas,
 		
-		BlackOut: function (Sec, Delay, WillDelete) {
+		BlackOut: function (Sec, Delay) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
 				Style.innerHTML = "@keyframes BlackOut {0% {BackGround: Transparent;} 100% {BackGround: Black;}}";
@@ -118,12 +118,54 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(Effecter);
 				
-			if (WillDelete) {
-				setTimeout(function () {
-					Effecter.parentElement.removeChild(Effecter);
-					document.head.removeChild(Style);
-				}, Sec * 1000);
-			}
+			setTimeout(function () {
+				Effecter.parentElement.removeChild(Effecter);
+				document.head.removeChild(Style);
+			}, (Sec + Delay) * 1000);
+			
+			return Effecter;
+		},
+		
+		WhiteOut: function (Sec, Delay) {
+			var Style = document.createElement("Style");
+				Style.id = "RPGHelper-Effect";
+				Style.innerHTML = "@keyframes WhiteOut {0% {BackGround: Transparent;} 100% {BackGround: White;}}";
+				
+				document.head.appendChild(Style);
+				
+			var Effecter = document.createElement("Canvas");
+				Effecter.style.width = this.Canvas.style.width;
+				Effecter.style.height = this.Canvas.style.height;
+				Effecter.style.animation = "WhiteOut " + Sec + "s Ease " + Delay + "s 1 Normal";
+				
+				this.Canvas.appendChild(Effecter);
+				
+			setTimeout(function () {
+				Effecter.parentElement.removeChild(Effecter);
+				document.head.removeChild(Style);
+			}, (Sec + Delay) * 1000);
+			
+			return Effecter;
+		},
+		
+		ColorOut: function (Sec, Delay, Color) {
+			var Style = document.createElement("Style");
+				Style.id = "RPGHelper-Effect";
+				Style.innerHTML = "@keyframes BlackOut {0% {" + Color + "} 100% {BackGround: Transparent;}}";
+				
+				document.head.appendChild(Style);
+				
+			var Effecter = document.createElement("Canvas");
+				Effecter.style.width = this.Canvas.style.width;
+				Effecter.style.height = this.Canvas.style.height;
+				Effecter.style.animation = "BlackOut " + Sec + "s Ease " + Delay + "s 1 Normal";
+				
+				this.Canvas.appendChild(Effecter);
+				
+			setTimeout(function () {
+				Effecter.parentElement.removeChild(Effecter);
+				document.head.removeChild(Style);
+			}, (Sec + Delay) * 1000);
 			
 			return Effecter;
 		}
