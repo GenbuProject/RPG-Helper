@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.1 [Last Updated: 2016/07/26]
+ *#RPG Helper Release 1.1
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
