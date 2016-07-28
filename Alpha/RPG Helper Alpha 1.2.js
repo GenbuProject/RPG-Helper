@@ -101,6 +101,23 @@ var RPGHelper = function () {
 			Filer.click();
 	}
 	
+	this.ResourceLoad = function () {
+		var Loader = new XMLHttpRequest();
+			Loader.responseType = "json"
+			
+			Loader.open("GET", "SystemData/Item.Json", false);
+			Loader.send(null);
+			Resource.Item = JSON.parse(Loader.responseText).Item;
+			
+			Loader.open("GET", "SystemData/Monstar.Json", false);
+			Loader.send(null);
+			Resource.Item = JSON.parse(Loader.responseText).Monstar;
+			
+			Loader.open("GET", "SystemData/Weapon.Json", false);
+			Loader.send(null);
+			Resource.Item = JSON.parse(Loader.responseText).Weapon;
+	}
+	
 	this.Effect = {
 		Canvas: this.Canvas,
 		
