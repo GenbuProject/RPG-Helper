@@ -432,6 +432,12 @@ var RPGHelper = function () {
 		BGM: this.BGM,
 		SE: this.SE,
 		
+		Load: function (URLs) {
+			for (var i = 0; i < URLs.length; i++) {
+				this.PlaySE(URLs[i], 0);
+			}
+		},
+		
 		PlayBGM: function (URL, Volume) {
 			if (!this.BGM.paused) {
 				this.BGM.pause();
