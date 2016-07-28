@@ -78,6 +78,7 @@ var RPGHelper = function () {
 	 *##################################################
 	 *#>>Load<<
 	 *#RPGのセーブデータを読み込む
+	 *#Resource["UserData"]内に格納される
 	 *#
 	 *#>>引数<<
 	 *#LoadFuc : Function型
@@ -93,7 +94,7 @@ var RPGHelper = function () {
 				Reader.readAsText(Event.target.files[0]);
 				
 				Reader.onloadend = function () {
-					Resource = JSON.parse(Reader.result);
+					Resource.UserData = JSON.parse(Reader.result);
 					LoadFuc();
 				}
 			});
@@ -101,21 +102,28 @@ var RPGHelper = function () {
 			Filer.click();
 	}
 	
-	this.ResourceLoad = function () {
+	/*/
+	 *##################################################
+	 *#>>SystemLoad<<
+	 *#RPGのシステムデータを読み込む
+	 *#Resource["SystemData"]内に格納される
+	 *##################################################
+	/*/
+	this.SystemLoad = function () {
 		var Loader = new XMLHttpRequest();
 			Loader.responseType = "json"
 			
 			Loader.open("GET", "SystemData/Item.Json", false);
 			Loader.send(null);
-			Resource.Item = JSON.parse(Loader.responseText).Item;
+			Resource.SystemData.Item = JSON.parse(Loader.responseText).Item;
 			
 			Loader.open("GET", "SystemData/Monstar.Json", false);
 			Loader.send(null);
-			Resource.Item = JSON.parse(Loader.responseText).Monstar;
+			Resource.SystemData.Monstar = JSON.parse(Loader.responseText).Monstar;
 			
 			Loader.open("GET", "SystemData/Weapon.Json", false);
 			Loader.send(null);
-			Resource.Item = JSON.parse(Loader.responseText).Weapon;
+			Resource.SystemData.Weapon = JSON.parse(Loader.responseText).Weapon;
 	}
 	
 	this.Effect = {
