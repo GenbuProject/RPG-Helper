@@ -56,6 +56,61 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
+	 *#>>Sound<<
+	 *#音源の操作を行うクラス
+	 *##################################################
+	/*/
+	this.Sound = {
+		BGM: this.BGM,
+		SE: this.SE,
+		
+		Load: function () {
+			for (var Key in Resource.SystemData.Audio.BGM) {
+				this.PlaySE("Audio/" + Key, 0);
+			}
+			
+			for (var Key in Resource.SystemData.Audio.SE) {
+				this.PlaySE("Audio/" + Key, 0);
+			}
+		},
+		
+		PlayBGM: function (ID) {
+			if (!this.BGM.paused) {
+				this.BGM.pause();
+				this.BGM.currentTime = 0;
+				this.BGM.src = "";
+			}
+			
+			for (var Key in Resource.SystemData.Audio.BGM) {
+				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
+					this.BGM.src = "Audio/" + Key;
+					this.BGM.volume = Resource.SystemData.Audio.BGM[Key].Volume;
+					
+					this.BGM.play();
+				}
+			}
+		},
+		
+		StopBGM: function () {
+			this.BGM.pause();
+			this.BGM.currentTime = 0;
+			this.BGM.src = "";
+		},
+		
+		PlaySE: function (ID) {
+			for (var Key in Resource.SystemData.Audio.SE) {
+				if (Resource.SystemData.Audio.SE[Key].ID == ID) {
+					this.SE.src = "Audio/" + SE;
+					this.SE.volume = Resource.SystemData.Audio.BGM[SE].Volume;
+					
+					this.SE.play();
+				}
+			}
+		}
+	}
+	
+	/*/
+	 *##################################################
 	 *#>>Save<<
 	 *#RPGのセーブデータを保存する
 	 *##################################################
@@ -451,55 +506,6 @@ var RPGHelper = function () {
 			}
 			
 			return Dialog;
-		}
-	}
-	
-	this.Sound = {
-		BGM: this.BGM,
-		SE: this.SE,
-		
-		Load: function () {
-			for (var Key in Resource.SystemData.Audio.BGM) {
-				this.PlaySE("Audio/" + Key, 0);
-			}
-			
-			for (var Key in Resource.SystemData.Audio.SE) {
-				this.PlaySE("Audio/" + Key, 0);
-			}
-		},
-		
-		PlayBGM: function (ID) {
-			if (!this.BGM.paused) {
-				this.BGM.pause();
-				this.BGM.currentTime = 0;
-				this.BGM.src = "";
-			}
-			
-			for (var Key in Resource.SystemData.Audio.BGM) {
-				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
-					this.BGM.src = "Audio/" + Key;
-					this.BGM.volume = Resource.SystemData.Audio.BGM[Key].Volume;
-					
-					this.BGM.play();
-				}
-			}
-		},
-		
-		StopBGM: function () {
-			this.BGM.pause();
-			this.BGM.currentTime = 0;
-			this.BGM.src = "";
-		},
-		
-		PlaySE: function (ID) {
-			for (var Key in Resource.SystemData.Audio.SE) {
-				if (Resource.SystemData.Audio.SE[Key].ID == ID) {
-					this.SE.src = "Audio/" + SE;
-					this.SE.volume = Resource.SystemData.Audio.BGM[SE].Volume;
-					
-					this.SE.play();
-				}
-			}
 		}
 	}
 }
