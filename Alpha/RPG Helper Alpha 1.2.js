@@ -66,11 +66,11 @@ var RPGHelper = function () {
 		
 		Load: function () {
 			for (var Key in Resource.SystemData.Audio.BGM) {
-				this.PlaySE("Audio/" + Key, 0);
+				this.PlaySE(Key, 0);
 			}
 			
 			for (var Key in Resource.SystemData.Audio.SE) {
-				this.PlaySE("Audio/" + Key, 0);
+				this.PlaySE(Key, 0);
 			}
 		},
 		
