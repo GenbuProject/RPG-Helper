@@ -79,7 +79,7 @@ var RPGHelper = function () {
 	 *##################################################
 	 *#>>Load<<
 	 *#RPGのセーブデータを読み込む
-	 *#Resource["UserData"]内に格納される
+	 *#Resource.UserData内に格納される
 	 *#
 	 *#>>引数<<
 	 *#LoadFuc : Function型
@@ -107,23 +107,14 @@ var RPGHelper = function () {
 	 *##################################################
 	 *#>>SystemLoad<<
 	 *#RPGのシステムデータを読み込む
-	 *#Resource["SystemData"]内に格納される
+	 *#Resource.SystemData内に格納される
 	 *##################################################
 	/*/
 	this.SystemLoad = function () {
 		var Loader = new XMLHttpRequest();
-		
-			Loader.open("GET", "SystemData/Item.Json", false);
+			Loader.open("GET", "SystemData.Json", false);
 			Loader.send(null);
-			Resource.SystemData.Item = JSON.parse(Loader.responseText);
-			
-			Loader.open("GET", "SystemData/Monstar.Json", false);
-			Loader.send(null);
-			Resource.SystemData.Monstar = JSON.parse(Loader.responseText);
-			
-			Loader.open("GET", "SystemData/Weapon.Json", false);
-			Loader.send(null);
-			Resource.SystemData.Weapon = JSON.parse(Loader.responseText);
+			Resource.SystemData = JSON.parse(Loader.responseText);
 	}
 	
 	this.Effect = {
