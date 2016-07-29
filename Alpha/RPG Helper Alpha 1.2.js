@@ -43,7 +43,8 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	Resource = {
-		
+		SystemData: {},
+		UserData: {}
 	}
 	
 	/*/
