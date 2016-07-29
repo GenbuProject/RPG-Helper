@@ -298,7 +298,7 @@ var RPGHelper = function () {
 			}, Speed);
 		}
 		
-		Dialog.onclick = (function (Canvas) {
+		Dialog.onclick = (function (Canvas, Sound) {
 			return function () {
 				this.Clicked = true;
 				Canvas.removeChild(Dialog);
@@ -306,13 +306,14 @@ var RPGHelper = function () {
 				Sound.PlaySE(Resource.SystemData.Audio.Util.Click, 1);
 				ClickFuc();
 			}
-		})(this.Canvas);
+		})(this.Canvas, this.Sound);
 		
 		return Dialog;
 	}
 	
 	this.Menu = {
 		Canvas: this.Canvas,
+		Sound = this.Sound,
 		
 		/*/
 		 *##################################################
@@ -397,10 +398,12 @@ var RPGHelper = function () {
 					Dialog.style.left = this.Canvas.style.width.split("px")[0] - (this.Canvas.style.width.split("px")[0] / 10) * (10 - Size[0].substr(0, 1)) + "px";
 				}
 				
-				Dialog.onclick = function () {
-					Sound.PlaySE(Resource.SystemData.Audio.Util.Click, 1);
-					ClickFuc();
-				}
+				Dialog.onclick = (function (Sound) {
+					return function () {
+						Sound.PlaySE(Resource.SystemData.Audio.Util.Click, 1);
+						ClickFuc();
+					}
+				})(this.Sound);
 				
 			ParentPanel.appendChild(Dialog);
 			
