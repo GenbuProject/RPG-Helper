@@ -98,13 +98,20 @@ var RPGHelper = function () {
 		},
 		
 		PlaySE: function (ID) {
-			for (var Key in Resource.SystemData.Audio.SE) {
-				if (Resource.SystemData.Audio.SE[Key].ID == ID) {
-					this.SE.src = "Audio/" + SE;
-					this.SE.volume = Resource.SystemData.Audio.BGM[SE].Volume;
-					
-					this.SE.play();
+			if (typeof arguments[0] == "number") {
+				for (var Key in Resource.SystemData.Audio.SE) {
+					if (Resource.SystemData.Audio.SE[Key].ID == ID) {
+						this.SE.src = "Audio/" + SE;
+						this.SE.volume = Resource.SystemData.Audio.BGM[SE].Volume;
+						
+						this.SE.play();
+					}
 				}
+			} else if (typeof arguments[0] == "string") {
+				this.SE.src = "Audio/" + ID;
+				this.SE.volume = typeof arguments[1] == "number" ? arguments[1] : 1;
+				
+				this.SE.play();
 			}
 		}
 	}
@@ -303,10 +310,7 @@ var RPGHelper = function () {
 				this.Clicked = true;
 				Canvas.removeChild(Dialog);
 				
-				this.SE.src = "Audio/" + Resource.SystemData.Audio.Util.Click;
-				this.SE.volume = 1;
-				this.SE.play();
-				
+				Sound.PlaySE(Resource.Audio.Util.Click, 1);
 				ClickFuc();
 			}
 		})(this.Canvas, this.Sound);
@@ -403,10 +407,7 @@ var RPGHelper = function () {
 				
 				Dialog.onclick = (function (Sound) {
 					return function () {
-						this.SE.src = "Audio/" + Resource.SystemData.Audio.Util.Click;
-						this.SE.volume = 1;
-						this.SE.play();
-						
+						Sound.PlaySE(Resource.Audio.Util.Click, 1);
 						ClickFuc();
 					}
 				})(this.Sound);
