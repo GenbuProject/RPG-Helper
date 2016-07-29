@@ -240,6 +240,8 @@ var RPGHelper = function () {
 			return function () {
 				this.Clicked = true;
 				Canvas.removeChild(Dialog);
+				
+				Sound.PlaySE(Resource.SystemData.Audio.Util.Click, 1);
 				ClickFuc();
 			}
 		})(this.Canvas);
@@ -334,6 +336,7 @@ var RPGHelper = function () {
 				}
 				
 				Dialog.onclick = function () {
+					Sound.PlaySE(Resource.SystemData.Audio.Util.Click, 1);
 					ClickFuc();
 				}
 				
@@ -448,23 +451,31 @@ var RPGHelper = function () {
 		BGM: this.BGM,
 		SE: this.SE,
 		
-		Load: function (URLs) {
-			for (var i = 0; i < URLs.length; i++) {
-				this.PlaySE(URLs[i], 0);
+		Load: function () {
+			for (var Key in Resource.SystemData.Audio.BGM) {
+				this.PlaySE("Audio/" + Key, 0);
+			}
+			
+			for (var Key in Resource.SystemData.Audio.SE) {
+				this.PlaySE("Audio/" + Key, 0);
 			}
 		},
 		
-		PlayBGM: function (URL, Volume) {
+		PlayBGM: function (ID) {
 			if (!this.BGM.paused) {
 				this.BGM.pause();
 				this.BGM.currentTime = 0;
 				this.BGM.src = "";
 			}
 			
-			this.BGM.src = URL;
-			this.BGM.volume = Volume;
-			
-			this.BGM.play();
+			for (var Key in Resource.SystemData.Audio.BGM) {
+				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
+					this.BGM.src = "Audio/" + Key;
+					this.BGM.volume = Resource.SystemData.Audio.BGM[Key].Volume;
+					
+					this.BGM.play();
+				}
+			}
 		},
 		
 		StopBGM: function () {
@@ -473,11 +484,15 @@ var RPGHelper = function () {
 			this.BGM.src = "";
 		},
 		
-		PlaySE: function (URL, Volume) {
-			this.SE.src = URL;
-			this.SE.volume = Volume;
-			
-			this.SE.play();
+		PlaySE: function (ID) {
+			for (var Key in Resource.SystemData.Audio.SE) {
+				if (Resource.SystemData.Audio.SE[Key].ID == ID) {
+					this.SE.src = "Audio/" + SE;
+					this.SE.volume = Resource.SystemData.Audio.BGM[SE].Volume;
+					
+					this.SE.play();
+				}
+			}
 		}
 	}
 }
