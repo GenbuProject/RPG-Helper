@@ -313,7 +313,7 @@ var RPGHelper = function () {
 	
 	this.Menu = {
 		Canvas: this.Canvas,
-		Sound = this.Sound,
+		Sound: this.Sound,
 		
 		/*/
 		 *##################################################
