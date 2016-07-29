@@ -303,7 +303,10 @@ var RPGHelper = function () {
 				this.Clicked = true;
 				Canvas.removeChild(Dialog);
 				
-				Sound.PlaySE("Audio/" + Resource.SystemData.Audio.Util.Click, 1);
+				this.SE.src = "Audio/" + Resource.SystemData.Audio.Util.Click;
+				this.SE.volume = 1;
+				this.SE.play();
+				
 				ClickFuc();
 			}
 		})(this.Canvas, this.Sound);
@@ -400,7 +403,10 @@ var RPGHelper = function () {
 				
 				Dialog.onclick = (function (Sound) {
 					return function () {
-						Sound.PlaySE("Audio/" + Resource.SystemData.Audio.Util.Click, 1);
+						this.SE.src = "Audio/" + Resource.SystemData.Audio.Util.Click;
+						this.SE.volume = 1;
+						this.SE.play();
+						
 						ClickFuc();
 					}
 				})(this.Sound);
