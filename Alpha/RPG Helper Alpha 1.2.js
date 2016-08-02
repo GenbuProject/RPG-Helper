@@ -260,7 +260,7 @@ var RPGHelper = function () {
 	this.Map = {
 		Move: function (ID, Position) {
 			var Loader = new XMLHttpRequest();
-				Loader.open("GET", "Map" + Resource.SystemData.Map[ID].MapFile, false);
+				Loader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
 				Loader.send(null);
 				
 				console.log(Loader.responseText);
