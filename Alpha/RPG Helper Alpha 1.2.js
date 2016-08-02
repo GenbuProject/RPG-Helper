@@ -183,6 +183,7 @@ var RPGHelper = function () {
 		var Loader = new XMLHttpRequest();
 			Loader.open("GET", "SystemData.Json", false);
 			Loader.send(null);
+			
 			Resource.SystemData = JSON.parse(Loader.responseText);
 	}
 	
@@ -257,7 +258,13 @@ var RPGHelper = function () {
 	}
 	
 	this.Map = {
-		
+		Move: function (ID, Position) {
+			var Loader = new XMLHttpRequest();
+				Loader.open("GET", "Map" + Resource.SystemData.Map[ID].MapFile, false);
+				Loader.send(null);
+				
+				console.log(Loader.responseText);
+		}
 	}
 	
 	/*/
