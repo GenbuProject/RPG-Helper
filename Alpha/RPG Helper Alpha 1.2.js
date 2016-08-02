@@ -123,7 +123,7 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	this.Save = function (FileName) {
-		var Data = new Blob([JSON.stringify(Resource, null, "\t")], {
+		var Data = new Blob([JSON.stringify(Resource.UserData, null, "\t")], {
 			type: "Text/Plain"
 		});
 		
