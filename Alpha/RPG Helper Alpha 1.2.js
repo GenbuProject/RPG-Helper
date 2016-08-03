@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.2 [Last Updated: 2016/07/27]
+ *#RPG Helper Alpha 1.2 [Last Updated: 2016/08/03]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -258,7 +258,7 @@ var RPGHelper = function () {
 	}
 	
 	this.Map = {
-		Move: function (ID, Position) {
+		Warp: function (ID, Position) {
 			var Loader = new XMLHttpRequest();
 				Loader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
 				Loader.send(null);
