@@ -304,11 +304,12 @@ var RPGHelper = function () {
 				
 			TipImg.onload = function () {
 				var Ctx = MapCanvas.getContext("2d");
+					Ctx.scale(1, 0.5);
 				
 				for (var y = 0; y < MapData[0].length; y++) {
  					for (var x = 0; x < MapData[0][y].length; x++) {
  						if (typeof MapData[0][y][x] != "^" && typeof MapData[0][y][x] == "number") {
- 							Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 8);
+ 							Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 16);
  						}
  					}
  				}
@@ -316,7 +317,7 @@ var RPGHelper = function () {
 				for (var y = 0; y < MapData[1].length; y++) {
 					for (var x = 0; x < MapData[1][y].length; x++) {
 						if (typeof MapData[1][y][x] != "^" && typeof MapData[1][y][x] == "number") {
-							Ctx.drawImage(TipImg, 16 * (MapData[1][y][x] % 8), 16 * (Math.floor(MapData[1][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 8);
+							Ctx.drawImage(TipImg, 16 * (MapData[1][y][x] % 8), 16 * (Math.floor(MapData[1][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 16);
 						}
 					}
 				}
@@ -324,7 +325,7 @@ var RPGHelper = function () {
 				for (var y = 0; y < MapData[2].length; y++) {
 					for (var x = 0; x < MapData[2][y].length; x++) {
 						if (typeof MapData[2][y][x] != "^" && typeof MapData[2][y][x] == "number") {
-							Ctx.drawImage(TipImg, 16 * (MapData[2][y][x] % 8), 16 * (Math.floor(MapData[2][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 8);
+							Ctx.drawImage(TipImg, 16 * (MapData[2][y][x] % 8), 16 * (Math.floor(MapData[2][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 16);
 						}
 					}
 				}
@@ -396,6 +397,10 @@ var RPGHelper = function () {
 		})(this.Canvas, this.Sound);
 		
 		return Dialog;
+	}
+	
+	this.PromptBox = function (Pos, Content, ButtonContext, ButtonFuc) {
+		
 	}
 	
 	this.Menu = {
