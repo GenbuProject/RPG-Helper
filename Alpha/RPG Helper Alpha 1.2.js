@@ -275,10 +275,12 @@ var RPGHelper = function () {
 				}
 				
 				Loader.send(null);
-				console.log(Loader.response);
 				
 				Loader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
+				Loader.responseType = "arraybuffer";
+				
 				Loader.onload = null;
+				
 				Loader.send(null);
 				
 				console.log(Loader.responseText);
