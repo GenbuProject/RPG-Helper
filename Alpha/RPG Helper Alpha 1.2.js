@@ -328,7 +328,7 @@ var RPGHelper = function () {
 				
 				MapCanvas.style.display = "";
 				
-				return MapCanvas;
+				//return MapCanvas;
 			}
 		}
 	}
