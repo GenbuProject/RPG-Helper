@@ -277,7 +277,7 @@ var RPGHelper = function () {
 						)
 					);
 					
-					TipImg.src = TipData;
+					TipImg.src = TipData + new Date().getTime();
 				}
 				
 				TipLoader.send(null);
@@ -294,7 +294,6 @@ var RPGHelper = function () {
 			var MapCanvas = document.createElement("Canvas");
 				MapCanvas.style.width = this.Canvas.style.width;
 				MapCanvas.style.height = this.Canvas.style.height;
-				MapCanvas.style.background = "Transparent";
 				
 				this.Canvas.appendChild(MapCanvas);
 				
@@ -303,7 +302,7 @@ var RPGHelper = function () {
 			//128px * (16 * n)pxのチップデータ
 			for (var y = 0; y < MapData.length; y++) {
 				for (var x = 0; x < MapData[y].length; x++) {
-					Ctx.drawImage(TipImg, MapData[0][y][x] % 8, Math.floor(MapData[0][y][x] / 8), 16, 16, 16 * x, 16 * y, 16, 16);
+					Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
 				}
 			}
 		}
