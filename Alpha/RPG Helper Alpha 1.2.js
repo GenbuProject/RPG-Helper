@@ -258,9 +258,12 @@ var RPGHelper = function () {
 	}
 	
 	this.Map = {
+		Canvas: this.Canvas,
+		
 		Warp: function (ID, Position) {
 			var TipData = null;
 			var MapData = null;
+			var TipImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
 				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
@@ -280,12 +283,28 @@ var RPGHelper = function () {
 			var MapLoader = new XMLHttpRequest();
 				MapLoader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
 				
+				MapLoader.onload = function () {
+					MapData = JSON.parse(MapLoader.responseText);
+				}
+				
 				MapLoader.send(null);
 				
-				MapData = JSON.parse(MapLoader.responseText);
+				TipImg.src = TipData;
 				
-			console.log(TipData);
-			console.log(MapData);
+			var MapCanvas = document.createElement("Canvas");
+				MapCanvas.style.width = this.Canvas.style.width;
+				MapCanvas.style.height = this.Canvas.style.height;
+				MapCanvas.style.background = "Transparent";
+				
+				this.Canvas.appendChild(MapCanvas);
+				
+			var Ctx = MapCanvas.getContext("2D");
+			
+			for (var y = 0; y < MapData.length; y++) {
+				for (var x = 0; x < MapData[y].length; x++) {
+					//Ctx.drawImage(TipImg, 16 * MapData[0][y][x], 16 * MapData[0][y][x], 16, 16, 
+				}
+			}
 		}
 	}
 	
