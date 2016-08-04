@@ -297,13 +297,11 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas);
 				
-			TipImg.onload = function () {
-				var Ctx = MapCanvas.getContext("2d");
-				
-				for (var y = 0; y < MapData[0].length; y++) {
-					for (var x = 0; x < MapData[0][y].length; x++) {
-						Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
-					}
+			var Ctx = MapCanvas.getContext("2d");
+			
+			for (var y = 0; y < MapData[0].length; y++) {
+				for (var x = 0; x < MapData[0][y].length; x++) {
+					Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
 				}
 			}
 		}
