@@ -277,7 +277,7 @@ var RPGHelper = function () {
 						)
 					);
 					
-					TipImg.src = TipData + new Date().getTime();
+					TipImg.src = TipData + "?" + new Date().getTime();
 				}
 				
 				TipLoader.send(null);
