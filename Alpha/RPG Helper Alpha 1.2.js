@@ -259,31 +259,33 @@ var RPGHelper = function () {
 	
 	this.Map = {
 		Warp: function (ID, Position) {
-			var Tip = null;
+			var TipData = null;
+			var MapData = null;
 			
-			var Loader = new XMLHttpRequest();
-				Loader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
-				Loader.responseType = "arraybuffer";
+			var TipLoader = new XMLHttpRequest();
+				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
+				TipLoader.responseType = "arraybuffer";
 				
-				Loader.onload = function () {
-					var Data = new Blob(
-						[Loader.response],
-						{type: "image/png"}
+				TipLoader.onload = function () {
+					TipData = URL.createObjectURL(
+						new Blob(
+							[TipLoader.response],
+							{type: "image/png"}
+						)
 					);
-					
-					Tip = URL.createObjectURL(Data);
 				}
 				
-				Loader.send(null);
+				TipLoader.send(null);
 				
-				Loader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
-				Loader.responseType = "";
+			var MapLoader = new XMLHttpRequest();
+				MapLoader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
 				
-				Loader.onload = null;
+				MapLoader.send(null);
 				
-				Loader.send(null);
+				MapData = JSON.parse(MapLoader.responseText);
 				
-				console.log(Loader.responseText);
+			console.log(TipData);
+			console.log(MapData);
 		}
 	}
 	
