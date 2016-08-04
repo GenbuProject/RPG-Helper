@@ -198,6 +198,7 @@ var RPGHelper = function () {
 				document.head.appendChild(Style);
 				
 			var Effecter = document.createElement("Canvas");
+				Effecter.style.position = "Absolute";
 				Effecter.style.width = this.Canvas.style.width;
 				Effecter.style.height = this.Canvas.style.height;
 				Effecter.style.animation = "BlackOut " + Sec + "s Ease " + Delay + "s 1 Normal";
@@ -220,6 +221,7 @@ var RPGHelper = function () {
 				document.head.appendChild(Style);
 				
 			var Effecter = document.createElement("Canvas");
+				Effecter.style.position = "Absolute";
 				Effecter.style.width = this.Canvas.style.width;
 				Effecter.style.height = this.Canvas.style.height;
 				Effecter.style.animation = "WhiteOut " + Sec + "s Ease " + Delay + "s 1 Normal";
@@ -242,6 +244,7 @@ var RPGHelper = function () {
 				document.head.appendChild(Style);
 				
 			var Effecter = document.createElement("Canvas");
+				Effecter.style.position = "Absolute";
 				Effecter.style.width = this.Canvas.style.width;
 				Effecter.style.height = this.Canvas.style.height;
 				Effecter.style.animation = "BlackOut " + Sec + "s Ease " + Delay + "s 1 Normal";
@@ -292,9 +295,9 @@ var RPGHelper = function () {
 				MapLoader.send(null);
 				
 			var MapCanvas = document.createElement("Canvas");
+				MapCanvas.style.position = "Absolute";
 				MapCanvas.style.width = this.Canvas.style.width;
 				MapCanvas.style.height = this.Canvas.style.height;
-				MapCanvas.style.position = "Absolute";
 				MapCanvas.style.display = "None";
 				
 				this.Canvas.appendChild(MapCanvas);
@@ -327,9 +330,9 @@ var RPGHelper = function () {
 				}
 				
 				MapCanvas.style.display = "";
-				
-				//return MapCanvas;
 			}
+			
+			return MapCanvas;
 		}
 	}
 	
