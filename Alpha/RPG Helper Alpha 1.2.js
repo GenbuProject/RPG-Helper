@@ -398,10 +398,6 @@ var RPGHelper = function () {
 		return Dialog;
 	}
 	
-	this.PromptBox = function (Pos, Content, ButtonContext, ButtonFuc) {
-		
-	}
-	
 	this.Menu = {
 		Canvas: this.Canvas,
 		Sound: this.Sound,
