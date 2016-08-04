@@ -276,6 +276,8 @@ var RPGHelper = function () {
 							{type: "image/png"}
 						)
 					);
+					
+					TipImg.src = TipData;
 				}
 				
 				TipLoader.send(null);
@@ -288,8 +290,6 @@ var RPGHelper = function () {
 				}
 				
 				MapLoader.send(null);
-				
-				TipImg.src = TipData;
 				
 			var MapCanvas = document.createElement("Canvas");
 				MapCanvas.style.width = this.Canvas.style.width;
