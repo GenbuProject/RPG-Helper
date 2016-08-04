@@ -259,8 +259,26 @@ var RPGHelper = function () {
 	
 	this.Map = {
 		Warp: function (ID, Position) {
+			var Tip = null;
+			
 			var Loader = new XMLHttpRequest();
+				Loader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
+				Loader.responseType = "arraybuffer";
+				
+				Loader.onload = function () {
+					var Data = new Blob(
+						[Loader.response],
+						{type: "image/png"}
+					);
+					
+					Tip = URL.createObjectURL(Data);
+				}
+				
+				Loader.send(null);
+				console.log(Loader.response);
+				
 				Loader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
+				Loader.onload = null;
 				Loader.send(null);
 				
 				console.log(Loader.responseText);
