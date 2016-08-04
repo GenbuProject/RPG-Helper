@@ -298,7 +298,7 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas);
 				
-			var Ctx = MapCanvas.getContext("2D");
+			var Ctx = MapCanvas.getContext("2d");
 			
 			//128px * (16 * n)pxのチップデータ
 			for (var y = 0; y < MapData.length; y++) {
