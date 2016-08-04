@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.2 [Last Updated: 2016/08/04]
+ *#RPG Helper Alpha 1.2 [Last Updated: 2016/08/05]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -326,6 +326,8 @@ var RPGHelper = function () {
 				}
 				
 				MapCanvas.style.display = "";
+				
+				return MapCanvas;
 			}
 		}
 	}
