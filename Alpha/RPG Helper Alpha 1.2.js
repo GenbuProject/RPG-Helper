@@ -294,6 +294,7 @@ var RPGHelper = function () {
 			var MapCanvas = document.createElement("Canvas");
 				MapCanvas.style.width = this.Canvas.style.width;
 				MapCanvas.style.height = this.Canvas.style.height;
+				MapCanvas.style.display = "None";
 				
 				this.Canvas.appendChild(MapCanvas);
 				
@@ -305,6 +306,8 @@ var RPGHelper = function () {
 						Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 8 * y, 16, 8);
 					}
 				}
+				
+				MapCanvas.style.display = "";
 			}
 		}
 	}
