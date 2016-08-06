@@ -295,8 +295,8 @@ var RPGHelper = function () {
 				MapLoader.send(null);
 				
 			var MapCanvas = document.createElement("Canvas");
-				MapCanvas.width = this.Canvas.style.width;
-				MapCanvas.height = this.Canvas.style.height;
+				MapCanvas.width = this.Canvas.style.width.split("px")[0];
+				MapCanvas.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas.style.position = "Absolute";
 				MapCanvas.style.display = "None";
 				
