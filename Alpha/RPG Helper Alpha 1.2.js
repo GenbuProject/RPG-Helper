@@ -159,6 +159,7 @@ var RPGHelper = function () {
 		
 		var Filer = document.createElement("Input");
 			Filer.type = "File";
+			Filer.accept = "text/*";
 			
 			Filer.addEventListener("change", function (Event) {
 				Reader.readAsText(Event.target.files[0]);
