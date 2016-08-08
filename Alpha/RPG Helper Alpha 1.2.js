@@ -299,8 +299,7 @@ var RPGHelper = function () {
 							)
 						);
 						
-						var Img = new Image();
-							Img.src = Link;
+						CharaImg.src = Link;
 					}
 					
 					Reader.send(null);
@@ -358,7 +357,7 @@ var RPGHelper = function () {
 					this.Canvas.appendChild(CharaCanvas);
 					
 				var Ctx = CharaCanvas.getContext("2d");
-					Ctx.drawImage(Img, 32, 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
+					Ctx.drawImage(CharaImg, 32, 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
 			}
 			
 			return MapCanvas;
