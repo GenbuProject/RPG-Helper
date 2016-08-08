@@ -320,6 +320,13 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas);
 				
+			var CharaCanvas = document.createElement("Canvas");
+				CharaCanvas.width = this.Canvas.style.width.split("px")[0];
+				CharaCanvas.height = this.Canvas.style.height.split("px")[0];
+				CharaCanvas.style.position = "Absolute";
+				
+				this.Canvas.appendChild(CharaCanvas);
+				
 			TipImg.onload = function () {
 				var Ctx = MapCanvas.getContext("2d");
 				
@@ -349,13 +356,6 @@ var RPGHelper = function () {
 			}
 			
 			CharaImg.onload = function () {
-				var CharaCanvas = document.createElement("Canvas");
-					CharaCanvas.width = this.Canvas.style.width.split("px")[0];
-					CharaCanvas.height = this.Canvas.style.height.split("px")[0];
-					CharaCanvas.style.position = "Absolute";
-					
-					this.Canvas.appendChild(CharaCanvas);
-					
 				var Ctx = CharaCanvas.getContext("2d");
 					Ctx.drawImage(CharaImg, 32, 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
 			}
