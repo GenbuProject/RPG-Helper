@@ -276,11 +276,14 @@ var RPGHelper = function () {
 	this.Map = {
 		Canvas: this.Canvas,
 		
-		Warp: function (ID, Position) {
+		Show: function (ID) {
+			if (document.getElementById("Map")) {
+				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
+			}
+			
 			var TipData = null;
 			var MapData = null;
 			var TipImg = new Image();
-			var CharaImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
 				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
@@ -298,23 +301,6 @@ var RPGHelper = function () {
 				}
 				
 				TipLoader.send(null);
-				
-				var Reader = new XMLHttpRequest();
-					Reader.open("GET", "CharacterTip/MainCharacter.png", true);
-					Reader.responseType = "arraybuffer";
-					
-					Reader.onload = function () {
-						var Link = URL.createObjectURL(
-							new Blob(
-								[Reader.response], 
-								{"type": "image/png"}
-							)
-						);
-						
-						CharaImg.src = Link;
-					}
-					
-					Reader.send(null);
 					
 			var MapLoader = new XMLHttpRequest();
 				MapLoader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
@@ -332,14 +318,6 @@ var RPGHelper = function () {
 				MapCanvas.style.position = "Absolute";
 				
 				this.Canvas.appendChild(MapCanvas);
-				
-			var CharaCanvas = document.createElement("Canvas");
-				CharaCanvas.id = "Chara";
-				CharaCanvas.width = this.Canvas.style.width.split("px")[0];
-				CharaCanvas.height = this.Canvas.style.height.split("px")[0];
-				CharaCanvas.style.position = "Absolute";
-				
-				this.Canvas.appendChild(CharaCanvas);
 				
 			TipImg.onload = function () {
 				var Ctx = MapCanvas.getContext("2d");
@@ -369,12 +347,61 @@ var RPGHelper = function () {
 				}
 			}
 			
+			return MapCanvas;
+		},
+		
+		Hide: function () {
+			if (document.getElementById("Map")) {
+				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
+			}
+		}
+	}
+	
+	this.Character = {
+		Canvas: this.Canvas,
+		
+		Warp: function (TipImage, Position) {
+			if (document.getElementById("Character")) {
+				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
+			}
+			
+			var CharaImg = new Image();
+			
+			var CharaLoader = new XMLHttpRequest();
+				CharaLoader.open("GET", TipImage, true);
+				CharaLoader.responseType = "arraybuffer";
+				
+				CharaLoader.onload = function () {
+					var Link = URL.createObjectURL(
+						new Blob(
+							[CharaLoader.response], 
+							{"type": "image/png"}
+						)
+					);
+					
+					CharaImg.src = Link;
+				}
+				
+				CharaLoader.send(null);
+				
+			var CharaCanvas = document.createElement("Canvas");
+				CharaCanvas.id = "Character";
+				CharaCanvas.width = this.Canvas.style.width.split("px")[0];
+				CharaCanvas.height = this.Canvas.style.height.split("px")[0];
+				CharaCanvas.style.position = "Absolute";
+				
+				this.Canvas.appendChild(CharaCanvas);
+				
 			CharaImg.onload = function () {
 				var Ctx = CharaCanvas.getContext("2d");
 					Ctx.drawImage(CharaImg, 32, 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
 			}
-			
-			return MapCanvas;
+		},
+		
+		Hide: function () {
+			if (document.getElementById("Character")) {
+				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
+			}
 		}
 	}
 	
