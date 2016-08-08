@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.2 [Last Updated: 2016/08/05]
+ *#RPG Helper Alpha 1.2 [Last Updated: 2016/08/08]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -314,6 +314,7 @@ var RPGHelper = function () {
 				MapLoader.send(null);
 				
 			var MapCanvas = document.createElement("Canvas");
+				MapCanvas.id = "Map";
 				MapCanvas.width = this.Canvas.style.width.split("px")[0];
 				MapCanvas.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas.style.position = "Absolute";
@@ -321,6 +322,7 @@ var RPGHelper = function () {
 				this.Canvas.appendChild(MapCanvas);
 				
 			var CharaCanvas = document.createElement("Canvas");
+				CharaCanvas.id = "Chara";
 				CharaCanvas.width = this.Canvas.style.width.split("px")[0];
 				CharaCanvas.height = this.Canvas.style.height.split("px")[0];
 				CharaCanvas.style.position = "Absolute";
@@ -402,6 +404,8 @@ var RPGHelper = function () {
 		
 		if (typeof Content == "string") {
 			var Counter = 0;
+			
+			Content = Content.replace(/\n/g, "<Br>");
 			
 			var Timer = setInterval(function () {
 				if (Counter <= Content.length) {
