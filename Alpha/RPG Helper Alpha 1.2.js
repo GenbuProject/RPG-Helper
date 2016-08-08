@@ -405,7 +405,7 @@ var RPGHelper = function () {
 			
 			var Timer = setInterval(function () {
 				if (Counter <= Content.length) {
-					Dialog.textContent = Content.substr(0, Counter);
+					Dialog.innerHTML = Content.substr(0, Counter);
 					Counter++;
 				} else {
 					clearInterval(Timer);
