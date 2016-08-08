@@ -695,6 +695,5 @@ var RPGHelper = function () {
 	}
 	
 	this.SystemLoad();
-	
 	this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
 }
