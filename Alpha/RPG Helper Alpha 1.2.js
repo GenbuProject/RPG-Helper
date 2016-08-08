@@ -268,6 +268,7 @@ var RPGHelper = function () {
 			var TipData = null;
 			var MapData = null;
 			var TipImg = new Image();
+			var CharaImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
 				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
@@ -286,6 +287,24 @@ var RPGHelper = function () {
 				
 				TipLoader.send(null);
 				
+				var Reader = new XMLHttpRequest();
+					Reader.open("GET", "CharacterTip/MainCharacter.png", true);
+					Reader.responseType = "arraybuffer";
+					
+					Reader.onload = function () {
+						var Link = URL.createObjectURL(
+							new Blob(
+								[Reader.response], 
+								{"type": "image/png"}
+							)
+						);
+						
+						var Img = new Image();
+							Img.src = Link;
+					}
+					
+					Reader.send(null);
+					
 			var MapLoader = new XMLHttpRequest();
 				MapLoader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
 				
@@ -299,7 +318,6 @@ var RPGHelper = function () {
 				MapCanvas.width = this.Canvas.style.width.split("px")[0];
 				MapCanvas.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas.style.position = "Absolute";
-				MapCanvas.style.display = "None";
 				
 				this.Canvas.appendChild(MapCanvas);
 				
@@ -329,8 +347,18 @@ var RPGHelper = function () {
 						}
 					}
 				}
-				
-				MapCanvas.style.display = "";
+			}
+			
+			Img.onload = function () {
+				var CharaCanvas = document.createElement("Canvas");
+					CharaCanvas.width = this.Canvas.style.width.split("px")[0];
+					CharaCanvas.height = this.Canvas.style.height.split("px")[0];
+					CharaCanvas.style.position = "Absolute";
+					
+					this.Canvas.appendChild(CharaCanvas);
+					
+				var Ctx = CharaCanvas.getContext("2d");
+					Ctx.drawImage(Img, 32, 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
 			}
 			
 			return MapCanvas;
