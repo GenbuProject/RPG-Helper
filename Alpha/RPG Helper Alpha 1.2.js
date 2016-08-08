@@ -33,6 +33,18 @@ var RPGHelper = function () {
 			TOP: 0x0001,
 			BOTTOM: 0x0002,
 			CENTER: 0x0003
+		},
+		
+		COLOR: {
+			BLACK: "Black",
+			BLUE: "Blue",
+			CYAN: "Cyan",
+			GLAY: "Glay",
+			GREEN: "Green",
+			MAGENTA: "Magenta",
+			ORANGE: "Orange",
+			RED: "Red",
+			WHITE: "White"
 		}
 	}
 	
@@ -377,10 +389,11 @@ var RPGHelper = function () {
 	 *#Speed : R.SPEED型
 	 *##################################################
 	/*/
-	this.MsgBox = function (Pos, Speed, Content, ClickFuc) {
+	this.MsgBox = function (Pos, Speed, Color, Content, ClickFuc) {
 		var Dialog = document.createElement("RPGHelper-MsgBox");
 			Dialog.style.position = "Absolute";
 			Dialog.style.width = (this.Canvas.attributes["width"].value - 10) + "px";
+			Dialog.style.color = Color;
 			Dialog.Clicked = false;
 			
 			if (Resource.SystemData.BackGround.Dialog != "") {
@@ -498,9 +511,10 @@ var RPGHelper = function () {
 		 *#|=> [1] : String型(00 ～ 99, ^^)
 		 *##################################################
 		/*/
-		MenuItem: function (ParentPanel, Size, Content, ClickFuc) {
+		MenuItem: function (ParentPanel, Size, Color, Content, ClickFuc) {
 			var Dialog = document.createElement("RPGHelper-Menu-MenuItem");
 				Dialog.style.position = "Absolute";
+				Dialog.style.color = Color;
 				Dialog.textContent = Content;
 				
 				if (Size[0].substr(0, 1) != "^" && Size[1].substr(0, 1) != "^" && Size[0].substr(1, 1) != "^" && Size[1].substr(1, 1) != "^") {
@@ -560,9 +574,10 @@ var RPGHelper = function () {
 		 *#Content : String型
 		 *##################################################
 		/*/
-		MenuMsgBox: function (ParentPanel, Size, Content) {
+		MenuMsgBox: function (ParentPanel, Size, Color, Content) {
 			var Dialog = document.createElement("RPGHelper-Menu-MenuMsgBox");
 				Dialog.style.position = "Absolute";
+				Dialog.style.color = Color;
 				Dialog.textContent = Content;
 				
 				if (Size[0].substr(0, 1) != "^" && Size[1].substr(0, 1) != "^" && Size[0].substr(1, 1) != "^" && Size[1].substr(1, 1) != "^") {
@@ -601,10 +616,11 @@ var RPGHelper = function () {
 			return Dialog;
 		},
 		
-		MenuTextArea: function (ParentPanel, Size, HintMsg, IsRequired) {
+		MenuTextArea: function (ParentPanel, Size, Color, HintMsg, IsRequired) {
 			var Dialog = document.createElement("TextArea");
 				Dialog.setAttribute("Class", "RPGHelper-Menu-MenuTextArea");
 				Dialog.style.position = "Absolute";
+				Dialog.style.color = Color;
 				
 				Dialog.setAttribute("PlaceHolder", HintMsg);
 				if (IsRequired) Dialog.setAttribute("Required", "Required");
