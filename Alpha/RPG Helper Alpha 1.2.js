@@ -348,7 +348,7 @@ var RPGHelper = function () {
 				}
 			}
 			
-			Img.onload = function () {
+			CharaImg.onload = function () {
 				var CharaCanvas = document.createElement("Canvas");
 					CharaCanvas.width = this.Canvas.style.width.split("px")[0];
 					CharaCanvas.height = this.Canvas.style.height.split("px")[0];
