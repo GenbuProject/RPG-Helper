@@ -95,11 +95,11 @@ var RPGHelper = function () {
 		
 		PlayBGM: function (ID) {
 			if (!this.BGM.paused) {
-				this.BGM.muted = true;
+				//this.BGM.muted = true;
 				this.BGM.currentTime = 0;
 				this.BGM.pause();
 				this.BGM.src = "Audio/null.wav";
-				this.BGM.muted = false;
+				//this.BGM.muted = false;
 			}
 			
 			for (var Key in Resource.SystemData.Audio.BGM) {
