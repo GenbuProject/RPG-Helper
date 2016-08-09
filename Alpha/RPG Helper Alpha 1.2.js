@@ -170,6 +170,7 @@ var RPGHelper = function () {
 	 *#Resource.UserData内に格納される
 	 *#
 	 *#>>引数<<
+	 *#Extention : String型
 	 *#LoadFuc : Function型
 	 *##################################################
 	/*/
