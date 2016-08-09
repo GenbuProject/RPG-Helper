@@ -23,18 +23,6 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	this.R = {
-		SPEED: {
-			SLOW: 100,
-			NORMAL: 80,
-			FAST: 50
-		},
-		
-		POS: {
-			TOP: 0x0001,
-			BOTTOM: 0x0002,
-			CENTER: 0x0003
-		},
-		
 		COLOR: {
 			BLACK: "Black",
 			BLUE: "Blue",
@@ -45,6 +33,25 @@ var RPGHelper = function () {
 			ORANGE: "Orange",
 			RED: "Red",
 			WHITE: "White"
+		},
+		
+		POS: {
+			TOP: 0x0001,
+			BOTTOM: 0x0002,
+			CENTER: 0x0003
+		},
+		
+		SPEED: {
+			SLOW: 100,
+			NORMAL: 80,
+			FAST: 50
+		},
+		
+		DIRECTION: {
+			E: "East",
+			W: "West",
+			S: "South",
+			N: "North"
 		}
 	}
 	
@@ -359,8 +366,9 @@ var RPGHelper = function () {
 	
 	this.Character = {
 		Canvas: this.Canvas,
+		R: this.R,
 		
-		Warp: function (TipImage, Position) {
+		Warp: function (TipImage, Direction, Position) {
 			if (document.getElementById("Character")) {
 				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
 			}
@@ -394,7 +402,7 @@ var RPGHelper = function () {
 				
 			CharaImg.onload = function () {
 				var Ctx = CharaCanvas.getContext("2d");
-					Ctx.drawImage(CharaImg, 32, 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
+					Ctx.drawImage(CharaImg, 32, Direction == this.R.DIRECTION.EAST ? 96 : Direction == this.R.DIRECTION.WEST ? 48 : Direction == this.R.DIRECTION.SOUTH ? 0 : Direction == this.R.DIRECTION.NORTH ? 144 : 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
 			}
 		},
 		
@@ -430,17 +438,17 @@ var RPGHelper = function () {
 			this.Canvas.appendChild(Dialog);
 			
 		switch (Pos) {
-			case 0x0001:
+			case this.R.POS.TOP:
 				Dialog.style.top = "0px";
 				Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 4 - 5) + "px"; //【縦横500pxの時】500px / 4 - 5px[ボーダー幅] = 120px
 				break;
 				
-			case 0x0002:
+			case this.R.POS.BOTTOM:
 				Dialog.style.top = (this.Canvas.style.height.split("px")[0] - (this.Canvas.style.height.split("px")[0] / 4)) + "px"; //【縦横500pxの時】500px - (500px / 4) = 500px - 125px = 375px
 				Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 4 - 10) + "px"; //【縦横500pxの時】500px / 4 - 10px[ボーダー幅 * 2] = 115px
 				break;
 				
-			case 0x0003:
+			case this.R.POS.CENTER:
 				Dialog.style.top = ((this.Canvas.style.height.split("px")[0] / 2) - (this.Canvas.style.height.split("px")[0] / 4)) + "px"; //【縦横500pxの時】(500px / 2) - (500px - 2) = 250px - 125px = 125px
 				Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 2 - 5) + "px"; //【縦横500pxの時】500px / 2 - 5 = 245px
 				break;
