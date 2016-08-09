@@ -96,9 +96,7 @@ var RPGHelper = function () {
 		PlayBGM: function (ID) {
 			if (!this.BGM.paused) {
 				try {
-					this.BGM.currentTime = 0;
 					this.BGM.pause();
-					
 					this.BGM.src = "Audio/null.wav";
 				} catch (Error) {
 					console.log(Error);
@@ -117,9 +115,7 @@ var RPGHelper = function () {
 		
 		StopBGM: function () {
 			try {
-				this.BGM.currentTime = 0;
 				this.BGM.pause();
-				
 				this.BGM.src = "Audio/null.wav";
 			} catch (Error) {
 				console.log(Error);
