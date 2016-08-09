@@ -400,10 +400,12 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(CharaCanvas);
 				
-			CharaImg.onload = function () {
-				var Ctx = CharaCanvas.getContext("2d");
-					Ctx.drawImage(CharaImg, 32, Direction == this.R.DIRECTION.EAST ? 96 : Direction == this.R.DIRECTION.WEST ? 48 : Direction == this.R.DIRECTION.SOUTH ? 0 : Direction == this.R.DIRECTION.NORTH ? 144 : 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
-			}
+			CharaImg.onload = (function (R) {
+				return function () {
+					var Ctx = CharaCanvas.getContext("2d");
+						Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.EAST ? 96 : Direction == R.DIRECTION.WEST ? 48 : Direction == R.DIRECTION.SOUTH ? 0 : Direction == R.DIRECTION.NORTH ? 144 : 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
+				}
+			})(this.R);
 		},
 		
 		Hide: function () {
