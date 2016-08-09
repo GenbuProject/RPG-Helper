@@ -95,11 +95,17 @@ var RPGHelper = function () {
 		
 		PlayBGM: function (ID) {
 			if (!this.BGM.paused) {
-				//this.BGM.muted = true;
-				this.BGM.currentTime = 0;
-				this.BGM.pause();
-				this.BGM.src = "Audio/null.wav";
-				//this.BGM.muted = false;
+				try {
+					this.BGM.muted = true;
+					this.BGM.currentTime = 0;
+					
+					this.BGM.pause();
+					
+					this.BGM.src = "Audio/null.wav";
+					this.BGM.muted = false;
+				} catch (Error) {
+					console.log(Error);
+				}
 			}
 			
 			for (var Key in Resource.SystemData.Audio.BGM) {
@@ -113,11 +119,17 @@ var RPGHelper = function () {
 		},
 		
 		StopBGM: function () {
-			//this.BGM.muted = true;
-			this.BGM.currentTime = 0;
-			this.BGM.pause();
-			this.BGM.src = "Audio/null.wav";
-			//this.BGM.muted = false;
+			try {
+				this.BGM.muted = true;
+				this.BGM.currentTime = 0;
+				
+				this.BGM.pause();
+				
+				this.BGM.src = "Audio/null.wav";
+				this.BGM.muted = false;
+			} catch (Error) {
+				console.log(Error);
+			}
 		},
 		
 		PlaySE: function (ID) {
