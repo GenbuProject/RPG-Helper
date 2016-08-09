@@ -96,13 +96,10 @@ var RPGHelper = function () {
 		PlayBGM: function (ID) {
 			if (!this.BGM.paused) {
 				try {
-					this.BGM.muted = true;
 					this.BGM.currentTime = 0;
-					
 					this.BGM.pause();
 					
 					this.BGM.src = "Audio/null.wav";
-					this.BGM.muted = false;
 				} catch (Error) {
 					console.log(Error);
 				}
@@ -120,13 +117,10 @@ var RPGHelper = function () {
 		
 		StopBGM: function () {
 			try {
-				this.BGM.muted = true;
 				this.BGM.currentTime = 0;
-				
 				this.BGM.pause();
 				
 				this.BGM.src = "Audio/null.wav";
-				this.BGM.muted = false;
 			} catch (Error) {
 				console.log(Error);
 			}
