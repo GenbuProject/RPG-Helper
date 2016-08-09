@@ -173,12 +173,12 @@ var RPGHelper = function () {
 	 *#LoadFuc : Function型
 	 *##################################################
 	/*/
-	this.Load = function (LoadFuc) {
+	this.Load = function (Extention, LoadFuc) {
 		var Reader = new FileReader();
 		
 		var Filer = document.createElement("Input");
 			Filer.type = "File";
-			Filer.accept = "text/*";
+			Filer.accept = Extention;
 			
 			Filer.addEventListener("change", function (Event) {
 				Reader.readAsText(Event.target.files[0]);
@@ -189,7 +189,10 @@ var RPGHelper = function () {
 				}
 			});
 			
-			Filer.click();
+			var Click = document.createEvent("MouseEvents");
+				Click.initEvent("click", false, true);
+				
+			Filer.dispatchEvent(Click);
 	}
 	
 	/*/
