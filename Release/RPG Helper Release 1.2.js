@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.2 [Last Updated: 2016/08/08]
+ *#RPG Helper Release 1.2 [Last Updated: 2016/08/10]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -20,7 +20,7 @@ var RPGHelper = function () {
 		
 	/*/
 	 *##################################################
-	 *#>>R<<
+	 *#【R】
 	 *#レイアウトシステム定数
 	 *##################################################
 	/*/
@@ -59,7 +59,7 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
-	 *#>>Resource<<
+	 *#【Resource】
 	 *#RPGのセーブデータの情報
 	 *##################################################
 	/*/
@@ -77,7 +77,7 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
-	 *#>>Sound<<
+	 *#【Sound】
 	 *#音源の操作を行うクラス
 	 *##################################################
 	/*/
@@ -145,8 +145,11 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
-	 *#>>Save<<
+	 *#【Save】
 	 *#RPGのセーブデータを保存する
+	 *#
+	 *#≪引数≫
+	 *#FileName : String型
 	 *##################################################
 	/*/
 	this.Save = function (FileName) {
@@ -173,11 +176,11 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
-	 *#>>Load<<
+	 *#【Load】
 	 *#RPGのセーブデータを読み込む
 	 *#Resource.UserData内に格納される
 	 *#
-	 *#>>引数<<
+	 *#≪引数≫
 	 *#Extention : String型
 	 *#LoadFuc : Function型
 	 *##################################################
@@ -206,7 +209,7 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
-	 *#>>SystemLoad<<
+	 *#【SystemLoad】
 	 *#RPGのシステムデータを読み込む
 	 *#Resource.SystemData内に格納される
 	 *##################################################
@@ -219,9 +222,25 @@ var RPGHelper = function () {
 			Resource.SystemData = JSON.parse(Loader.responseText);
 	}
 	
+	/*/
+	 *##################################################
+	 *#【Effect】
+	 *#エフェクトの描画を行うクラス
+	 *##################################################
+	/*/
 	this.Effect = {
 		Canvas: this.Canvas,
 		
+		/*/
+		 *##################################################
+		 *#【BlackOut】
+		 *#黒色へフェーズインする
+		 *#
+		 *#≪引数≫
+		 *#Sec : int型
+		 *#Delay : int型
+		 *##################################################
+		/*/
 		BlackOut: function (Sec, Delay) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
@@ -245,6 +264,16 @@ var RPGHelper = function () {
 			return Effecter;
 		},
 		
+		/*/
+		 *##################################################
+		 *#【BlackOut】
+		 *#黒色へフェーズインする
+		 *#
+		 *#≪引数≫
+		 *#Sec : int型
+		 *#Delay : int型
+		 *##################################################
+		/*/
 		WhiteOut: function (Sec, Delay) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
@@ -268,6 +297,17 @@ var RPGHelper = function () {
 			return Effecter;
 		},
 		
+		/*/
+		 *##################################################
+		 *#【BlackOut】
+		 *#黒色へフェーズインする
+		 *#
+		 *#≪引数≫
+		 *#Sec : int型
+		 *#Delay : int型
+		 *#Color : R.COLOR型 || String型
+		 *##################################################
+		/*/
 		ColorOut: function (Sec, Delay, Color) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
@@ -292,9 +332,24 @@ var RPGHelper = function () {
 		}
 	}
 	
+	/*/
+	 *##################################################
+	 *#【Map】
+	 *#マップ操作を行うクラス
+	 *##################################################
+	/*/
 	this.Map = {
 		Canvas: this.Canvas,
 		
+		/*/
+		 *##################################################
+		 *#【Show】
+		 *#指定したIDのマップを表示する
+		 *#
+		 *#≪引数≫
+		 *#ID : int型
+		 *##################################################
+		/*/
 		Show: function (ID) {
 			if (document.getElementById("Map")) {
 				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
@@ -369,6 +424,12 @@ var RPGHelper = function () {
 			return MapCanvas;
 		},
 		
+		/*/
+		 *##################################################
+		 *#【Hide】
+		 *#マップを非表示にする
+		 *##################################################
+		/*/
 		Hide: function () {
 			if (document.getElementById("Map")) {
 				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
@@ -376,10 +437,29 @@ var RPGHelper = function () {
 		}
 	}
 	
+	/*/
+	 *##################################################
+	 *#【Sound】
+	 *#キャラクターチップの操作を行うクラス
+	 *##################################################
+	/*/
 	this.Character = {
 		Canvas: this.Canvas,
 		R: this.R,
 		
+		/*/
+		 *##################################################
+		 *#【Warp】
+		 *#指定した画像のキャラクターを表示する
+		 *#
+		 *#≪引数≫
+		 *#TipImage : String型
+		 *#Direction : R.DIRECTION型
+		 *#Position : Array型
+		 *#|=> [0] : int型
+		 *#|=> [1] : int型
+		 *##################################################
+		/*/
 		Warp: function (TipImage, Direction, Position) {
 			if (document.getElementById("Character")) {
 				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
@@ -420,6 +500,12 @@ var RPGHelper = function () {
 			})(this.R);
 		},
 		
+		/*/
+		 *##################################################
+		 *#【Hide】
+		 *#キャラクターを非表示にする
+		 *##################################################
+		/*/
 		Hide: function () {
 			if (document.getElementById("Character")) {
 				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
@@ -429,13 +515,15 @@ var RPGHelper = function () {
 	
 	/*/
 	 *##################################################
-	 *#>>MsgBox<<
+	 *#【MsgBox】
 	 *#メッセージダイアログを表示
 	 *#
-	 *#>>引数<<
+	 *#≪引数≫
 	 *#Pos : R.POS型
-	 *#Content : String型
 	 *#Speed : R.SPEED型
+	 *#Color : R.COLOR型
+	 *#Content : String型
+	 *#ClickFuc : Function型
 	 *##################################################
 	/*/
 	this.MsgBox = function (Pos, Speed, Color, Content, ClickFuc) {
@@ -502,10 +590,10 @@ var RPGHelper = function () {
 		
 		/*/
 		 *##################################################
-		 *#>>MenuPanel<<
+		 *#【MenuPanel】
 		 *#メニュー画面を表示
 		 *#
-		 *#>>引数<<
+		 *#≪引数≫
 		 *#Size : Array型
 		 *#|=> [0] : String型(00 ～ 99, ^^)
 		 *#|=> [1] : String型(00 ～ 99, ^^)
@@ -547,17 +635,18 @@ var RPGHelper = function () {
 		
 		/*/
 		 *##################################################
-		 *#>>MenuItem<<
-		 *#メニュー画面のアイテムを表示
+		 *#【MenuItem】
+		 *#メニュー画面用アイテムを表示
 		 *#
-		 *#>>引数<<
+		 *#≪引数≫
 		 *#ParentPanel : Element型
 		 *#Size : Array型
-		 *#|=> [0] : int型(00 ～ 99, ^^)
-		 *#|=> [1] : int型(00 ～ 99, ^^)
-		 *#
 		 *#|=> [0] : String型(00 ～ 99, ^^)
 		 *#|=> [1] : String型(00 ～ 99, ^^)
+		 *#
+		 *#Color : R.COLOR型
+		 *#Content : String型
+		 *#ClickFuc : Function型
 		 *##################################################
 		/*/
 		MenuItem: function (ParentPanel, Size, Color, Content, ClickFuc) {
@@ -611,15 +700,16 @@ var RPGHelper = function () {
 		
 		/*/
 		 *##################################################
-		 *#>>MenuMsgBox<<
-		 *#メニュー画面のテキストを表示
+		 *#【MenuMsgBox】
+		 *#メニュー画面用テキスト欄を表示
 		 *#
-		 *#>>引数<<
+		 *#≪引数≫
 		 *#ParentPanel : Element型
 		 *#Size : Array型
 		 *#|=> [0] : String型(00 ～ 99, ^^)
 		 *#|=> [1] : String型(00 ～ 99, ^^)
 		 *#
+		 *#Color : R.COLOR型
 		 *#Content : String型
 		 *##################################################
 		/*/
@@ -665,14 +755,28 @@ var RPGHelper = function () {
 			return Dialog;
 		},
 		
-		MenuTextArea: function (ParentPanel, Size, Color, HintMsg, IsRequired) {
+		/*/
+		 *##################################################
+		 *#【MenuTextArea】
+		 *#メニュー画面用入力欄を表示
+		 *#
+		 *#≪引数≫
+		 *#ParentPanel : Element型
+		 *#Size : Array型
+		 *#|=> [0] : String型(00 ～ 99, ^^)
+		 *#|=> [1] : String型(00 ～ 99, ^^)
+		 *#
+		 *#Color : R.COLOR型
+		 *#HintMsg : String型
+		 *##################################################
+		/*/
+		MenuTextArea: function (ParentPanel, Size, Color, HintMsg) {
 			var Dialog = document.createElement("TextArea");
 				Dialog.setAttribute("Class", "RPGHelper-Menu-MenuTextArea");
 				Dialog.style.position = "Absolute";
 				Dialog.style.color = Color;
 				
 				Dialog.setAttribute("PlaceHolder", HintMsg);
-				if (IsRequired) Dialog.setAttribute("Required", "Required");
 				
 				if (Size[0].substr(0, 1) != "^" && Size[1].substr(0, 1) != "^" && Size[0].substr(1, 1) != "^" && Size[1].substr(1, 1) != "^") {
 					Dialog.style.width = (this.Canvas.style.width.split("px")[0] / 10) * (Math.max(Size[0].substr(0, 1), Size[1].substr(0, 1)) - Math.min(Size[0].substr(0, 1), Size[1].substr(0, 1))) - 7 + "px";
