@@ -816,6 +816,11 @@ var RPGHelper = function () {
 					Dialog.style.left = this.Canvas.style.width.split("px")[0] - (this.Canvas.style.width.split("px")[0] / 10) * (10 - Size[0].substr(0, 1)) + "px";
 				}
 				
+				if (navigator.userAgent.toLowerCase().indexOf("Chrome") != -1) {
+					Dialog.style.width -= 2;
+					Dialog.style.height -= 4;
+				}
+				
 				Dialog.style.maxWidth = Dialog.style.width;
 				Dialog.style.minWidth = Dialog.style.width;
 				Dialog.style.maxHeight = Dialog.style.height;
