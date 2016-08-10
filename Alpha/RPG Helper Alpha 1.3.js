@@ -835,10 +835,10 @@ var RPGHelper = function () {
 	this.SystemLoad();
 	this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
 	
-	if (Resource.SystemData.BackGround.Dialog != "") {
+	if (Resource.SystemData.BackGround.Dialog != "" && !document.getElementById("RPGHelper-BackStyle")) {
 		var BackStyle = document.createElement("Style");
 			BackStyle.id = "RPGHelper-BackStyle";
-			BackStyle.textContent = 'RPGHelper-MsgBox, RPGHelper-Menu-MenuPanel {BackGround: URL("Image/' + Resource.SystemData.BackGround.Dialog + '");}';
+			BackStyle.textContent = 'RPGHelper-MsgBox, RPGHelper-Menu-MenuPanel {\n\tBackGround: URL("Image/' + Resource.SystemData.BackGround.Dialog + '");\n}';
 			
 			document.head.appendChild(BackStyle);
 	}
