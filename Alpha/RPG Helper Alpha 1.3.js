@@ -565,10 +565,6 @@ var RPGHelper = function () {
 			Dialog.style.color = Color;
 			Dialog.Clicked = false;
 			
-			if (Resource.SystemData.BackGround.Dialog != "") {
-				Dialog.style.background = "URL('Image/" + Resource.SystemData.BackGround.Dialog + "')";
-			}
-			
 			this.Canvas.appendChild(Dialog);
 			
 		switch (Pos) {
@@ -657,10 +653,6 @@ var RPGHelper = function () {
 					Dialog.style.left = this.Canvas.style.width.split("px")[0] - (this.Canvas.style.width.split("px")[0] / 10) * (10 - Size[0].substr(0, 1)) + "px";
 				}
 				
-				if (Resource.SystemData.BackGround.Dialog != "") {
-					Dialog.style.background = "URL('Image/" + Resource.SystemData.BackGround.Dialog + "')";
-				}
-				
 			this.Canvas.appendChild(Dialog);
 			return Dialog;
 		},
@@ -707,10 +699,6 @@ var RPGHelper = function () {
 					Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 10) * (10 - Size[0].substr(1, 1)) - 10 + "px";
 					Dialog.style.top = this.Canvas.style.height.split("px")[0] - (this.Canvas.style.height.split("px")[0] / 10) * (10 - Size[0].substr(1, 1)) + "px";
 					Dialog.style.left = this.Canvas.style.width.split("px")[0] - (this.Canvas.style.width.split("px")[0] / 10) * (10 - Size[0].substr(0, 1)) + "px";
-				}
-				
-				if (Resource.SystemData.BackGround.Dialog != "") {
-					Dialog.style.background = "URL('Image/" + Resource.SystemData.BackGround.Dialog + "')";
 				}
 				
 				Dialog.onclick = (function (Sound) {
@@ -773,10 +761,6 @@ var RPGHelper = function () {
 					Dialog.style.left = this.Canvas.style.width.split("px")[0] - (this.Canvas.style.width.split("px")[0] / 10) * (10 - Size[0].substr(0, 1)) + "px";
 				}
 				
-				if (Resource.SystemData.BackGround.Dialog != "") {
-					Dialog.style.background = "URL('Image/" + Resource.SystemData.BackGround.Dialog + "')";
-				}
-				
 			ParentPanel.appendChild(Dialog);
 			
 			if (parseInt(Dialog.style.width.split("px")[0]) + parseInt(Dialog.parentElement.style.left.split("px")[0]) < parseInt(this.Canvas.style.width.split("px")[0] - 5)) {
@@ -837,10 +821,6 @@ var RPGHelper = function () {
 				Dialog.style.maxHeight = Dialog.style.height;
 				Dialog.style.minHeight = Dialog.style.height;
 				
-				if (Resource.SystemData.BackGround.Dialog != "") {
-					Dialog.style.background = "URL('Image/" + Resource.SystemData.BackGround.Dialog + "')";
-				}
-				
 			ParentPanel.appendChild(Dialog);
 			
 			if (parseInt(Dialog.style.width.split("px")[0]) + parseInt(Dialog.parentElement.style.left.split("px")[0]) < parseInt(this.Canvas.style.width.split("px")[0] - 5)) {
@@ -850,6 +830,14 @@ var RPGHelper = function () {
 			
 			return Dialog;
 		}
+	}
+	
+	if (Resource.SystemData.BackGround.Dialog != "") {
+		var BackStyle = document.createElement("Style");
+			BackStyle.id = "RPGHelper-BackStyle";
+			BackStyle.textContent = 'RPGHelper-MsgBox, RPGHelper-Menu-MenuPanel {BackGround: URL("Image/' + Resource.SystemData.BackGround.Dialog + '");}';
+			
+			document.head.appendChild(BackStyle);
 	}
 	
 	this.SystemLoad();
