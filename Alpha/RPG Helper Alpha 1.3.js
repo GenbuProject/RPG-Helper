@@ -832,6 +832,9 @@ var RPGHelper = function () {
 		}
 	}
 	
+	this.SystemLoad();
+	this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
+	
 	if (Resource.SystemData.BackGround.Dialog != "") {
 		var BackStyle = document.createElement("Style");
 			BackStyle.id = "RPGHelper-BackStyle";
@@ -839,7 +842,4 @@ var RPGHelper = function () {
 			
 			document.head.appendChild(BackStyle);
 	}
-	
-	this.SystemLoad();
-	this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
 }
