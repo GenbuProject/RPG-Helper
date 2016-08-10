@@ -817,8 +817,8 @@ var RPGHelper = function () {
 				}
 				
 				if (navigator.userAgent.toLowerCase().indexOf("chrome") != -1) {
-					Dialog.style.width -= 2;
-					Dialog.style.height -= 4;
+					Dialog.style.width = (Dialog.style.width.split("px")[0] - 2) + "px";
+					Dialog.style.height = (Dialog.style.height.split("px")[0] - 4) + "px";
 				}
 				
 				Dialog.style.maxWidth = Dialog.style.width;
