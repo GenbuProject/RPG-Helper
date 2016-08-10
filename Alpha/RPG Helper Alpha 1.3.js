@@ -482,17 +482,17 @@ var RPGHelper = function () {
 		/*/
 		 *##################################################
 		 *#【Warp】
-		 *#指定した画像のキャラクターを表示する
+		 *#指定したIDのキャラクターを表示する
 		 *#
 		 *#≪引数≫
-		 *#TipImage : String型
+		 *#CharacterID : int型
 		 *#Direction : R.DIRECTION型
 		 *#Position : Array型
 		 *#|=> [0] : int型
 		 *#|=> [1] : int型
 		 *##################################################
 		/*/
-		Warp: function (TipImage, Direction, Position) {
+		Warp: function (CharacterID, Direction, Position) {
 			if (document.getElementById("Character")) {
 				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
 			}
@@ -500,7 +500,7 @@ var RPGHelper = function () {
 			var CharaImg = new Image();
 			
 			var CharaLoader = new XMLHttpRequest();
-				CharaLoader.open("GET", TipImage, true);
+				CharaLoader.open("GET", "CharacterTip/" + Resource.UserData.Character[CharacterID].CharacterTip, true);
 				CharaLoader.responseType = "arraybuffer";
 				
 				CharaLoader.onload = function () {
