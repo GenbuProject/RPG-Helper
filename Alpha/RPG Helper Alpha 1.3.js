@@ -11,11 +11,11 @@ var RPGHelper = function () {
 		this.Canvas.style.position = "Relative";
 		
 	this.BGM = new Audio();
-		this.BGM.type = "audio/wav";
+		this.BGM.type = "audio/wave";
 		this.BGM.loop = true;
 		
 	this.SE = new Audio();
-		this.SE.type = "audio/wav";
+		this.SE.type = "audio/wave";
 		this.SE.loop = false;
 		
 	/*/
