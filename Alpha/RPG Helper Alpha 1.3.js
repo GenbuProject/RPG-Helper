@@ -451,6 +451,10 @@ var RPGHelper = function () {
 						}
 					}
 				}
+				
+				for (var EventID = 0; EventID < MapData[3].length; EventID++) {
+					Ctx.drawImage(TipImg, 16 * (MapData[3][EventID]["TipID"] % 8), 16 * (Math.floor(MapData[3][EventID]["TipID"] / 8)), 16, 16, 16 * MapData[3][EventID]["Position"][0], 16 * MapData[3][EventID]["Position"][1], 16, 16);
+				}
 			}
 			
 			return MapCanvas;
