@@ -18,6 +18,11 @@ var RPGHelper = function () {
 		this.SE.type = "audio/wave";
 		this.SE.loop = false;
 		
+	this.Plugin1 = document.createElement("Script");
+		this.Plugin1.src = "https://api.html5media.info/1.1.8/html5media.min.js";
+		
+		document.head.appendChild(this.Plugin1);
+		
 	/*/
 	 *##################################################
 	 *#【R】
