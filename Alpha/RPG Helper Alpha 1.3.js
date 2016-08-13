@@ -25,6 +25,10 @@ var RPGHelper = function () {
 					Resource.UserData = Event.data.Data;
 					break;
 					
+				case 1:
+					//MsgBox正常終了
+					break;
+					
 				default:
 					break;
 			}
@@ -691,6 +695,11 @@ var RPGHelper = function () {
 				ClickFuc();
 			}
 		})(this.Canvas, this.Sound);
+		
+		this.Worker.postMessage({
+			WorkID: 1,
+			Data: Dialog
+		});
 		
 		return Dialog;
 	}
