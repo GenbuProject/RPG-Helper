@@ -18,7 +18,7 @@ var RPGHelper = function () {
 		this.SE.type = "audio/*";
 		this.SE.loop = false;
 		
-	this.Worker = new Worker("Worker Pack for RPG Helper Alpha 1.3.js");
+	this.Worker = new Worker("https://genbuproject.github.io/RPG-Helper/Alpha/Worker Pack for RPG Helper Alpha 1.3.js");
 		this.Worker.onmessage = function (Event) {
 			switch (Event.data.WorkID) {
 				case 0:
