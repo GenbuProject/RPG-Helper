@@ -242,7 +242,7 @@ var RPGHelper = function () {
 			Filer.accept = Extention;
 			
 			Filer.addEventListener("change", function (Event) {
-				this.Worker.postMessage({
+				Worker.postMessage({
 					WorkID: 0,
 					Data: Event.target.files[0]
 				});
