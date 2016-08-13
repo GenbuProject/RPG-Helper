@@ -1,5 +1,6 @@
 var WorkID = {
-	Load: 0
+	Load: 0,
+	ServiceForLoad: 100
 }
 
 onmessage = function (Event) {
@@ -11,6 +12,14 @@ onmessage = function (Event) {
 			postMessage({
 				WorkID: WorkID.Load,
 				Data: JSON.parse(Reader.result)
+			});
+			
+			break;
+			
+		case WorkID.ServiceForLoad:
+			postMessage({
+				WorkID: WorkID.ServiceForLoad,
+				Data: Event.data.Data
 			});
 			
 			break;
