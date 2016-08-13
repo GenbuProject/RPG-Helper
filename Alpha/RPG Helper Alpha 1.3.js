@@ -232,6 +232,8 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	this.Load = function (Extention, LoadFuc) {
+		var Worker = this.Worker;
+		
 		var Click = document.createEvent("MouseEvents");
 			Click.initEvent("click", false, true);
 			
