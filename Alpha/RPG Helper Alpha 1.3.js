@@ -570,7 +570,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[1]--;
-						Character.Warp(0, this.R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(0, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 						
@@ -578,7 +578,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[1]++;
-						Character.Warp(0, this.R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(0, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 						
@@ -586,7 +586,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[0]--;
-						Character.Warp(0, this.R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(0, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 						
@@ -594,7 +594,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[0]++;
-						Character.Warp(0, this.R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(0, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 				}
