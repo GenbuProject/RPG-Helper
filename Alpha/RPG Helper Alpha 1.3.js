@@ -269,10 +269,8 @@ var RPGHelper = function () {
 		
 		this.Worker.postMessage({
 			WorkID: 100,
-			Data: (function (Gene) {
-				return Gene
-			})(Gene)
-		});
+			Data: Gene
+		}, [Gene]);
 	}
 	
 	/*/
