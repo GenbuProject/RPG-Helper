@@ -18,11 +18,6 @@ var RPGHelper = function () {
 		this.SE.type = "audio/*";
 		this.SE.loop = false;
 		
-	this.Plugin1 = document.createElement("Script");
-		this.Plugin1.src = "https://api.html5media.info/1.1.8/html5media.min.js";
-		
-		document.head.appendChild(this.Plugin1);
-		
 	/*/
 	 *##################################################
 	 *#【R】
@@ -258,6 +253,8 @@ var RPGHelper = function () {
 			
 			Resource.SystemData = JSON.parse(Loader.responseText);
 	}
+	
+	var CharaPos = [null, null];
 	
 	/*/
 	 *##################################################
@@ -539,6 +536,8 @@ var RPGHelper = function () {
 						Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
 				}
 			})(this.R);
+			
+			CharaPos = [Position[0], Position[1]];
 		},
 		
 		/*/
@@ -550,6 +549,59 @@ var RPGHelper = function () {
 		Hide: function () {
 			if (document.getElementById("Character")) {
 				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
+			}
+		}
+	}
+	
+	this.GamePad = {
+		KeyboardType: function () {
+			if (sessionStorage.getItem("GamePad")) {
+				document.removeEventListener("keydown");
+			}
+			
+			document.addEventListener("keydown", function (Event) {
+				switch (Event.keyCode) {
+					case 38:
+						Event.preventDefault();
+						
+						CharaPos[1]--;
+						Character.Warp(0, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+						
+					case 40:
+						Event.preventDefault();
+						
+						CharaPos[1]++;
+						Character.Warp(0, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+						
+					case 37:
+						Event.preventDefault();
+						
+						CharaPos[0]--;
+						Character.Warp(0, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+						
+					case 39:
+						Event.preventDefault();
+						
+						CharaPos[0]++;
+						Character.Warp(0, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+				}
+			});
+			
+			sessionStorage.setItem("GamePad", "Keyboard");
+		},
+		
+		Disable: function () {
+			if (sessionStorage.getItem("GamePad")) {
+				document.removeEventListener("keydown");
+				sessionStorage.removeItem("GamePad");
 			}
 		}
 	}
