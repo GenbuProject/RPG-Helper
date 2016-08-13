@@ -18,8 +18,8 @@ var RPGHelper = function () {
 		this.SE.type = "audio/*";
 		this.SE.loop = false;
 		
-	this.Worker = new Worker("https://genbuproject.github.io/RPG-Helper/Alpha/Worker Pack for RPG Helper Alpha 1.3.js");
-		this.Worker.onmessage = function (Event) {
+	this.Worker = new SharedWorker("https://genbuproject.github.io/RPG-Helper/Alpha/Worker Pack for RPG Helper Alpha 1.3.js");
+		this.Worker.port.onmessage = function (Event) {
 			var GeneForLoad = null;
 			
 			switch (Event.data.WorkID) {
@@ -250,7 +250,7 @@ var RPGHelper = function () {
 				Filer.accept = Extention;
 				
 				Filer.addEventListener("change", function (Event) {
-					Worker.postMessage({
+					Worker.port.postMessage({
 						WorkID: 0,
 						Data: Event.target.files[0]
 					});
@@ -267,10 +267,10 @@ var RPGHelper = function () {
 		
 		Gene.next();
 		
-		this.Worker.postMessage({
+		this.Worker.port.postMessage({
 			WorkID: 100,
 			Data: Gene
-		}, [Gene]);
+		});
 	}
 	
 	/*/
