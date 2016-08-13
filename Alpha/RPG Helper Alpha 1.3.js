@@ -24,15 +24,16 @@ var RPGHelper = function () {
 			
 			switch (Event.data.WorkID) {
 				case 0:
+					GeneForLoad.next();
+					
 					Resource.UserData = Event.data;
 					this.onmessage = null;
-					
-					GeneForLoad.next();
 					
 					break;
 					
 				case 100:
 					GeneForLoad = Event.data.Data;
+					GeneForLoad.next();
 					
 					break;
 			}
@@ -240,7 +241,7 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	this.Load = function (Extention) {
-		var Gene = (function* () {
+		var Gene = (function* (Worker) {
 			var Click = document.createEvent("MouseEvents");
 				Click.initEvent("click", false, true);
 				
@@ -249,18 +250,20 @@ var RPGHelper = function () {
 				Filer.accept = Extention;
 				
 				Filer.addEventListener("change", function (Event) {
-					this.Worker.postMessage({
+					Worker.postMessage({
 						WorkID: 0,
 						Data: Event.target.files[0]
 					});
 				});
+				
+				yield "Waiting a event...";
 				
 				Filer.dispatchEvent(Click);
 				
 			yield "User is choosing a file...";
 			
 			return "Loading has been finished.";
-		})();
+		})(this.Worker);
 		
 		Gene.next();
 		
