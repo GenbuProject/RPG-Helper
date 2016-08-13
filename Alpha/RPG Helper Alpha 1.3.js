@@ -696,11 +696,6 @@ var RPGHelper = function () {
 			}
 		})(this.Canvas, this.Sound);
 		
-		this.Worker.postMessage({
-			WorkID: 1,
-			Data: Dialog
-		});
-		
 		return Dialog;
 	}
 	
