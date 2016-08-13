@@ -555,10 +555,13 @@ var RPGHelper = function () {
 	
 	this.GamePad = {
 		PadFunc: null,
-		R: this.R,
 		
-		KeyboardType: function () {
+		R: this.R,
+		Character: this.Character,
+		
+		KeyboardType: function (CharacterID) {
 			var R = this.R;
+			var Character = this.Character;
 			
 			if (sessionStorage.getItem("GamePad") != null) {
 				document.removeEventListener("keydown", this.PadFunc, false);
@@ -570,7 +573,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[1]--;
-						Character.Warp(0, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 						
@@ -578,7 +581,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[1]++;
-						Character.Warp(0, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 						
@@ -586,7 +589,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[0]--;
-						Character.Warp(0, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 						
@@ -594,7 +597,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						CharaPos[0]++;
-						Character.Warp(0, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
 						
 						break;
 				}
