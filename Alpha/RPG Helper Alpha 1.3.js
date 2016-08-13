@@ -557,7 +557,7 @@ var RPGHelper = function () {
 		R: this.R,
 		
 		KeyboardType: function () {
-			if (!sessionStorage.getItem("GamePad")) {
+			if (sessionStorage.getItem("GamePad") != null) {
 				document.removeEventListener("keydown", GamePad, false);
 			}
 			
@@ -603,7 +603,7 @@ var RPGHelper = function () {
 		},
 		
 		Disable: function () {
-			if (!sessionStorage.getItem("GamePad")) {
+			if (sessionStorage.getItem("GamePad") != null) {
 				document.removeEventListener("keydown", GamePad, false);
 				sessionStorage.removeItem("GamePad");
 			}
