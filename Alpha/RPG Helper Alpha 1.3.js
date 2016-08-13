@@ -178,7 +178,7 @@ var RPGHelper = function () {
 			if (typeof arguments[0] == "number") {
 				for (var Key in Resource.SystemData.Audio.SE) {
 					if (Resource.SystemData.Audio.SE[Key].ID == ID) {
-						this.SE.src = "Audio/" + Key;
+						this.SE.src = "Audio/SE" + Key;
 						this.SE.volume = Resource.SystemData.Audio.SE[Key].Volume;
 						
 						this.SE.play();
