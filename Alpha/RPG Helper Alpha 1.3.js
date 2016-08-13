@@ -554,59 +554,60 @@ var RPGHelper = function () {
 	}
 	
 	this.GamePad = {
+		PadFunc: null,
 		R: this.R,
 		
 		KeyboardType: function () {
 			var R = this.R;
 			
 			if (sessionStorage.getItem("GamePad") != null) {
-				document.removeEventListener("keydown", GamePad, false);
+				document.removeEventListener("keydown", this.PadFunc, false);
 			}
 			
-			document.addEventListener("keydown", function (Event) {
-				(function GamePad() {
-					switch (Event.keyCode) {
-						case 38:
-							Event.preventDefault();
-							
-							CharaPos[1]--;
-							Character.Warp(0, this.R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
-							
-							break;
-							
-						case 40:
-							Event.preventDefault();
-							
-							CharaPos[1]++;
-							Character.Warp(0, this.R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
-							
-							break;
-							
-						case 37:
-							Event.preventDefault();
-							
-							CharaPos[0]--;
-							Character.Warp(0, this.R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
-							
-							break;
-							
-						case 39:
-							Event.preventDefault();
-							
-							CharaPos[0]++;
-							Character.Warp(0, this.R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
-							
-							break;
-					}
-				})();
-			});
+			this.PadFunc = function (Event) {
+				switch (Event.keyCode) {
+					case 38:
+						Event.preventDefault();
+						
+						CharaPos[1]--;
+						Character.Warp(0, this.R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+						
+					case 40:
+						Event.preventDefault();
+						
+						CharaPos[1]++;
+						Character.Warp(0, this.R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+						
+					case 37:
+						Event.preventDefault();
+						
+						CharaPos[0]--;
+						Character.Warp(0, this.R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+						
+					case 39:
+						Event.preventDefault();
+						
+						CharaPos[0]++;
+						Character.Warp(0, this.R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+						
+						break;
+				}
+			}
+			
+			document.addEventListener("keydown", this.PadFunc);
 			
 			sessionStorage.setItem("GamePad", "Keyboard");
 		},
 		
 		Disable: function () {
 			if (sessionStorage.getItem("GamePad") != null) {
-				document.removeEventListener("keydown", GamePad, false);
+				document.removeEventListener("keydown", this.PadFunc, false);
 				sessionStorage.removeItem("GamePad");
 			}
 		}
