@@ -19,7 +19,7 @@ onmessage = function (Event) {
 		case WorkID.ServiceForLoad:
 			postMessage({
 				WorkID: WorkID.ServiceForLoad,
-				Data: Event.data.Data
+				Data: "Searched."
 			});
 			
 			break;
