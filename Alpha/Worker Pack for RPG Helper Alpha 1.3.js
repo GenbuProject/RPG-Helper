@@ -7,7 +7,7 @@ onmessage = function (Event) {
 	switch (Event.data.WorkID) {
 		case WorkID.Load:
 			var Reader = new FileReaderSync();
-				Reader.readAsText(Event.data.Data.target.files[0]);
+				Reader.readAsText(Event.data.Data);
 				
 			postMessage({
 				WorkID: WorkID.Load,
