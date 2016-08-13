@@ -22,17 +22,10 @@ var RPGHelper = function () {
 		this.Worker.onmessage = function (Event) {
 			switch (Event.data.WorkID) {
 				case 0:
-					GeneForLoad.next();
-					GeneForLoad = undefined;
-					
-					Resource.UserData = Event.data;
-					this.onmessage = null;
-					
+					Resource.UserData = Event.data.Data;
 					break;
 					
-				case 100:
-					GeneForLoad.next();
-					
+				default:
 					break;
 			}
 		}
@@ -238,35 +231,24 @@ var RPGHelper = function () {
 	 *#LoadFuc : Function型
 	 *##################################################
 	/*/
-	this.Load = function (Extention) {
-		var Gene = (function* (Worker) {
-			var Click = document.createEvent("MouseEvents");
-				Click.initEvent("click", false, true);
-				
-			var Filer = document.createElement("Input");
-				Filer.type = "File";
-				Filer.accept = Extention;
-				
-				Filer.addEventListener("change", function (Event) {
-					Worker.postMessage({
-						WorkID: 0,
-						Data: Event.target.files[0]
-					});
+	this.Load = function (Extention, LoadFuc) {
+		var Click = document.createEvent("MouseEvents");
+			Click.initEvent("click", false, true);
+			
+		var Filer = document.createElement("Input");
+			Filer.type = "File";
+			Filer.accept = Extention;
+			
+			Filer.addEventListener("change", function (Event) {
+				this.Worker.postMessage({
+					WorkID: 0,
+					Data: Event.target.files[0]
 				});
 				
-				Filer.dispatchEvent(Click);
-				
-			yield "User is choosing a file...";
+				LoadFuc();
+			});
 			
-			return "Loading has been finished.";
-		})(this.Worker);
-		
-		GeneForLoad = Gene;
-		
-		this.Worker.postMessage({
-			WorkID: 100,
-			Data: "User is choosing a file..."
-		});
+			Filer.dispatchEvent(Click);
 	}
 	
 	/*/
