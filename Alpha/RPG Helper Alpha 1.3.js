@@ -20,11 +20,10 @@ var RPGHelper = function () {
 		
 	this.Worker = new Worker("https://genbuproject.github.io/RPG-Helper/Alpha/Worker Pack for RPG Helper Alpha 1.3.js");
 		this.Worker.onmessage = function (Event) {
-			var GeneForLoad = null;
-			
 			switch (Event.data.WorkID) {
 				case 0:
 					GeneForLoad.next();
+					GeneForLoad = undefined;
 					
 					Resource.UserData = Event.data;
 					this.onmessage = null;
@@ -32,7 +31,6 @@ var RPGHelper = function () {
 					break;
 					
 				case 100:
-					GeneForLoad = Event.data.Data;
 					GeneForLoad.next();
 					
 					break;
@@ -256,8 +254,6 @@ var RPGHelper = function () {
 					});
 				});
 				
-				yield "Waiting a event...";
-				
 				Filer.dispatchEvent(Click);
 				
 			yield "User is choosing a file...";
@@ -265,11 +261,11 @@ var RPGHelper = function () {
 			return "Loading has been finished.";
 		})(this.Worker);
 		
-		Gene.next();
+		GeneForLoad = Gene;
 		
 		this.Worker.postMessage({
 			WorkID: 100,
-			Data: Gene
+			Data: "User is choosing a file..."
 		});
 	}
 	
