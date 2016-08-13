@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.3 [Last Updated: 2016/08/10]
+ *#RPG Helper Alpha 1.3 [Last Updated: 2016/08/13]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -18,6 +18,19 @@ var RPGHelper = function () {
 		this.SE.type = "audio/*";
 		this.SE.loop = false;
 		
+	this.Worker = new Worker("Worker Pack for RPG Helper Alpha 1.3.js");
+		this.Worker.onmessage = function (Event) {
+			switch (Event.data.WorkID) {
+				case 0:
+					Resource.UserData = Event.data;
+					this.onmessage = null;
+					
+					break;
+			}
+		}
+		
+	this.CharaPos = [null, null];
+	
 	/*/
 	 *##################################################
 	 *#【R】
@@ -217,20 +230,16 @@ var RPGHelper = function () {
 	 *#LoadFuc : Function型
 	 *##################################################
 	/*/
-	this.Load = function (Extention, LoadFuc) {
-		var Reader = new FileReader();
-		
+	this.Load = function (Extention) {
 		var Filer = document.createElement("Input");
 			Filer.type = "File";
 			Filer.accept = Extention;
 			
 			Filer.addEventListener("change", function (Event) {
-				Reader.readAsText(Event.target.files[0]);
-				
-				Reader.onloadend = function () {
-					Resource.UserData = JSON.parse(Reader.result);
-					LoadFuc();
-				}
+				this.Worker.postMessage({
+					WorkID: 0,
+					Data: Event.target.files[0]
+				});
 			});
 			
 			var Click = document.createEvent("MouseEvents");
@@ -253,8 +262,6 @@ var RPGHelper = function () {
 			
 			Resource.SystemData = JSON.parse(Loader.responseText);
 	}
-	
-	var CharaPos = [null, null];
 	
 	/*/
 	 *##################################################
