@@ -3,13 +3,13 @@ var WorkID = {
 	ServiceForLoad: 100
 }
 
-port.onmessage = function (Event) {
+onmessage = function (Event) {
 	switch (Event.data.WorkID) {
 		case WorkID.Load:
 			var Reader = new FileReaderSync();
 				Reader.readAsText(Event.data.Data.target.files[0]);
 				
-			port.postMessage({
+			postMessage({
 				WorkID: WorkID.Load,
 				Data: JSON.parse(Reader.result)
 			});
@@ -17,7 +17,7 @@ port.onmessage = function (Event) {
 			break;
 			
 		case WorkID.ServiceForLoad:
-			port.postMessage({
+			postMessage({
 				WorkID: WorkID.ServiceForLoad,
 				Data: Event.data.Data
 			});
