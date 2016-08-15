@@ -606,7 +606,7 @@ var RPGHelper = function () {
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
 						} else {
-							switch (TipSettingData[MapData[32 * MemPos[1] + MemPos[0]]]) {
+							switch (TipSettingData[MapData[0][32 * MemPos[1] + MemPos[0]]]) {
 								case "0":
 									break;
 									
