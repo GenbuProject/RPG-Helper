@@ -560,7 +560,7 @@ var RPGHelper = function () {
 			CharaImg.onload = (function (R) {
 				return function () {
 					var Ctx = CharaCanvas.getContext("2d");
-						Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * Position[1], 16, 32);
+						Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
 				}
 			})(this.R);
 			
