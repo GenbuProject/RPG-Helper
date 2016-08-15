@@ -606,7 +606,7 @@ var RPGHelper = function () {
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
 						} else {
-							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -627,7 +627,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -648,7 +648,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -681,7 +681,7 @@ var RPGHelper = function () {
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
 						} else {
-							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -702,7 +702,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -723,7 +723,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -756,7 +756,7 @@ var RPGHelper = function () {
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
 						} else {
-							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -777,7 +777,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -798,7 +798,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -831,7 +831,7 @@ var RPGHelper = function () {
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
 						} else {
-							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -852,7 +852,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
@@ -873,7 +873,7 @@ var RPGHelper = function () {
 						}
 						
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
 								case "0":
 									break;
 									
