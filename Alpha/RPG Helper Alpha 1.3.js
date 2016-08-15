@@ -391,6 +391,10 @@ var RPGHelper = function () {
 	this.Map = {
 		Canvas: this.Canvas,
 		
+		TipData: null,
+		TipSettingData: null,
+		MapData: null
+		
 		/*/
 		 *##################################################
 		 *#【Show】
@@ -405,9 +409,6 @@ var RPGHelper = function () {
 				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
 			}
 			
-			var TipData = null;
-			var TipSettingData = null;
-			var MapData = null;
 			var TipImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
@@ -583,10 +584,12 @@ var RPGHelper = function () {
 		PadFunc: null,
 		
 		R: this.R,
+		Map: this.Map,
 		Character: this.Character,
 		
 		KeyboardType: function (CharacterID) {
 			var R = this.R;
+			var Map = this.Map;
 			var Character = this.Character;
 			
 			if (sessionStorage.getItem("GamePad") != null) {
