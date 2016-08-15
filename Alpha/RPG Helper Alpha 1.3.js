@@ -393,7 +393,7 @@ var RPGHelper = function () {
 		
 		TipData: null,
 		TipSettingData: null,
-		MapData: null
+		MapData: null,
 		
 		/*/
 		 *##################################################
