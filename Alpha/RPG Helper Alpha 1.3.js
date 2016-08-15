@@ -608,9 +608,26 @@ var RPGHelper = function () {
 								if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 									return;
 								} else {
-									/*switch (TipSettingData[32 * MemPos[1] + MemPos[0]]) {
-										case 
-									}*/
+									switch (TipSettingData[32 * MemPos[1] + MemPos[0]]) {
+										case "0":
+											break;
+											
+										case "F0000":
+											return;
+											break;
+											
+										case "100000":
+											Character.Hide();
+											return;
+											
+											break;
+											
+										case "100":
+											Character.Hide();
+											return;
+											
+											break;
+									}
 								}
 							}
 						}
