@@ -616,14 +616,48 @@ var RPGHelper = function () {
 									
 								case "100000":
 									Character.Hide();
-									return;
-									
 									break;
 									
 								case "100":
 									Character.Hide();
-									return;
+									break;
+							}
+						}
+						
+						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
 									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
 									break;
 							}
 						}
