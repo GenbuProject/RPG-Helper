@@ -611,7 +611,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -630,7 +632,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -649,7 +653,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -680,7 +686,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -699,7 +707,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -718,7 +728,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -749,7 +761,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -768,7 +782,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -787,7 +803,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -818,7 +836,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -837,7 +857,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
@@ -856,7 +878,9 @@ var RPGHelper = function () {
 									break;
 									
 								case "F0000":
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
 									return;
+									
 									break;
 									
 								case "100000":
