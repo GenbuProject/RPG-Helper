@@ -410,7 +410,7 @@ var RPGHelper = function () {
 			var TipImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
-				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
+				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID]["FileName"], true);
 				TipLoader.responseType = "arraybuffer";
 				
 				TipLoader.onload = function () {
