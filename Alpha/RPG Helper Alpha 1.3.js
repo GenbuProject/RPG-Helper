@@ -406,6 +406,7 @@ var RPGHelper = function () {
 			}
 			
 			var TipData = null;
+			var TipSettingData = null;
 			var MapData = null;
 			var TipImg = new Image();
 			
@@ -425,7 +426,16 @@ var RPGHelper = function () {
 				}
 				
 				TipLoader.send(null);
-					
+				
+			var TipSettingLoader = new XMLHttpRequest();
+				TipSettingLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID]["FileName"].split(".png")[0] + ".TileSetting", false);
+				
+				TipSettingLoader.onload = function () {
+					TipSettingData = JSON.parse(TipSettingLoader.responseText);
+				}
+				
+				TipSettingLoader.send(null);
+				
 			var MapLoader = new XMLHttpRequest();
 				MapLoader.open("GET", "Map/" + Resource.SystemData.Map[ID].MapFile, false);
 				
