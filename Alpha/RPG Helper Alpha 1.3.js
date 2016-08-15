@@ -670,6 +670,67 @@ var RPGHelper = function () {
 					case 40:
 						Event.preventDefault();
 						
+						var MemPos = [CharaPos[0], CharaPos[1] + 1];
+						
+						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
+							return;
+						} else {
+							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
 						CharaPos[1]++;
 						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 						
@@ -678,6 +739,67 @@ var RPGHelper = function () {
 					case 37:
 						Event.preventDefault();
 						
+						var MemPos = [CharaPos[0] - 1, CharaPos[1]];
+						
+						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
+							return;
+						} else {
+							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
 						CharaPos[0]--;
 						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 						
@@ -685,6 +807,67 @@ var RPGHelper = function () {
 						
 					case 39:
 						Event.preventDefault();
+						
+						var MemPos = [CharaPos[0] + 1, CharaPos[1]];
+						
+						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
+							return;
+						} else {
+							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
+						
+						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
+							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									break;
+									
+								case "F0000":
+									return;
+									break;
+									
+								case "100000":
+									Character.Hide();
+									break;
+									
+								case "100":
+									Character.Hide();
+									break;
+							}
+						}
 						
 						CharaPos[0]++;
 						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
