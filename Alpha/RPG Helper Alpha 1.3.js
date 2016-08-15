@@ -601,7 +601,7 @@ var RPGHelper = function () {
 					case 38:
 						Event.preventDefault();
 						
-						var MemPos = [CharaPos[0], CharaPos[1] - 1];
+						var MemPos = [CharaPos[0], CharaPos[1] - 0.5];
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -668,7 +668,7 @@ var RPGHelper = function () {
 							}
 						}
 						
-						CharaPos[1]--;
+						CharaPos[1] -= 0.5;
 						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 						
 						break;
@@ -676,7 +676,7 @@ var RPGHelper = function () {
 					case 40:
 						Event.preventDefault();
 						
-						var MemPos = [CharaPos[0], CharaPos[1] + 1];
+						var MemPos = [CharaPos[0], CharaPos[1] + 0.5];
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -743,7 +743,7 @@ var RPGHelper = function () {
 							}
 						}
 						
-						CharaPos[1]++;
+						CharaPos[1] += 0.5;
 						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
 						
 						break;
@@ -751,7 +751,7 @@ var RPGHelper = function () {
 					case 37:
 						Event.preventDefault();
 						
-						var MemPos = [CharaPos[0] - 1, CharaPos[1]];
+						var MemPos = [CharaPos[0] - 0.5, CharaPos[1]];
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -818,7 +818,7 @@ var RPGHelper = function () {
 							}
 						}
 						
-						CharaPos[0]--;
+						CharaPos[0] -= 0.5;
 						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
 						
 						break;
@@ -826,7 +826,7 @@ var RPGHelper = function () {
 					case 39:
 						Event.preventDefault();
 						
-						var MemPos = [CharaPos[0] + 1, CharaPos[1]];
+						var MemPos = [CharaPos[0] + 0.5, CharaPos[1]];
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -893,7 +893,7 @@ var RPGHelper = function () {
 							}
 						}
 						
-						CharaPos[0]++;
+						CharaPos[0] += 0.5;
 						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
 						
 						break;
