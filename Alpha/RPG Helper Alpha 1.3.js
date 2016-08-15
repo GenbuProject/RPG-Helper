@@ -411,7 +411,7 @@ var RPGHelper = function () {
 			var TipImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
-				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID]["FileName"], true);
+				TipLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID], true);
 				TipLoader.responseType = "arraybuffer";
 				
 				TipLoader.onload = function () {
@@ -428,7 +428,7 @@ var RPGHelper = function () {
 				TipLoader.send(null);
 				
 			var TipSettingLoader = new XMLHttpRequest();
-				TipSettingLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID]["FileName"].split(".png")[0] + ".TileSetting", false);
+				TipSettingLoader.open("GET", "Tile/" + Resource.SystemData.Tile[Resource.SystemData.Map[ID].TileID].split(".png")[0] + ".TileSetting", false);
 				
 				TipSettingLoader.onload = function () {
 					TipSettingData = JSON.parse(TipSettingLoader.responseText);
@@ -597,6 +597,20 @@ var RPGHelper = function () {
 				switch (Event.keyCode) {
 					case 38:
 						Event.preventDefault();
+						
+						var MemPos = [CharaPos[0], CharaPos[1] - 1];
+						
+						if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
+							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
+								if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
+									return;
+								} else {
+									/*switch (TipSettingData[32 * MemPos[1] + MemPos[0]]) {
+										case 
+									}*/
+								}
+							}
+						}
 						
 						CharaPos[1]--;
 						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
