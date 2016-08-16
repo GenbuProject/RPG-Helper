@@ -652,19 +652,17 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
-									Character.Hide();
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
-									Character.Hide();
 									break;
 									
 								case "200":
@@ -680,20 +678,30 @@ var RPGHelper = function () {
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -701,26 +709,36 @@ var RPGHelper = function () {
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
 						
 						CharaPos[1]--;
-						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 						
 						break;
 						
@@ -734,20 +752,30 @@ var RPGHelper = function () {
 						} else {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -755,20 +783,30 @@ var RPGHelper = function () {
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -776,26 +814,36 @@ var RPGHelper = function () {
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
 						
 						CharaPos[1]++;
-						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 						
 						break;
 						
@@ -809,20 +857,30 @@ var RPGHelper = function () {
 						} else {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -830,20 +888,30 @@ var RPGHelper = function () {
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -851,26 +919,36 @@ var RPGHelper = function () {
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
 						
 						CharaPos[0]--;
-						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 						
 						break;
 						
@@ -884,20 +962,30 @@ var RPGHelper = function () {
 						} else {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -905,20 +993,30 @@ var RPGHelper = function () {
 						if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
@@ -926,26 +1024,36 @@ var RPGHelper = function () {
 						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+									//通行不可
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
-									Character.Hide();
+									//常にキャラの上に表示
 									break;
 									
 								case "100":
-									Character.Hide();
+									//後ろに行くと隠れる
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
 						
 						CharaPos[0]++;
-						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 						
 						break;
 				}
