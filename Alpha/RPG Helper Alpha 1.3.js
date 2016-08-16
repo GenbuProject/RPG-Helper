@@ -641,6 +641,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						var MemPos = [CharaPos[0], CharaPos[1] - 1];
+						var Count = 0;
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -652,16 +653,22 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
@@ -671,6 +678,8 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
@@ -684,16 +693,22 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
@@ -703,6 +718,8 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
@@ -716,6 +733,8 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
@@ -723,6 +742,8 @@ var RPGHelper = function () {
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									return;
 									
@@ -730,6 +751,8 @@ var RPGHelper = function () {
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									return;
 									
@@ -743,6 +766,8 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									return;
 									
@@ -750,8 +775,10 @@ var RPGHelper = function () {
 							}
 						}
 						
-						CharaPos[1]--;
-						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+						if (Count == 0) {
+							CharaPos[1]--;
+							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+						}
 						
 						break;
 						
