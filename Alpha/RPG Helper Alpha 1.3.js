@@ -145,7 +145,7 @@ var RPGHelper = function () {
 					this.BGM.src = "Audio/" + Key;
 					this.BGM.volume = Resource.SystemData.Audio.BGM[Key].Volume;
 					
-					thia.BGM.load();
+					this.BGM.load();
 					this.BGM.play();
 				}
 			}
