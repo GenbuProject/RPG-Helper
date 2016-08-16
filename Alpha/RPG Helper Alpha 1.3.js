@@ -901,7 +901,6 @@ var RPGHelper = function () {
 			}
 			
 			document.addEventListener("keydown", this.PadFunc);
-			
 			sessionStorage.setItem("GamePad", "Keyboard");
 		},
 		
