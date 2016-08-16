@@ -781,7 +781,7 @@ var RPGHelper = function () {
 						}
 						
 						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000") {
-							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]]] == "400000" ? 0x0002 : 0x0000]);
+							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]]] == "400000" ? 0x0002 : 0x0000]);
 						}
 						
 						break;
