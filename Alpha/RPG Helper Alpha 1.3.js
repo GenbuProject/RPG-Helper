@@ -653,16 +653,16 @@ var RPGHelper = function () {
 								case "F0000":
 									//通行不可
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
-									
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -671,6 +671,7 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -684,16 +685,16 @@ var RPGHelper = function () {
 								case "F0000":
 									//通行不可
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
-									
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -702,6 +703,7 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -721,18 +723,29 @@ var RPGHelper = function () {
 									
 								case "100000":
 									//常にキャラの上に表示
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
+									return;
+									
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
+									return;
+									
 									break;
 									
 								case "200":
 									//下レイヤーに合わせる
+									return;
+									
 									break;
 									
 								case "400000":
 									//下半身が半透明に
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
+									return;
+									
 									break;
 							}
 						}
