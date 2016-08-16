@@ -525,7 +525,7 @@ var RPGHelper = function () {
 		 *#|=> [1] : int型
 		 *##################################################
 		/*/
-		Warp: function (CharacterID, Direction, Position) {
+		Warp: function (CharacterID, Direction, Position, VisibleTip) {
 			if (document.getElementById("Character")) {
 				document.getElementById("Character").parentElement.removeChild(document.getElementById("Character"));
 			}
@@ -560,7 +560,46 @@ var RPGHelper = function () {
 			CharaImg.onload = (function (R) {
 				return function () {
 					var Ctx = CharaCanvas.getContext("2d");
+					
+					if (VisibleTip == null) {
 						Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
+					} else if (VisibleTip instanceof Array) {
+						if (VisibleTip[0] == 0x0000) {
+							if (VisibleTip[1] == 0x0000) {
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
+							} else if (VisibleTip[1] == 0x0001) {
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+							} else if (VisibleTip[1] == 0x0002) {
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+								
+								Ctx.globalAlpha = 0.5;
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1] - 2), 16, 16);
+							}
+						} else if (VisibleTip[0] == 0x0001) {
+							if (VisibleTip[1] == 0x0000) {
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1] - 2), 16, 16);
+							} else if (VisibleTip[1] == 0x0001) {
+								
+							} else if (VisibleTip[1] == 0x0002) {
+								Ctx.globalAlpha = 0.5;
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1] - 2), 16, 16);
+							}
+						} else if (VisibleTip[0] == 0x0002) {
+							if (VisibleTip[1] == 0x0000) {
+								Ctx.globalAlpha = 0.5;
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+								
+								Ctx.globalAlpha = 1.0;
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1] - 2), 16, 16);
+							} else if (VisibleTip[1] == 0x0001) {
+								Ctx.globalAlpha = 0.5;
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+							} else if (VisibleTip[1] == 0x0002) {
+								Ctx.globalAlpha = 0.5;
+								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
+							}
+						}
+					}
 				}
 			})(this.R);
 			
@@ -608,20 +647,32 @@ var RPGHelper = function () {
 						} else {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
+									//通行可能
 									break;
 									
 								case "F0000":
+									//通行不可
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
 									return;
 									
 									break;
 									
 								case "100000":
+									//常にキャラの上に表示
 									Character.Hide();
 									break;
 									
 								case "100":
+									//後ろに行くと隠れる
 									Character.Hide();
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
 									break;
 							}
 						}
