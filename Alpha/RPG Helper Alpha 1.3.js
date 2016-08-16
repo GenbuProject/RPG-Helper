@@ -790,6 +790,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						var MemPos = [CharaPos[0], CharaPos[1] + 1];
+						var Count = 0;
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -801,17 +802,23 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
+									Count++;
 									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -820,6 +827,9 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -832,17 +842,23 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
+									Count++;
 									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -851,6 +867,9 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -863,31 +882,56 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
+									return;
+									
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
+									return;
+									
 									break;
 									
 								case "200":
 									//下レイヤーに合わせる
+									return;
+									
 									break;
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
+									return;
+									
 									break;
 							}
 						}
 						
-						CharaPos[1]++;
-						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
+						if (Count == 0) {
+							CharaPos[1]++;
+							Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
+						}
+						
+						if (TipSettingData[MapData[2][CharaPos[1] + 1][CharaPos[0]]] == "100000") {
+							Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+						}
 						
 						break;
 						
@@ -895,6 +939,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						var MemPos = [CharaPos[0] - 1, CharaPos[1]];
+						var Count = 0;
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -906,17 +951,23 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
+									Count++;
 									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -925,6 +976,9 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -937,17 +991,23 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
+									Count++;
 									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -956,6 +1016,9 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -968,31 +1031,56 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
+									return;
+									
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
+									return;
+									
 									break;
 									
 								case "200":
 									//下レイヤーに合わせる
+									return;
+									
 									break;
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
+									return;
+									
 									break;
 							}
 						}
 						
-						CharaPos[0]--;
-						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
+						if (Count == 0) {
+							CharaPos[0]--;
+							Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
+						}
+						
+						if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0] - 1]] == "100000") {
+							Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+						}
 						
 						break;
 						
@@ -1000,6 +1088,7 @@ var RPGHelper = function () {
 						Event.preventDefault();
 						
 						var MemPos = [CharaPos[0] + 1, CharaPos[1]];
+						var Count = 0;
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -1011,17 +1100,23 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
+									Count++;
 									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -1030,6 +1125,9 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -1042,17 +1140,23 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									return;
+									Count++;
 									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -1061,6 +1165,9 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
 									break;
 							}
 						}
@@ -1073,31 +1180,56 @@ var RPGHelper = function () {
 									
 								case "F0000":
 									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									return;
 									
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, 0x0001]);
+									return;
+									
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
+									return;
+									
 									break;
 									
 								case "200":
 									//下レイヤーに合わせる
+									return;
+									
 									break;
 									
 								case "400000":
 									//下半身が半透明に
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
+									return;
+									
 									break;
 							}
 						}
 						
-						CharaPos[0]++;
-						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
+						if (Count == 0) {
+							CharaPos[0]++;
+							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
+						}
+						
+						if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0] + 1]] == "100000") {
+							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+						}
 						
 						break;
 				}
