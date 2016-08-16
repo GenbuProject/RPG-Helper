@@ -597,311 +597,312 @@ var RPGHelper = function () {
 			}
 			
 			this.PadFunc = function (Event) {
-				switch (Event.keyCode) {
-					case 38:
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0], CharaPos[1] - 0.5];
-						
-						if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
-							return;
-						} else {
-							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+				setTimeout(function () {
+					switch (Event.keyCode) {
+						case 38:
+							Event.preventDefault();
+							
+							var MemPos = [CharaPos[0], CharaPos[1] - 0.5];
+							
+							if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
+								return;
+							} else {
+								switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						CharaPos[1] -= 0.5;
-						Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
-						
-						break;
-						
-					case 40:
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0], CharaPos[1] + 0.5];
-						
-						if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
-							return;
-						} else {
-							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							CharaPos[1] -= 0.5;
+							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]]);
+							
+							break;
+							
+						case 40:
+							Event.preventDefault();
+							
+							var MemPos = [CharaPos[0], CharaPos[1] + 0.5];
+							
+							if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
+								return;
+							} else {
+								switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						CharaPos[1] += 0.5;
-						Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
-						
-						break;
-						
-					case 37:
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0] - 0.5, CharaPos[1]];
-						
-						if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
-							return;
-						} else {
-							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							CharaPos[1] += 0.5;
+							Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]]);
+							
+							break;
+							
+						case 37:
+							Event.preventDefault();
+							
+							var MemPos = [CharaPos[0] - 0.5, CharaPos[1]];
+							
+							if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
+								return;
+							} else {
+								switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						CharaPos[0] -= 0.5;
-						Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
-						
-						break;
-						
-					case 39:
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0] + 0.5, CharaPos[1]];
-						
-						if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
-							return;
-						} else {
-							switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							CharaPos[0] -= 0.5;
+							Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]]);
+							
+							break;
+							
+						case 39:
+							Event.preventDefault();
+							
+							var MemPos = [CharaPos[0] + 0.5, CharaPos[1]];
+							
+							if (MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])] == -1) {
+								return;
+							} else {
+								switch (TipSettingData[MapData[0][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[1][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
-							switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
-								case "0":
-									break;
-									
-								case "F0000":
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
-									return;
-									
-									break;
-									
-								case "100000":
-									Character.Hide();
-									break;
-									
-								case "100":
-									Character.Hide();
-									break;
+							
+							if (MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])] != -1) {
+								switch (TipSettingData[MapData[2][Math.floor(MemPos[1])][Math.floor(MemPos[0])]]) {
+									case "0":
+										break;
+										
+									case "F0000":
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+										return;
+										
+										break;
+										
+									case "100000":
+										Character.Hide();
+										break;
+										
+									case "100":
+										Character.Hide();
+										break;
+								}
 							}
-						}
-						
-						CharaPos[0] += 0.5;
-						Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
-						
-						break;
+							
+							CharaPos[0] += 0.5;
+							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]]);
+							
+							break;
+					}
 				}
-			}
+			}, 10);
 			
 			document.addEventListener("keydown", this.PadFunc);
-			
 			sessionStorage.setItem("GamePad", "Keyboard");
 		},
 		
