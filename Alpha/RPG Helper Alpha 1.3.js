@@ -145,6 +145,7 @@ var RPGHelper = function () {
 					this.BGM.src = "Audio/" + Key;
 					this.BGM.volume = Resource.SystemData.Audio.BGM[Key].Volume;
 					
+					thia.BGM.load();
 					this.BGM.play();
 				}
 			}
@@ -181,6 +182,7 @@ var RPGHelper = function () {
 						this.SE.src = "Audio/SE/" + Key;
 						this.SE.volume = Resource.SystemData.Audio.SE[Key].Volume;
 						
+						this.SE.load();
 						this.SE.play();
 					}
 				}
@@ -188,6 +190,7 @@ var RPGHelper = function () {
 				this.SE.src = "Audio/" + ID;
 				this.SE.volume = typeof arguments[1] == "number" ? arguments[1] : 1;
 				
+				this.SE.load();
 				this.SE.play();
 			}
 		}
