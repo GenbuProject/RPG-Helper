@@ -133,7 +133,6 @@ var RPGHelper = function () {
 			for (var Key in Resource.SystemData.Audio.Util) {
 				Util[UtilCount] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
 					Util[UtilCount].loop = false;
-					Util[UtilCount].volume = Resource.SystemData.Audio.Util[Key].Volume;
 					
 					Util[UtilCount].onload = function () {
 						var Source = Ctx.createMediaElementSource(Util[UtilCount]);
