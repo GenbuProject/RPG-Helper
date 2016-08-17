@@ -153,11 +153,11 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		PlayBGM: function (ID) {
-			if (!BGM[ID].paused) {
-				BGM[ID].pause();
+			if (!this.BGM[ID].paused) {
+				this.BGM[ID].pause();
 			}
 			
-			BGM[ID].play();
+			this.BGM[ID].play();
 		},
 		
 		/*/
@@ -166,12 +166,15 @@ var RPGHelper = function () {
 		 *#BGMを停止する
 		 *##################################################
 		/*/
-		StopBGM: function () {
-			try {
-				this.BGM.pause();
-				this.BGM.src = "Audio/null.wav";
-			} catch (Error) {
-				console.log(Error);
+		StopBGM: function (ID) {
+			if (ID == undefined) {
+				for (var i = 0; i < this.BGM.length; i++) {
+					if (!this.BGM[i].paused) {
+						this.BGM[i].pause();
+					}
+				}
+			} else {
+				this.BGM[ID].pause();
 			}
 		},
 		
