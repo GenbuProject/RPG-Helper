@@ -2886,7 +2886,7 @@ var RPGHelper = function () {
 							Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 						}
 						
-						if (TipSettingData[MapData[2][CharaPos[1] + 1][CharaPos[0]]] == "100000") {
+						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000") {
 							Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 						}
 						
@@ -3025,7 +3025,7 @@ var RPGHelper = function () {
 							Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 						}
 						
-						if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0] - 1]] == "100000") {
+						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000") {
 							Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 						}
 						
@@ -3164,7 +3164,7 @@ var RPGHelper = function () {
 							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 						}
 						
-						if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0] + 1]] == "100000") {
+						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000") {
 							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 						}
 						
