@@ -88,7 +88,13 @@ var RPGHelper = function () {
 	/*/
 	this.Sound = {
 		BGM: this.BGM,
+		BGMBuffer: this.BGMBuffer,
+		
 		SE: this.SE,
+		SEBuffer: this.SEBuffer,
+		
+		Util: this.Util,
+		UtilBuffer: this.UtilBuffer,
 		
 		/*/
 		 *##################################################
@@ -165,24 +171,11 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		PlayBGM: function (ID) {
-			if (!this.BGM.paused) {
-				try {
-					this.BGM.pause();
-					this.BGM.src = "Audio/null.wav";
-				} catch (Error) {
-					console.log(Error);
-				}
-			}
-			
-			for (var Key in Resource.SystemData.Audio.BGM) {
-				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
-					this.BGM.src = "Audio/" + Key;
-					this.BGM.volume = Resource.SystemData.Audio.BGM[Key].Volume;
-					
-					this.BGM.load();
-					this.BGM.play();
-				}
-			}
+			var Source = this.BGM.createBufferSource();
+				Source.buffer = this.BGMBuffer[ID];
+				Source.connect(this.BGM.destination);
+				
+				Source.start();
 		},
 		
 		/*/
