@@ -92,7 +92,7 @@ var RPGHelper = function () {
 		 *#使用する音源を一斉読み込みする
 		 *##################################################
 		/*/
-		Load: function () {
+		Load: function (LoadFuc) {
 			var Ctx = new AudioContext();
 			
 			var BGM = this.BGM;
@@ -139,6 +139,8 @@ var RPGHelper = function () {
 					
 				UtilCount++;
 			}
+			
+			LoadFuc();
 		},
 		
 		/*/
