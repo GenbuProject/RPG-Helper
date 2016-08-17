@@ -10,14 +10,9 @@ var RPGHelper = function () {
 		this.Canvas.style.height = this.Canvas.attributes["height"].value + "px";
 		this.Canvas.style.position = "Relative";
 		
-	this.BGM = new AudioContext();
-	this.BGMBuffer = [];
-	
-	this.SE = new AudioContext();
-	this.SEBuffer = [];
-	
-	this.Util = new AudioContext();
-	this.UtilBuffer = [];
+	this.BGM = [];
+	this.SE = [];
+	this.Util = [];
 	
 	this.CharaPos = [null, null];
 	
@@ -88,13 +83,8 @@ var RPGHelper = function () {
 	/*/
 	this.Sound = {
 		BGM: this.BGM,
-		BGMBuffer: this.BGMBuffer,
-		
 		SE: this.SE,
-		SEBuffer: this.SEBuffer,
-		
 		Util: this.Util,
-		UtilBuffer: this.UtilBuffer,
 		
 		/*/
 		 *##################################################
@@ -103,67 +93,51 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		Load: function () {
+			var Ctx = new AudioContext();
+			
 			var BGM = this.BGM;
-			var BGMBuffer = this.BGMBuffer;
-			var BGMReaders = [];
 				var BGMCount = 0;
 				
 			var SE = this.SE;
-			var SEBuffer = this.SEBuffer;
-			var SEReaders = [];
 				var SECount = 0;
 				
 			var Util = this.Util;
-			var UtilBuffer = this.UtilBuffer;
-			var UtilReaders = [];
 				var UtilCount = 0;
 				
 			for (var Key in Resource.SystemData.Audio.BGM) {
-				BGMCount++;
-				
-				BGMReaders[BGMCount] = new XMLHttpRequest();
-					BGMReaders[BGMCount].open("GET", "Audio/" + Key, true);
-					BGMReaders[BGMCount].responseType = "arraybuffer";
+				BGM[BGMCount] = new Audio("Audio/" + Key);
+					BGM[BGMCount].loop = true;
 					
-					BGMReaders[BGMCount].onload = function () {
-						BGM.decodeAudioData(BGMReaders[BGMCount].response, function (Result) {
-							BGMBuffer[BGMCount] = Result;
-						});
+					BGM[BGMCount].onload = function () {
+						var Source = Ctx.createMediaElementSource(BGM[BGMCount]);
+							Source.connect(Ctx.destination);
 					}
 					
-					BGMReaders[BGMCount].send(null);
+				BGMCount++;
 			}
 			
 			for (var Key in Resource.SystemData.Audio.SE) {
-				SECount++;
-				
-				SEReaders[SECount] = new XMLHttpRequest();
-					SEReaders[SECount].open("GET", "Audio/SE/" + Key, true);
-					SEReaders[SECount].responseType = "arraybuffer";
+				SE[SECount] = new Audio("Audio/SE/" + Key);
+					SE[SECount].loop = false;
 					
-					SEReaders[SECount].onload = function () {
-						SE.decodeAudioData(SEReaders[SECount].response, function (Result) {
-							SEBuffer[SECount] = Result;
-						});
+					SE[SECount].onload = function () {
+						var Source = Ctx.createMediaElementSource(SE[SECount]);
+							Source.connect(Ctx.destination);
 					}
 					
-					SEReaders[SECount].send(null);
+				SECount++;
 			}
 			
 			for (var Key in Resource.SystemData.Audio.Util) {
-				UtilCount++;
-				
-				UtilReaders[UtilCount] = new XMLHttpRequest();
-					UtilReaders[UtilCount].open("GET", "Audio/" + Resource.SystemData.Audio.Util[Key], true);
-					UtilReaders[UtilCount].responseType = "arraybuffer";
+				Util[UtilCount] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
+					BGM[BGMCount].loop = false;
 					
-					UtilReaders[UtilCount].onload = function () {
-						Util.decodeAudioData(UtilReaders[UtilCount].response, function (Result) {
-							UtilBuffer[UtilCount] = Result;
-						});
+					Util[UtilCount].onload = function () {
+						var Source = Ctx.createMediaElementSource(Util[UtilCount]);
+							Source.connect(Ctx.destination);
 					}
 					
-					UtilReaders[UtilCount].send(null);
+				UtilCount++;
 			}
 		},
 		
@@ -177,11 +151,11 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		PlayBGM: function (ID) {
-			var Source = this.BGM.createBufferSource();
-				Source.buffer = this.BGMBuffer[ID];
-				Source.connect(this.BGM.destination);
-				
-				Source.start();
+			if (!BGM[ID].paused) {
+				BGM[ID].pause();
+			}
+			
+			BGM[ID].play();
 		},
 		
 		/*/
