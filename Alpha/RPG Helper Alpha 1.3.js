@@ -126,8 +126,8 @@ var RPGHelper = function () {
 					BGMReaders[BGMCount].responseType = "arraybuffer";
 					
 					BGMReaders[BGMCount].onload = function () {
-						this.BGM.decodeAudioData(BGMReaders[BGMCount].response, function (Result) {
-							this.BGMBuffer[BGMCount] = Result;
+						BGM.decodeAudioData(BGMReaders[BGMCount].response, function (Result) {
+							BGMBuffer[BGMCount] = Result;
 						});
 					}
 					
@@ -142,8 +142,8 @@ var RPGHelper = function () {
 					SEReaders[SECount].responseType = "arraybuffer";
 					
 					SEReaders[SECount].onload = function () {
-						this.SE.decodeAudioData(SEReaders[SECount].response, function (Result) {
-							this.SEBuffer[SECount] = Result;
+						SE.decodeAudioData(SEReaders[SECount].response, function (Result) {
+							SEBuffer[SECount] = Result;
 						});
 					}
 					
@@ -158,8 +158,8 @@ var RPGHelper = function () {
 					UtilReaders[UtilCount].responseType = "arraybuffer";
 					
 					UtilReaders[UtilCount].onload = function () {
-						this.Util.decodeAudioData(UtilReaders[UtilCount].response, function (Result) {
-							this.UtilBuffer[UtilCount] = Result;
+						Util.decodeAudioData(UtilReaders[UtilCount].response, function (Result) {
+							UtilBuffer[UtilCount] = Result;
 						});
 					}
 					
