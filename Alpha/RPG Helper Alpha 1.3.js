@@ -10,14 +10,15 @@ var RPGHelper = function () {
 		this.Canvas.style.height = this.Canvas.attributes["height"].value + "px";
 		this.Canvas.style.position = "Relative";
 		
-	this.BGM = new Audio();
-		this.BGM.type = "audio/*";
-		this.BGM.loop = true;
-		
-	this.SE = new Audio();
-		this.SE.type = "audio/*";
-		this.SE.loop = false;
-		
+	this.BGM = new AudioContext();
+	this.BGMBuffer = [];
+	
+	this.SE = new AudioContext();
+	this.SEBuffer = [];
+	
+	this.Util = new AudioContext();
+	this.UtilBuffer = [];
+	
 	this.CharaPos = [null, null];
 	
 	/*/
@@ -96,12 +97,61 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		Load: function () {
+			var BGMReaders = [];
+				var BGMCount = 0;
+				
+			var SEReaders = [];
+				var SECount = 0;
+				
+			var UtilReaders = [];
+				var UtilCount = 0;
+				
 			for (var Key in Resource.SystemData.Audio.BGM) {
-				this.PlaySE(Key, 0);
+				BGMCount++;
+				
+				BGMReaders[BGMCount] = new XMLHttpRequest();
+					BGMReaders[BGMCount].open("GET", "Audio/" + Key, true);
+					BGMReaders[BGMCount].responseType = "arraybuffer";
+					
+					BGMReaders[BGMCount].onload = function () {
+						BGM.decodeAudioData(BGMReaders[BGMCount].response, function (Result) {
+							BGMBuffer[BGMCount] = Result;
+						});
+					}
+					
+					BGMReaders[BGMCount].send(null);
 			}
 			
 			for (var Key in Resource.SystemData.Audio.SE) {
-				this.PlaySE(Key, 0);
+				SECount++;
+				
+				SEReaders[SECount] = new XMLHttpRequest();
+					SEReaders[SECount].open("GET", "Audio/SE/" + Key, true);
+					SEReaders[SECount].responseType = "arraybuffer";
+					
+					SEReaders[SECount].onload = function () {
+						SE.decodeAudioData(SEReaders[SECount].response, function (Result) {
+							SEBuffer[SECount] = Result;
+						});
+					}
+					
+					SEReaders[SECount].send(null);
+			}
+			
+			for (var Key in Resource.SystemData.Audio.Util) {
+				UtilCount++;
+				
+				UtilReaders[UtilCount] = new XMLHttpRequest();
+					UtilReaders[UtilCount].open("GET", "Audio/" + Resource.SystemData.Audio.Util[Key], true);
+					UtilReaders[UtilCount].responseType = "arraybuffer";
+					
+					UtilReaders[UtilCount].onload = function () {
+						Util.decodeAudioData(UtilReaders[UtilCount].response, function (Result) {
+							UtilBuffer[UtilCount] = Result;
+						});
+					}
+					
+					UtilReaders[UtilCount].send(null);
 			}
 		},
 		
