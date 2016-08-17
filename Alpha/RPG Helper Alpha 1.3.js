@@ -103,12 +103,18 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		Load: function () {
+			var BGM = this.BGM;
+			var BGMBuffer = this.BGMBuffer;
 			var BGMReaders = [];
 				var BGMCount = 0;
 				
+			var SE = this.SE;
+			var SEBuffer = this.SEBuffer;
 			var SEReaders = [];
 				var SECount = 0;
 				
+			var Util = this.Util;
+			var UtilBuffer = this.UtilBuffer;
 			var UtilReaders = [];
 				var UtilCount = 0;
 				
