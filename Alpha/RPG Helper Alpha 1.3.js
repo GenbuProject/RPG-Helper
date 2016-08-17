@@ -549,8 +549,20 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		Hide: function () {
-			if (document.getElementById("Map")) {
-				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
+			if (document.getElementById("Map1")) {
+				document.getElementById("Map1").parentElement.removeChild(document.getElementById("Map1"));
+			}
+			
+			if (document.getElementById("Map2")) {
+				document.getElementById("Map2").parentElement.removeChild(document.getElementById("Map2"));
+			}
+			
+			if (document.getElementById("Map3")) {
+				document.getElementById("Map3").parentElement.removeChild(document.getElementById("Map3"));
+			}
+			
+			if (document.getElementById("Map4")) {
+				document.getElementById("Map4").parentElement.removeChild(document.getElementById("Map4"));
 			}
 		}
 	}
