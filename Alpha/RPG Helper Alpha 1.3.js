@@ -107,7 +107,7 @@ var RPGHelper = function () {
 			for (var Key in Resource.SystemData.Audio.BGM) {
 				BGM[BGMCount] = new Audio("Audio/" + Key);
 					BGM[BGMCount].loop = true;
-					BGM[BGMCount].volume = Resource.SystemData.Audio.BGM[BGMCount].Volume;
+					BGM[BGMCount].volume = Resource.SystemData.Audio.BGM[Key].Volume;
 					
 					BGM[BGMCount].onload = function () {
 						var Source = Ctx.createMediaElementSource(BGM[BGMCount]);
@@ -120,7 +120,7 @@ var RPGHelper = function () {
 			for (var Key in Resource.SystemData.Audio.SE) {
 				SE[SECount] = new Audio("Audio/SE/" + Key);
 					SE[SECount].loop = false;
-					SE[SECount].volume = Resource.SystemData.Audio.SE[SECount].Volume;
+					SE[SECount].volume = Resource.SystemData.Audio.SE[Key].Volume;
 					
 					SE[SECount].onload = function () {
 						var Source = Ctx.createMediaElementSource(SE[SECount]);
@@ -133,7 +133,7 @@ var RPGHelper = function () {
 			for (var Key in Resource.SystemData.Audio.Util) {
 				Util[UtilCount] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
 					Util[UtilCount].loop = false;
-					Util[UtilCount].volume = Resource.SystemData.Audio.Util[UtilCount].Volume;
+					Util[UtilCount].volume = Resource.SystemData.Audio.Util[Key].Volume;
 					
 					Util[UtilCount].onload = function () {
 						var Source = Ctx.createMediaElementSource(Util[UtilCount]);
