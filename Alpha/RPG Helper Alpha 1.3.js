@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Alpha 1.3 [Last Updated: 2016/08/13]
+ *#RPG Helper Alpha 1.3 [Last Updated: 2016/08/17]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -668,6 +668,7 @@ var RPGHelper = function () {
 						
 						var MemPos = [CharaPos[0], CharaPos[1] - 1];
 						var Count = 0;
+						var LayerCount = 0;
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 							return;
@@ -680,6 +681,7 @@ var RPGHelper = function () {
 								case "F0000":
 									//通行不可
 									Count++;
+									LayerCount++;
 									
 									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
@@ -717,9 +719,17 @@ var RPGHelper = function () {
 									break;
 									
 								case "300":
+									//後ろに行くと隠れる + 下レイヤーに合わせる
+									Count++;
+									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "400200":
+									//下半身が半透明に + 下レイヤーに合わせる
+									break;
+									
+								case "210000":
 									break;
 							}
 						}
