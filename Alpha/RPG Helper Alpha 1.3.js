@@ -700,6 +700,7 @@ var RPGHelper = function () {
 				document.removeEventListener("keydown", this.PadFunc, false);
 			}
 			
+			//キーボード関数
 			this.PadFunc = function (Event) {
 				switch (Event.keyCode) {
 					case 38:
