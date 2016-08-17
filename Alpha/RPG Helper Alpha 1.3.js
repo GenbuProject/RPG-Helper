@@ -708,19 +708,18 @@ var RPGHelper = function () {
 						
 						var MemPos = [CharaPos[0], CharaPos[1] - 1];
 						var Count = 0;
-						var LayerCount = "NULL";
+						var LayerCount = "0";
 						
 						if (MapData[0][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
 									//通行可能
+									Count++;
 									break;
 									
 								case "F0000":
 									//通行不可
-									Count++;
 									LayerCount = "F0000";
-									
 									break;
 									
 								case "100000":
@@ -774,9 +773,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×]
 									/*/
-									Count++;
 									LayerCount = "210000";
-									
 									break;
 									
 								case "220000":
@@ -784,7 +781,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "220000";
 									
 									break;
@@ -794,7 +791,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "230000";
 									
 									break;
@@ -804,7 +801,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "240000";
 									
 									break;
@@ -814,7 +811,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "250000";
 									
 									break;
@@ -824,7 +821,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "260000";
 									
 									break;
@@ -834,7 +831,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "270000";
 									
 									break;
@@ -844,7 +841,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "280000";
 									
 									break;
@@ -854,7 +851,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "290000";
 									
 									break;
@@ -864,7 +861,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2A0000";
 									
 									break;
@@ -874,7 +871,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2B0000";
 									
 									break;
@@ -884,7 +881,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2C0000";
 									
 									break;
@@ -894,7 +891,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2D0000";
 									
 									break;
@@ -904,7 +901,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2E0000";
 									
 									break;
@@ -914,7 +911,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2F0000";
 									
 									break;
@@ -924,7 +921,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "310000";
 									
 									break;
@@ -934,7 +931,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "320000";
 									
 									break;
@@ -944,7 +941,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "330000";
 									
 									break;
@@ -954,7 +951,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "340000";
 									
 									break;
@@ -964,7 +961,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "350000";
 									
 									break;
@@ -974,7 +971,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "360000";
 									
 									break;
@@ -984,7 +981,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "370000";
 									
 									break;
@@ -994,7 +991,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "380000";
 									
 									break;
@@ -1004,7 +1001,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "390000";
 									
 									break;
@@ -1014,7 +1011,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3A0000";
 									
 									break;
@@ -1024,7 +1021,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3B0000";
 									
 									break;
@@ -1034,7 +1031,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3C0000";
 									
 									break;
@@ -1044,7 +1041,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3D0000";
 									
 									break;
@@ -1054,7 +1051,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3E0000";
 									
 									break;
@@ -1064,7 +1061,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3F0000";
 									
 									break;
@@ -1074,7 +1071,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "210100";
 									
 									break;
@@ -1084,7 +1081,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "220100";
 									
 									break;
@@ -1094,7 +1091,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "230100";
 									
 									break;
@@ -1104,7 +1101,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "240100";
 									
 									break;
@@ -1114,7 +1111,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "250100";
 									
 									break;
@@ -1124,7 +1121,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "260100";
 									
 									break;
@@ -1134,7 +1131,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "270100";
 									
 									break;
@@ -1144,7 +1141,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "280100";
 									
 									break;
@@ -1154,7 +1151,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "290100";
 									
 									break;
@@ -1164,7 +1161,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2A0100";
 									
 									break;
@@ -1174,7 +1171,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2B0100";
 									
 									break;
@@ -1184,7 +1181,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2C0100";
 									
 									break;
@@ -1194,7 +1191,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2D0100";
 									
 									break;
@@ -1204,7 +1201,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2E0100";
 									
 									break;
@@ -1214,7 +1211,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "610000";
 									
 									break;
@@ -1224,7 +1221,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "620000";
 									
 									break;
@@ -1234,7 +1231,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "630000";
 									
 									break;
@@ -1244,7 +1241,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "640000";
 									
 									break;
@@ -1254,7 +1251,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "650000";
 									
 									break;
@@ -1264,7 +1261,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "660000";
 									
 									break;
@@ -1274,7 +1271,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "670000";
 									
 									break;
@@ -1284,7 +1281,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "680000";
 									
 									break;
@@ -1294,7 +1291,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "690000";
 									
 									break;
@@ -1304,7 +1301,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6A0000";
 									
 									break;
@@ -1314,7 +1311,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6B0000";
 									
 									break;
@@ -1324,7 +1321,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6C0000";
 									
 									break;
@@ -1334,7 +1331,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6D0000";
 									
 									break;
@@ -1344,7 +1341,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6E0000";
 									
 									break;
@@ -1354,7 +1351,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6F0000";
 									
 									break;
@@ -1365,13 +1362,12 @@ var RPGHelper = function () {
 							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 								case "0":
 									//通行可能
+									Count++;
 									break;
 									
 								case "F0000":
 									//通行不可
-									Count++;
 									LayerCount = "F0000";
-									
 									break;
 									
 								case "100000":
@@ -1425,7 +1421,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "210000";
 									
 									break;
@@ -1435,7 +1431,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "220000";
 									
 									break;
@@ -1445,7 +1441,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "230000";
 									
 									break;
@@ -1455,7 +1451,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "240000";
 									
 									break;
@@ -1465,7 +1461,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "250000";
 									
 									break;
@@ -1475,7 +1471,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "260000";
 									
 									break;
@@ -1485,7 +1481,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "270000";
 									
 									break;
@@ -1495,7 +1491,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "280000";
 									
 									break;
@@ -1505,7 +1501,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "290000";
 									
 									break;
@@ -1515,7 +1511,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2A0000";
 									
 									break;
@@ -1525,7 +1521,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2B0000";
 									
 									break;
@@ -1535,7 +1531,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2C0000";
 									
 									break;
@@ -1545,7 +1541,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2D0000";
 									
 									break;
@@ -1555,7 +1551,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2E0000";
 									
 									break;
@@ -1565,7 +1561,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2F0000";
 									
 									break;
@@ -1575,7 +1571,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "310000";
 									
 									break;
@@ -1585,7 +1581,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "320000";
 									
 									break;
@@ -1595,7 +1591,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "330000";
 									
 									break;
@@ -1605,7 +1601,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "340000";
 									
 									break;
@@ -1615,7 +1611,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "350000";
 									
 									break;
@@ -1625,7 +1621,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "360000";
 									
 									break;
@@ -1635,7 +1631,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "370000";
 									
 									break;
@@ -1645,7 +1641,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "380000";
 									
 									break;
@@ -1655,7 +1651,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "390000";
 									
 									break;
@@ -1665,7 +1661,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3A0000";
 									
 									break;
@@ -1675,7 +1671,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3B0000";
 									
 									break;
@@ -1685,7 +1681,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3C0000";
 									
 									break;
@@ -1695,7 +1691,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3D0000";
 									
 									break;
@@ -1705,7 +1701,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3E0000";
 									
 									break;
@@ -1715,7 +1711,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3F0000";
 									
 									break;
@@ -1725,7 +1721,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "210100";
 									
 									break;
@@ -1735,7 +1731,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "220100";
 									
 									break;
@@ -1745,7 +1741,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "230100";
 									
 									break;
@@ -1755,7 +1751,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "240100";
 									
 									break;
@@ -1765,7 +1761,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "250100";
 									
 									break;
@@ -1775,7 +1771,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "260100";
 									
 									break;
@@ -1785,7 +1781,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "270100";
 									
 									break;
@@ -1795,7 +1791,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "280100";
 									
 									break;
@@ -1805,7 +1801,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "290100";
 									
 									break;
@@ -1815,7 +1811,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2A0100";
 									
 									break;
@@ -1825,7 +1821,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2B0100";
 									
 									break;
@@ -1835,7 +1831,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2C0100";
 									
 									break;
@@ -1845,7 +1841,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2D0100";
 									
 									break;
@@ -1855,7 +1851,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2E0100";
 									
 									break;
@@ -1865,7 +1861,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "610000";
 									
 									break;
@@ -1875,7 +1871,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "620000";
 									
 									break;
@@ -1885,7 +1881,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "630000";
 									
 									break;
@@ -1895,7 +1891,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "640000";
 									
 									break;
@@ -1905,7 +1901,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "650000";
 									
 									break;
@@ -1915,7 +1911,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "660000";
 									
 									break;
@@ -1925,7 +1921,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "670000";
 									
 									break;
@@ -1935,7 +1931,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "680000";
 									
 									break;
@@ -1945,7 +1941,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "690000";
 									
 									break;
@@ -1955,7 +1951,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6A0000";
 									
 									break;
@@ -1965,7 +1961,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6B0000";
 									
 									break;
@@ -1975,7 +1971,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6C0000";
 									
 									break;
@@ -1985,7 +1981,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6D0000";
 									
 									break;
@@ -1995,7 +1991,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6E0000";
 									
 									break;
@@ -2005,7 +2001,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6F0000";
 									
 									break;
@@ -2016,27 +2012,30 @@ var RPGHelper = function () {
 							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
 								case "0":
 									//通行可能
+									Count++;
 									break;
 									
 								case "F0000":
 									//通行不可
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+									LayerCount = "F0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "100000":
 									//常にキャラの上に表示
 									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									LayerCount = "100000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
 									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									LayerCount = "100";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "200":
@@ -2047,8 +2046,9 @@ var RPGHelper = function () {
 								case "400000":
 									//下半身が半透明に
 									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									LayerCount = "400000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 									break;
 									
 								case "100200":
@@ -2077,9 +2077,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "210000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "220000":
@@ -2087,7 +2088,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "220000";
 									
 									break;
@@ -2097,7 +2098,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "230000";
 									
 									break;
@@ -2107,9 +2108,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "240000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
 									break;
 									
 								case "250000":
@@ -2117,9 +2119,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "250000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "260000":
@@ -2127,9 +2130,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "260000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "270000":
@@ -2137,9 +2141,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "270000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "280000":
@@ -2147,9 +2152,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "280000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
 									break;
 									
 								case "290000":
@@ -2157,9 +2163,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "290000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2A0000":
@@ -2167,9 +2174,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2A0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2B0000":
@@ -2177,9 +2185,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2B0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2C0000":
@@ -2187,9 +2196,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2C0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
 									break;
 									
 								case "2D0000":
@@ -2197,9 +2207,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2D0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2E0000":
@@ -2207,9 +2218,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○]
 									/*/
-									Count++;
+									
 									LayerCount = "2E0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2F0000":
@@ -2217,9 +2229,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×]
 									/*/
-									Count++;
+									
 									LayerCount = "2F0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "310000":
@@ -2227,9 +2240,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "310000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "320000":
@@ -2237,9 +2251,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "320000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "330000":
@@ -2247,9 +2262,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "330000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "340000":
@@ -2257,9 +2273,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "340000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "350000":
@@ -2267,9 +2284,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "350000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "360000":
@@ -2277,9 +2295,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "360000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "370000":
@@ -2287,9 +2306,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "370000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "380000":
@@ -2297,9 +2317,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "380000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "390000":
@@ -2307,9 +2328,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "390000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "3A0000":
@@ -2317,9 +2339,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3A0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "3B0000":
@@ -2327,9 +2350,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3B0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "3C0000":
@@ -2337,9 +2361,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3C0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "3D0000":
@@ -2347,9 +2372,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3D0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "3E0000":
@@ -2357,9 +2383,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3E0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "3F0000":
@@ -2367,9 +2394,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×] + 常にキャラの上に表示
 									/*/
-									Count++;
+									
 									LayerCount = "3F0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
 									break;
 									
 								case "210100":
@@ -2377,7 +2405,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "210100";
 									
 									break;
@@ -2387,7 +2415,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "220100";
 									
 									break;
@@ -2397,7 +2425,7 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "230100";
 									
 									break;
@@ -2407,7 +2435,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "240100";
 									
 									break;
@@ -2417,7 +2445,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "250100";
 									
 									break;
@@ -2427,7 +2455,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "260100";
 									
 									break;
@@ -2437,7 +2465,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "270100";
 									
 									break;
@@ -2447,7 +2475,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "280100";
 									
 									break;
@@ -2457,7 +2485,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "290100";
 									
 									break;
@@ -2467,7 +2495,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2A0100";
 									
 									break;
@@ -2477,7 +2505,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
+									
 									LayerCount = "2B0100";
 									
 									break;
@@ -2487,9 +2515,8 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
-									LayerCount = "2C0100";
 									
+									LayerCount = "2C0100";
 									break;
 									
 								case "2D0100":
@@ -2497,9 +2524,8 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 後ろに行くと隠れる
 									/*/
-									Count++;
-									LayerCount = "2D0100";
 									
+									LayerCount = "2D0100";
 									break;
 									
 								case "2E0100":
@@ -2507,9 +2533,8 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 後ろに行くと隠れる
 									/*/
-									Count++;
-									LayerCount = "2E0100";
 									
+									LayerCount = "2E0100";
 									break;
 									
 								case "610000":
@@ -2517,9 +2542,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "610000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "620000":
@@ -2527,9 +2553,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "620000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "630000":
@@ -2537,9 +2564,10 @@ var RPGHelper = function () {
 									 *[○, ○]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "630000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "640000":
@@ -2547,9 +2575,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "640000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "650000":
@@ -2557,9 +2586,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "650000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "660000":
@@ -2567,9 +2597,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "660000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "670000":
@@ -2577,9 +2608,10 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "670000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "680000":
@@ -2587,9 +2619,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "680000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "690000":
@@ -2597,9 +2630,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "690000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6A0000":
@@ -2607,9 +2641,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6A0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6B0000":
@@ -2617,9 +2652,10 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6B0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6C0000":
@@ -2627,9 +2663,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6C0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6D0000":
@@ -2637,9 +2674,10 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ×] + 下半身が半透明に
 									/*/
-									Count++;
+									
 									LayerCount = "6D0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6E0000":
@@ -2647,9 +2685,9 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ○] + 下半身が半透明に
 									/*/
-									Count++;
 									LayerCount = "6E0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6F0000":
@@ -2657,99 +2695,1412 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[×, ×] + 下半身が半透明に
 									/*/
-									Count++;
 									LayerCount = "6F0000";
 									
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 							}
 						}
 						
 						if (LayerCount.match("#") != -1) {
 							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == undefined || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200")
-							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
-								case "0":
-									//通行可能
-									break;
-									
-								case "F0000":
-									//通行不可
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
-									break;
-									
-								case "100000":
-									//常にキャラの上に表示
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									
-									break;
-									
-								case "100":
-									//後ろに行くと隠れる
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									
-									break;
-									
-								case "200":
-									//下レイヤーに合わせる
-									break;
-									
-								case "400000":
-									//下半身が半透明に
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									
-									break;
-							}
-							
-							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
-								case "0":
-									//通行可能
-									break;
-									
-								case "F0000":
-									//通行不可
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
-									break;
-									
-								case "100000":
-									//常にキャラの上に表示
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									
-									break;
-									
-								case "100":
-									//後ろに行くと隠れる
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									
-									break;
-									
-								case "200":
-									//下レイヤーに合わせる
-									break;
-									
-								case "400000":
-									//下半身が半透明に
-									Count++;
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									
-									break;
+								switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+									case "0":
+										//通行可能
+										Count++;
+										break;
+										
+									case "F0000":
+										//通行不可
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "100000":
+										//常にキャラの上に表示
+										Count++;
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										
+										break;
+										
+									case "100":
+										//後ろに行くと隠れる
+										Count++;
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										
+										break;
+										
+									case "200":
+										//下レイヤーに合わせる
+										break;
+										
+									case "400000":
+										//下半身が半透明に
+										Count++;
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										
+										break;
+										
+									case "100200":
+										//常にキャラの上に表示 + 下レイヤーに合わせる
+										Count++;
+										LayerCount = "100200";
+										
+										break;
+										
+									case "300":
+										//後ろに行くと隠れる + 下レイヤーに合わせる
+										Count++;
+										LayerCount = "300";
+										
+										break;
+										
+									case "400200":
+										//下半身が半透明に + 下レイヤーに合わせる
+										Count++;
+										LayerCount = "400200";
+										
+										break;
+										
+									case "210000":
+										/*/
+										 *[○, ○]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "210000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "220000":
+										/*/
+										 *[○, ○]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "220000";
+										
+										break;
+										
+									case "230000":
+										/*/
+										 *[○, ○]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "230000";
+										
+										break;
+										
+									case "240000":
+										/*/
+										 *[○, ×]
+										 *[○, ○]
+										/*/
+										
+										LayerCount = "240000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+										break;
+										
+									case "250000":
+										/*/
+										 *[○, ×]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "250000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "260000":
+										/*/
+										 *[○, ×]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "260000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "270000":
+										/*/
+										 *[○, ×]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "270000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "280000":
+										/*/
+										 *[×, ○]
+										 *[○, ○]
+										/*/
+										
+										LayerCount = "280000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+										break;
+										
+									case "290000":
+										/*/
+										 *[×, ○]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "290000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2A0000":
+										/*/
+										 *[×, ○]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "2A0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2B0000":
+										/*/
+										 *[×, ○]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "2B0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2C0000":
+										/*/
+										 *[×, ×]
+										 *[○, ○]
+										/*/
+										
+										LayerCount = "2C0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+										break;
+										
+									case "2D0000":
+										/*/
+										 *[×, ×]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "2D0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2E0000":
+										/*/
+										 *[×, ×]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "2E0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2F0000":
+										/*/
+										 *[×, ×]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "2F0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "310000":
+										/*/
+										 *[○, ○]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "310000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "320000":
+										/*/
+										 *[○, ○]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "320000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "330000":
+										/*/
+										 *[○, ○]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "330000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "340000":
+										/*/
+										 *[○, ×]
+										 *[○, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "340000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "350000":
+										/*/
+										 *[○, ×]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "350000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "360000":
+										/*/
+										 *[○, ×]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "360000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "370000":
+										/*/
+										 *[○, ×]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "370000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "380000":
+										/*/
+										 *[×, ○]
+										 *[○, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "380000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "390000":
+										/*/
+										 *[×, ○]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "390000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3A0000":
+										/*/
+										 *[×, ○]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3A0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3B0000":
+										/*/
+										 *[×, ○]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3B0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3C0000":
+										/*/
+										 *[×, ×]
+										 *[○, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3C0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3D0000":
+										/*/
+										 *[×, ×]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3D0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3E0000":
+										/*/
+										 *[×, ×]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3E0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3F0000":
+										/*/
+										 *[×, ×]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3F0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "210100":
+										/*/
+										 *[○, ○]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "210100";
+										
+										break;
+										
+									case "220100":
+										/*/
+										 *[○, ○]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "220100";
+										
+										break;
+										
+									case "230100":
+										/*/
+										 *[○, ○]
+										 *[×, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "230100";
+										
+										break;
+										
+									case "240100":
+										/*/
+										 *[○, ×]
+										 *[○, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "240100";
+										
+										break;
+										
+									case "250100":
+										/*/
+										 *[○, ×]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "250100";
+										
+										break;
+										
+									case "260100":
+										/*/
+										 *[○, ×]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "260100";
+										
+										break;
+										
+									case "270100":
+										/*/
+										 *[○, ×]
+										 *[×, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "270100";
+										
+										break;
+										
+									case "280100":
+										/*/
+										 *[×, ○]
+										 *[○, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "280100";
+										
+										break;
+										
+									case "290100":
+										/*/
+										 *[×, ○]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "290100";
+										
+										break;
+										
+									case "2A0100":
+										/*/
+										 *[×, ○]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2A0100";
+										
+										break;
+										
+									case "2B0100":
+										/*/
+										 *[×, ○]
+										 *[×, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2B0100";
+										
+										break;
+										
+									case "2C0100":
+										/*/
+										 *[×, ×]
+										 *[○, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2C0100";
+										break;
+										
+									case "2D0100":
+										/*/
+										 *[×, ×]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2D0100";
+										break;
+										
+									case "2E0100":
+										/*/
+										 *[×, ×]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2E0100";
+										break;
+										
+									case "610000":
+										/*/
+										 *[○, ○]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "610000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "620000":
+										/*/
+										 *[○, ○]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "620000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "630000":
+										/*/
+										 *[○, ○]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "630000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "640000":
+										/*/
+										 *[○, ×]
+										 *[○, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "640000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "650000":
+										/*/
+										 *[○, ×]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "650000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "660000":
+										/*/
+										 *[○, ×]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "660000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "670000":
+										/*/
+										 *[○, ×]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "670000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "680000":
+										/*/
+										 *[×, ○]
+										 *[○, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "680000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "690000":
+										/*/
+										 *[×, ○]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "690000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6A0000":
+										/*/
+										 *[×, ○]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6A0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6B0000":
+										/*/
+										 *[×, ○]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6B0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6C0000":
+										/*/
+										 *[×, ×]
+										 *[○, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6C0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6D0000":
+										/*/
+										 *[×, ×]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6D0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6E0000":
+										/*/
+										 *[×, ×]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										LayerCount = "6E0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6F0000":
+										/*/
+										 *[×, ×]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										LayerCount = "6F0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+								}
+							} else {
+								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+									case "0":
+										//通行可能
+										Count++;
+										break;
+										
+									case "F0000":
+										//通行不可
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "100000":
+										//常にキャラの上に表示
+										Count++;
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										
+										break;
+										
+									case "100":
+										//後ろに行くと隠れる
+										Count++;
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										
+										break;
+										
+									case "200":
+										//下レイヤーに合わせる
+										break;
+										
+									case "400000":
+										//下半身が半透明に
+										Count++;
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										
+										break;
+										
+									case "100200":
+										//常にキャラの上に表示 + 下レイヤーに合わせる
+										Count++;
+										LayerCount = "100200";
+										
+										break;
+										
+									case "300":
+										//後ろに行くと隠れる + 下レイヤーに合わせる
+										Count++;
+										LayerCount = "300";
+										
+										break;
+										
+									case "400200":
+										//下半身が半透明に + 下レイヤーに合わせる
+										Count++;
+										LayerCount = "400200";
+										
+										break;
+										
+									case "210000":
+										/*/
+										 *[○, ○]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "210000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "220000":
+										/*/
+										 *[○, ○]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "220000";
+										
+										break;
+										
+									case "230000":
+										/*/
+										 *[○, ○]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "230000";
+										
+										break;
+										
+									case "240000":
+										/*/
+										 *[○, ×]
+										 *[○, ○]
+										/*/
+										
+										LayerCount = "240000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+										break;
+										
+									case "250000":
+										/*/
+										 *[○, ×]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "250000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "260000":
+										/*/
+										 *[○, ×]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "260000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "270000":
+										/*/
+										 *[○, ×]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "270000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "280000":
+										/*/
+										 *[×, ○]
+										 *[○, ○]
+										/*/
+										
+										LayerCount = "280000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+										break;
+										
+									case "290000":
+										/*/
+										 *[×, ○]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "290000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2A0000":
+										/*/
+										 *[×, ○]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "2A0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2B0000":
+										/*/
+										 *[×, ○]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "2B0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2C0000":
+										/*/
+										 *[×, ×]
+										 *[○, ○]
+										/*/
+										
+										LayerCount = "2C0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+										break;
+										
+									case "2D0000":
+										/*/
+										 *[×, ×]
+										 *[○, ×]
+										/*/
+										
+										LayerCount = "2D0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2E0000":
+										/*/
+										 *[×, ×]
+										 *[×, ○]
+										/*/
+										
+										LayerCount = "2E0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "2F0000":
+										/*/
+										 *[×, ×]
+										 *[×, ×]
+										/*/
+										
+										LayerCount = "2F0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "310000":
+										/*/
+										 *[○, ○]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "310000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "320000":
+										/*/
+										 *[○, ○]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "320000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "330000":
+										/*/
+										 *[○, ○]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "330000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "340000":
+										/*/
+										 *[○, ×]
+										 *[○, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "340000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "350000":
+										/*/
+										 *[○, ×]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "350000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "360000":
+										/*/
+										 *[○, ×]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "360000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "370000":
+										/*/
+										 *[○, ×]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "370000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "380000":
+										/*/
+										 *[×, ○]
+										 *[○, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "380000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "390000":
+										/*/
+										 *[×, ○]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "390000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3A0000":
+										/*/
+										 *[×, ○]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3A0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3B0000":
+										/*/
+										 *[×, ○]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3B0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3C0000":
+										/*/
+										 *[×, ×]
+										 *[○, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3C0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3D0000":
+										/*/
+										 *[×, ×]
+										 *[○, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3D0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3E0000":
+										/*/
+										 *[×, ×]
+										 *[×, ○] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3E0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "3F0000":
+										/*/
+										 *[×, ×]
+										 *[×, ×] + 常にキャラの上に表示
+										/*/
+										
+										LayerCount = "3F0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+										break;
+										
+									case "210100":
+										/*/
+										 *[○, ○]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "210100";
+										
+										break;
+										
+									case "220100":
+										/*/
+										 *[○, ○]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "220100";
+										
+										break;
+										
+									case "230100":
+										/*/
+										 *[○, ○]
+										 *[×, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "230100";
+										
+										break;
+										
+									case "240100":
+										/*/
+										 *[○, ×]
+										 *[○, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "240100";
+										
+										break;
+										
+									case "250100":
+										/*/
+										 *[○, ×]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "250100";
+										
+										break;
+										
+									case "260100":
+										/*/
+										 *[○, ×]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "260100";
+										
+										break;
+										
+									case "270100":
+										/*/
+										 *[○, ×]
+										 *[×, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "270100";
+										
+										break;
+										
+									case "280100":
+										/*/
+										 *[×, ○]
+										 *[○, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "280100";
+										
+										break;
+										
+									case "290100":
+										/*/
+										 *[×, ○]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "290100";
+										
+										break;
+										
+									case "2A0100":
+										/*/
+										 *[×, ○]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2A0100";
+										
+										break;
+										
+									case "2B0100":
+										/*/
+										 *[×, ○]
+										 *[×, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2B0100";
+										
+										break;
+										
+									case "2C0100":
+										/*/
+										 *[×, ×]
+										 *[○, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2C0100";
+										break;
+										
+									case "2D0100":
+										/*/
+										 *[×, ×]
+										 *[○, ×] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2D0100";
+										break;
+										
+									case "2E0100":
+										/*/
+										 *[×, ×]
+										 *[×, ○] + 後ろに行くと隠れる
+										/*/
+										
+										LayerCount = "2E0100";
+										break;
+										
+									case "610000":
+										/*/
+										 *[○, ○]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "610000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "620000":
+										/*/
+										 *[○, ○]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "620000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "630000":
+										/*/
+										 *[○, ○]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "630000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "640000":
+										/*/
+										 *[○, ×]
+										 *[○, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "640000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "650000":
+										/*/
+										 *[○, ×]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "650000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "660000":
+										/*/
+										 *[○, ×]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "660000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "670000":
+										/*/
+										 *[○, ×]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "670000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "680000":
+										/*/
+										 *[×, ○]
+										 *[○, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "680000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "690000":
+										/*/
+										 *[×, ○]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "690000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6A0000":
+										/*/
+										 *[×, ○]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6A0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6B0000":
+										/*/
+										 *[×, ○]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6B0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6C0000":
+										/*/
+										 *[×, ×]
+										 *[○, ○] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6C0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6D0000":
+										/*/
+										 *[×, ×]
+										 *[○, ×] + 下半身が半透明に
+										/*/
+										
+										LayerCount = "6D0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6E0000":
+										/*/
+										 *[×, ×]
+										 *[×, ○] + 下半身が半透明に
+										/*/
+										LayerCount = "6E0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+										
+									case "6F0000":
+										/*/
+										 *[×, ×]
+										 *[×, ×] + 下半身が半透明に
+										/*/
+										LayerCount = "6F0000";
+										
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+										break;
+								}
 							}
 						}
 						
-						if (Count == 0) {
+						if (Count != 0) {
 							CharaPos[1]--;
 							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 						}
 						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000") {
+						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == ("100000")) {
 							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+						}
+						
+						if (MapData[2][MemPos[1]][MemPos[0]] != -1) {
+							if (MapData[1][MemPos[1]][MemPos[0]] != -1) {
+								if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == ("100000" || "100200" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000")) {
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == ("100000" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000") ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+								}
+							} else {
+								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == ("100000" || "100200" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000")) {
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == ("100000" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000") ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+								}
+							}
+						} else {
+							if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == ("100000" || "100200" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000")) {
+								Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == ("100000" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000") ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+							}
 						}
 						
 						break;
@@ -3163,10 +4514,6 @@ var RPGHelper = function () {
 						if (Count == 0) {
 							CharaPos[0]++;
 							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-						}
-						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000") {
-							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 						}
 						
 						break;
