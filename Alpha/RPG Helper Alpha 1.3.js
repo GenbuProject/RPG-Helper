@@ -18,22 +18,6 @@ var RPGHelper = function () {
 		this.SE.type = "audio/*";
 		this.SE.loop = false;
 		
-	this.Worker = new Worker("https://genbuproject.github.io/RPG-Helper/Alpha/Worker Pack for RPG Helper Alpha 1.3.js");
-		this.Worker.onmessage = function (Event) {
-			switch (Event.data.WorkID) {
-				case 0:
-					Resource.UserData = Event.data.Data;
-					break;
-					
-				case 1:
-					//MsgBox正常終了
-					break;
-					
-				default:
-					break;
-			}
-		}
-		
 	this.CharaPos = [null, null];
 	
 	/*/
@@ -239,8 +223,6 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	this.Load = function (Extention, LoadFuc) {
-		var Worker = this.Worker;
-		
 		var Click = document.createEvent("MouseEvents");
 			Click.initEvent("click", false, true);
 			
@@ -249,12 +231,12 @@ var RPGHelper = function () {
 			Filer.accept = Extention;
 			
 			Filer.addEventListener("change", function (Event) {
-				Worker.postMessage({
-					WorkID: 0,
-					Data: Event.target.files[0]
-				});
-				
-				LoadFuc();
+				var Reader = new FileReader();
+					Reader.readAsText(Event.target.files[0]);
+					
+					Reader.onload = function () {
+						LoadFuc();
+					}
 			});
 			
 			Filer.dispatchEvent(Click);
