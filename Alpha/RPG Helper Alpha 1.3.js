@@ -472,21 +472,48 @@ var RPGHelper = function () {
 				
 				MapLoader.send(null);
 				
-			var MapCanvas = document.createElement("Canvas");
-				MapCanvas.id = "Map";
-				MapCanvas.width = this.Canvas.style.width.split("px")[0];
-				MapCanvas.height = this.Canvas.style.height.split("px")[0];
-				MapCanvas.style.position = "Absolute";
+			var MapCanvas1 = document.createElement("Canvas");
+				MapCanvas1.id = "Map1";
+				MapCanvas1.width = this.Canvas.style.width.split("px")[0];
+				MapCanvas1.height = this.Canvas.style.height.split("px")[0];
+				MapCanvas1.style.position = "Absolute";
 				
-				this.Canvas.appendChild(MapCanvas);
+				this.Canvas.appendChild(MapCanvas1);
+				
+			var MapCanvas2 = document.createElement("Canvas");
+				MapCanvas2.id = "Map2";
+				MapCanvas2.width = this.Canvas.style.width.split("px")[0];
+				MapCanvas2.height = this.Canvas.style.height.split("px")[0];
+				MapCanvas2.style.position = "Absolute";
+				
+				this.Canvas.appendChild(MapCanvas2);
+				
+			var MapCanvas3 = document.createElement("Canvas");
+				MapCanvas3.id = "Map3";
+				MapCanvas3.width = this.Canvas.style.width.split("px")[0];
+				MapCanvas3.height = this.Canvas.style.height.split("px")[0];
+				MapCanvas3.style.position = "Absolute";
+				
+				this.Canvas.appendChild(MapCanvas3);
+				
+			var MapCanvas4 = document.createElement("Canvas");
+				MapCanvas4.id = "Map4";
+				MapCanvas4.width = this.Canvas.style.width.split("px")[0];
+				MapCanvas4.height = this.Canvas.style.height.split("px")[0];
+				MapCanvas4.style.position = "Absolute";
+				
+				this.Canvas.appendChild(MapCanvas4);
 				
 			TipImg.onload = function () {
-				var Ctx = MapCanvas.getContext("2d");
+				var Ctx1 = MapCanvas1.getContext("2d");
+				var Ctx2 = MapCanvas2.getContext("2d");
+				var Ctx3 = MapCanvas3.getContext("2d");
+				var Ctx4 = MapCanvas4.getContext("2d");
 				
 				for (var y = 0; y < MapData[0].length; y++) {
  					for (var x = 0; x < MapData[0][y].length; x++) {
  						if (MapData[0][y][x] != -1 && typeof MapData[0][y][x] == "number") {
- 							Ctx.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
+ 							Ctx1.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
  						}
  					}
  				}
@@ -494,7 +521,7 @@ var RPGHelper = function () {
 				for (var y = 0; y < MapData[1].length; y++) {
 					for (var x = 0; x < MapData[1][y].length; x++) {
 						if (MapData[1][y][x] != -1 && typeof MapData[1][y][x] == "number") {
-							Ctx.drawImage(TipImg, 16 * (MapData[1][y][x] % 8), 16 * (Math.floor(MapData[1][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
+							Ctx2.drawImage(TipImg, 16 * (MapData[1][y][x] % 8), 16 * (Math.floor(MapData[1][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
 						}
 					}
 				}
@@ -502,17 +529,17 @@ var RPGHelper = function () {
 				for (var y = 0; y < MapData[2].length; y++) {
 					for (var x = 0; x < MapData[2][y].length; x++) {
 						if (MapData[2][y][x] != -1 && typeof MapData[2][y][x] == "number") {
-							Ctx.drawImage(TipImg, 16 * (MapData[2][y][x] % 8), 16 * (Math.floor(MapData[2][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
+							Ctx3.drawImage(TipImg, 16 * (MapData[2][y][x] % 8), 16 * (Math.floor(MapData[2][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
 						}
 					}
 				}
 				
 				for (var EventID = 0; EventID < MapData[3].length; EventID++) {
-					Ctx.drawImage(TipImg, 16 * (MapData[3][EventID]["TipID"] % 8), 16 * (Math.floor(MapData[3][EventID]["TipID"] / 8)), 16, 16, 16 * MapData[3][EventID]["Position"][0], 16 * MapData[3][EventID]["Position"][1], 16, 16);
+					Ctx4.drawImage(TipImg, 16 * (MapData[3][EventID]["TipID"] % 8), 16 * (Math.floor(MapData[3][EventID]["TipID"] / 8)), 16, 16, 16 * MapData[3][EventID]["Position"][0], 16 * MapData[3][EventID]["Position"][1], 16, 16);
 				}
 			}
 			
-			return MapCanvas;
+			return [MapCanvas1, MapCanvas2, MapCanvas3, MapCanvas4];
 		},
 		
 		/*/
@@ -670,9 +697,7 @@ var RPGHelper = function () {
 						var Count = 0;
 						var LayerCount = "NULL";
 						
-						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
-							//通行可能
-						} else {
+						if (MapData[0][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
 									//通行可能
@@ -2627,6 +2652,7 @@ var RPGHelper = function () {
 						}
 						
 						if (LayerCount.match("#") != -1) {
+							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == undefined || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200")
 							switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 								case "0":
 									//通行可能
