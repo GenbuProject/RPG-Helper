@@ -724,7 +724,7 @@ var RPGHelper = function () {
 							}
 						}
 						
-						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
+						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
 							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
 								if (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
 									//通行可能
