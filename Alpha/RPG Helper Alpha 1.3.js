@@ -721,9 +721,9 @@ var RPGHelper = function () {
 							}
 						}
 						
-						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == ("200" || "100200" || "300")) {
-							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == ("200" || "100200" || "300")) {
-								if (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == ("200" || "100200" || "300" || "0")) {
+						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
+							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
+								if (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
 									//通過可能
 								} else {
 									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
@@ -2371,8 +2371,8 @@ var RPGHelper = function () {
 						}
 						
 						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != ("100000" || "100200" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000")) {
-							if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != ("100000" || "100200" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000")) {
+						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3F0000") {
+							if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3F0000") {
 								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != ("100000" || "100200" || "310000" || "320000" || "330000" || "340000" || "350000" || "360000" || "370000" || "380000" || "390000" || "3A0000" || "3B0000" || "3C0000" || "3D0000" || "3E0000" || "3F0000")) {
 									
 								} else {
