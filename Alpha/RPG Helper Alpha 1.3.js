@@ -710,6 +710,521 @@ var RPGHelper = function () {
 						var Count = 0;
 						var LayerCount = "0";
 						
+						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
+							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
+								if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
+									//通過可能
+								}
+							}
+						}
+						
+						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == ("200" || "100200" || "300")) {
+							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == ("200" || "100200" || "300")) {
+								if (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == ("200" || "100200" || "300" || "0" || undefined)) {
+									//通過可能
+								} else {
+									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+										case "0":
+											//通行可能
+											break;
+											
+										case "F0000":
+											//通行不可
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "100000":
+											//常にキャラの上に表示
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											break;
+											
+										case "100":
+											//後ろに行くと隠れる
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											break;
+											
+										case "200":
+											//下レイヤーに合わせる
+											LayerCount += "#";
+											break;
+											
+										case "400000":
+											//下半身が半透明に
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											break;
+											
+										case "100200":
+											//常にキャラの上に表示 + 下レイヤーに合わせる
+											break;
+											
+										case "300":
+											//後ろに行くと隠れる + 下レイヤーに合わせる
+											break;
+											
+										case "400200":
+											//下半身が半透明に + 下レイヤーに合わせる
+											break;
+											
+										case "210000":
+											/*/
+											 *[○, ○]
+											 *[○, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "220000":
+											/*/
+											 *[○, ○]
+											 *[×, ○]
+											/*/
+											break;
+											
+										case "230000":
+											/*/
+											 *[○, ○]
+											 *[×, ×]
+											/*/
+											break;
+											
+										case "240000":
+											/*/
+											 *[○, ×]
+											 *[○, ○]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+											break;
+											
+										case "250000":
+											/*/
+											 *[○, ×]
+											 *[○, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "260000":
+											/*/
+											 *[○, ×]
+											 *[×, ○]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "270000":
+											/*/
+											 *[○, ×]
+											 *[×, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "280000":
+											/*/
+											 *[×, ○]
+											 *[○, ○]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+											break;
+											
+										case "290000":
+											/*/
+											 *[×, ○]
+											 *[○, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "2A0000":
+											/*/
+											 *[×, ○]
+											 *[×, ○]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "2B0000":
+											/*/
+											 *[×, ○]
+											 *[×, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "2C0000":
+											/*/
+											 *[×, ×]
+											 *[○, ○]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1] - 0.5], null);
+											break;
+											
+										case "2D0000":
+											/*/
+											 *[×, ×]
+											 *[○, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "2E0000":
+											/*/
+											 *[×, ×]
+											 *[×, ○]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "2F0000":
+											/*/
+											 *[×, ×]
+											 *[×, ×]
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "310000":
+											/*/
+											 *[○, ○]
+											 *[○, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "320000":
+											/*/
+											 *[○, ○]
+											 *[×, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "330000":
+											/*/
+											 *[○, ○]
+											 *[×, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "340000":
+											/*/
+											 *[○, ×]
+											 *[○, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "350000":
+											/*/
+											 *[○, ×]
+											 *[○, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "360000":
+											/*/
+											 *[○, ×]
+											 *[×, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "370000":
+											/*/
+											 *[○, ×]
+											 *[×, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "380000":
+											/*/
+											 *[×, ○]
+											 *[○, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "390000":
+											/*/
+											 *[×, ○]
+											 *[○, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "3A0000":
+											/*/
+											 *[×, ○]
+											 *[×, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "3B0000":
+											/*/
+											 *[×, ○]
+											 *[×, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "3C0000":
+											/*/
+											 *[×, ×]
+											 *[○, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "3D0000":
+											/*/
+											 *[×, ×]
+											 *[○, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "3E0000":
+											/*/
+											 *[×, ×]
+											 *[×, ○] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "3F0000":
+											/*/
+											 *[×, ×]
+											 *[×, ×] + 常にキャラの上に表示
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, 0x0000]);
+											break;
+											
+										case "210100":
+											/*/
+											 *[○, ○]
+											 *[○, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "220100":
+											/*/
+											 *[○, ○]
+											 *[×, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "230100":
+											/*/
+											 *[○, ○]
+											 *[×, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "240100":
+											/*/
+											 *[○, ×]
+											 *[○, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "250100":
+											/*/
+											 *[○, ×]
+											 *[○, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "260100":
+											/*/
+											 *[○, ×]
+											 *[×, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "270100":
+											/*/
+											 *[○, ×]
+											 *[×, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "280100":
+											/*/
+											 *[×, ○]
+											 *[○, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "290100":
+											/*/
+											 *[×, ○]
+											 *[○, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "2A0100":
+											/*/
+											 *[×, ○]
+											 *[×, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "2B0100":
+											/*/
+											 *[×, ○]
+											 *[×, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "2C0100":
+											/*/
+											 *[×, ×]
+											 *[○, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "2D0100":
+											/*/
+											 *[×, ×]
+											 *[○, ×] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "2E0100":
+											/*/
+											 *[×, ×]
+											 *[×, ○] + 後ろに行くと隠れる
+											/*/
+											break;
+											
+										case "610000":
+											/*/
+											 *[○, ○]
+											 *[○, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "620000":
+											/*/
+											 *[○, ○]
+											 *[×, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "630000":
+											/*/
+											 *[○, ○]
+											 *[×, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "640000":
+											/*/
+											 *[○, ×]
+											 *[○, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "650000":
+											/*/
+											 *[○, ×]
+											 *[○, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "660000":
+											/*/
+											 *[○, ×]
+											 *[×, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "670000":
+											/*/
+											 *[○, ×]
+											 *[×, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "680000":
+											/*/
+											 *[×, ○]
+											 *[○, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "690000":
+											/*/
+											 *[×, ○]
+											 *[○, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "6A0000":
+											/*/
+											 *[×, ○]
+											 *[×, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "6B0000":
+											/*/
+											 *[×, ○]
+											 *[×, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "6C0000":
+											/*/
+											 *[×, ×]
+											 *[○, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "6D0000":
+											/*/
+											 *[×, ×]
+											 *[○, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "6E0000":
+											/*/
+											 *[×, ×]
+											 *[×, ○] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+											
+										case "6F0000":
+											/*/
+											 *[×, ×]
+											 *[×, ×] + 下半身が半透明に
+											/*/
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+											break;
+									}
+								}
+							}
+						}
+						
 						if (MapData[0][MemPos[1]][MemPos[0]] != -1) {
 							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 								case "0":
