@@ -478,6 +478,7 @@ var RPGHelper = function () {
 				MapCanvas1.width = this.Canvas.style.width.split("px")[0];
 				MapCanvas1.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas1.style.position = "Absolute";
+				MapCanvas1.style.background = "Transparent";
 				
 				this.Canvas.appendChild(MapCanvas1);
 				
@@ -486,6 +487,7 @@ var RPGHelper = function () {
 				MapCanvas2.width = this.Canvas.style.width.split("px")[0];
 				MapCanvas2.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas2.style.position = "Absolute";
+				MapCanvas1.style.background = "Transparent";
 				
 				this.Canvas.appendChild(MapCanvas2);
 				
@@ -494,6 +496,7 @@ var RPGHelper = function () {
 				MapCanvas3.width = this.Canvas.style.width.split("px")[0];
 				MapCanvas3.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas3.style.position = "Absolute";
+				MapCanvas1.style.background = "Transparent";
 				
 				this.Canvas.appendChild(MapCanvas3);
 				
@@ -502,6 +505,7 @@ var RPGHelper = function () {
 				MapCanvas4.width = this.Canvas.style.width.split("px")[0];
 				MapCanvas4.height = this.Canvas.style.height.split("px")[0];
 				MapCanvas4.style.position = "Absolute";
+				MapCanvas1.style.background = "Transparent";
 				
 				this.Canvas.appendChild(MapCanvas4);
 				
@@ -729,9 +733,7 @@ var RPGHelper = function () {
 									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
 										case "0":
 											//通行可能
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "F0000":
@@ -741,16 +743,12 @@ var RPGHelper = function () {
 											
 										case "100000":
 											//常にキャラの上に表示
-											CharaPos[1]--;
 											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-											
 											break;
 											
 										case "100":
 											//後ろに行くと隠れる
-											CharaPos[1]--;
 											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-											
 											break;
 											
 										case "200":
@@ -759,9 +757,7 @@ var RPGHelper = function () {
 											
 										case "400000":
 											//下半身が半透明に
-											CharaPos[1]--;
 											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-											
 											break;
 											
 										case "100200":
@@ -805,9 +801,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○]
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "250000":
@@ -839,9 +833,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○]
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "290000":
@@ -873,9 +865,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○]
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "2D0000":
@@ -931,9 +921,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 											break;
 											
 										case "350000":
@@ -965,9 +953,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 											break;
 											
 										case "390000":
@@ -999,9 +985,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 											break;
 											
 										case "3D0000":
@@ -1057,9 +1041,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "250100":
@@ -1091,9 +1073,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "290100":
@@ -1125,9 +1105,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 											break;
 											
 										case "2D0100":
@@ -1175,9 +1153,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 											break;
 											
 										case "650000":
@@ -1209,9 +1185,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 											break;
 											
 										case "690000":
@@ -1243,9 +1217,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											CharaPos[1]--;
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-											
+											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 											break;
 											
 										case "6D0000":
@@ -1277,9 +1249,7 @@ var RPGHelper = function () {
 								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 									case "0":
 										//通行可能
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "F0000":
@@ -1289,16 +1259,12 @@ var RPGHelper = function () {
 										
 									case "100000":
 										//常にキャラの上に表示
-										CharaPos[1]--;
 										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										
 										break;
 										
 									case "100":
 										//後ろに行くと隠れる
-										CharaPos[1]--;
 										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										
 										break;
 										
 									case "200":
@@ -1307,9 +1273,7 @@ var RPGHelper = function () {
 										
 									case "400000":
 										//下半身が半透明に
-										CharaPos[1]--;
 										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-										
 										break;
 										
 									case "100200":
@@ -1353,9 +1317,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○]
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "250000":
@@ -1387,9 +1349,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○]
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "290000":
@@ -1421,9 +1381,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○]
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "2D0000":
@@ -1479,9 +1437,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 										break;
 										
 									case "350000":
@@ -1513,9 +1469,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 										break;
 										
 									case "390000":
@@ -1547,9 +1501,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 										break;
 										
 									case "3D0000":
@@ -1605,9 +1557,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "250100":
@@ -1639,9 +1589,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "290100":
@@ -1673,9 +1621,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 										break;
 										
 									case "2D0100":
@@ -1723,9 +1669,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 										break;
 										
 									case "650000":
@@ -1757,9 +1701,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 										break;
 										
 									case "690000":
@@ -1791,9 +1733,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										CharaPos[1]--;
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-										
+										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 										break;
 										
 									case "6D0000":
@@ -1825,9 +1765,7 @@ var RPGHelper = function () {
 							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
 								case "0":
 									//通行可能
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "F0000":
@@ -1837,16 +1775,12 @@ var RPGHelper = function () {
 									
 								case "100000":
 									//常にキャラの上に表示
-									CharaPos[1]--;
 									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									
 									break;
 									
 								case "100":
 									//後ろに行くと隠れる
-									CharaPos[1]--;
 									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									
 									break;
 									
 								case "200":
@@ -1855,9 +1789,7 @@ var RPGHelper = function () {
 									
 								case "400000":
 									//下半身が半透明に
-									CharaPos[1]--;
 									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									
 									break;
 									
 								case "100200":
@@ -1901,9 +1833,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "250000":
@@ -1935,9 +1865,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "290000":
@@ -1969,9 +1897,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "2D0000":
@@ -2027,9 +1953,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "350000":
@@ -2061,9 +1985,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "390000":
@@ -2095,9 +2017,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0001]);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 									break;
 									
 								case "3D0000":
@@ -2153,9 +2073,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "250100":
@@ -2187,9 +2105,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "290100":
@@ -2221,9 +2137,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 									break;
 									
 								case "2D0100":
@@ -2271,9 +2185,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 									break;
 									
 								case "650000":
@@ -2305,9 +2217,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 									break;
 									
 								case "690000":
@@ -2339,9 +2249,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0002]);
-									
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
 									break;
 									
 								case "6D0000":
@@ -2376,13 +2284,13 @@ var RPGHelper = function () {
 								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3F0000") {
 									
 								} else {
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 								}
 							} else {
-								Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+								Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 							}
 						} else {
-							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
+							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0001, TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400000" ? 0x0002 : 0x0000]);
 						}
 						
 						break;
