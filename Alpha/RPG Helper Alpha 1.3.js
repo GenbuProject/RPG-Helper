@@ -719,14 +719,13 @@ var RPGHelper = function () {
 							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
 								if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
 									//通過可能
-									CharaPos[1]--;
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
 								}
 							}
 						}
 						
-						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
-							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
+						if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
+							if (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
 								if (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
 									//通過可能
 								} else {
