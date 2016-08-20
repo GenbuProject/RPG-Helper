@@ -296,8 +296,8 @@ var RPGHelper = function () {
 				Loader.open("GET", "SystemData.Json", false);
 				Loader.send(null);
 				
-				//Resource.SystemData = JSON.parse(Loader.responseText);
-		} catch {
+				Resource.SystemData = JSON.parse(Loader.responseText);
+		} catch (Error) {
 			console.log("<RPG Helper> SystemData.Jsonが存在しません");
 		}
 	}
