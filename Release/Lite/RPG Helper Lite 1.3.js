@@ -7206,7 +7206,6 @@ var RPGHelper = function () {
 				this.Clicked = true;
 				Canvas.removeChild(Dialog);
 				
-				Sound.PlaySE("Click");
 				ClickFuc();
 			}
 		})(this.Canvas, this.Sound);
@@ -7305,7 +7304,6 @@ var RPGHelper = function () {
 				
 				Dialog.onclick = (function (Sound) {
 					return function () {
-						Sound.PlaySE("Click");
 						ClickFuc();
 					}
 				})(this.Sound);
