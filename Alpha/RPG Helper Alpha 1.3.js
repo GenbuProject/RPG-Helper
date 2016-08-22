@@ -548,9 +548,12 @@ var RPGHelper = function () {
 					
 					switch (MapData[3][EventID]["Type"]) {
 						case 1:
+							var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
+							var ID = EventID;
+							
 							setInterval(function () {
-								if (CharaPos[0] == MapData[3][EventID]["Position"][0] && CharaPos[1] == MapData[3][EventID]["Position"][1]) {
-									EventFucs[EventID]();
+								if (CharaPos[0] == X && CharaPos[1] == Y) {
+									EventFucs[ID]();
 								}
 							}, 10);
 							
