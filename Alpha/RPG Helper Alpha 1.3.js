@@ -434,7 +434,7 @@ var RPGHelper = function () {
 		 *#ID : int型
 		 *##################################################
 		/*/
-		Show: function (ID) {
+		Show: function (ID, EventFucs) {
 			if (document.getElementById("Map")) {
 				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
 			}
@@ -545,6 +545,17 @@ var RPGHelper = function () {
 				
 				for (var EventID = 0; EventID < MapData[3].length; EventID++) {
 					Ctx4.drawImage(TipImg, 16 * (MapData[3][EventID]["TipID"] % 8), 16 * (Math.floor(MapData[3][EventID]["TipID"] / 8)), 16, 16, 16 * MapData[3][EventID]["Position"][0], 16 * MapData[3][EventID]["Position"][1], 16, 16);
+					
+					switch (MapData[3][EventID]["Type"]) {
+						case 1:
+							setInterval(function () {
+								if (CharaPos[0] == MapData[3][EventID]["Position"][0] && CharaPos[1] == MapData[3][EventID]["Position"][1]) {
+									EventFucs[EventID]();
+								}
+							}, 10);
+							
+							break;
+					}
 				}
 			}
 			
