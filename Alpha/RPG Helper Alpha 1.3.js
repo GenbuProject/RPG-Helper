@@ -829,7 +829,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250000":
@@ -861,7 +861,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290000":
@@ -893,7 +893,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0000":
@@ -949,7 +949,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "350000":
@@ -981,7 +981,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "390000":
@@ -1013,7 +1013,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "3D0000":
@@ -1069,7 +1069,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250100":
@@ -1101,7 +1101,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290100":
@@ -1133,7 +1133,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0100":
@@ -1181,7 +1181,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "650000":
@@ -1213,7 +1213,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "690000":
@@ -1245,7 +1245,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "6D0000":
@@ -1345,7 +1345,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250000":
@@ -1377,7 +1377,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290000":
@@ -1409,7 +1409,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0000":
@@ -1465,7 +1465,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "350000":
@@ -1497,7 +1497,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "390000":
@@ -1529,7 +1529,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "3D0000":
@@ -1585,7 +1585,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null, 0);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250100":
@@ -1617,7 +1617,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null, 0);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290100":
@@ -1649,7 +1649,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null, 0);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0100":
@@ -1697,7 +1697,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "650000":
@@ -1729,7 +1729,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "690000":
@@ -1761,7 +1761,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "6D0000":
@@ -1861,7 +1861,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250000":
@@ -1893,7 +1893,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290000":
@@ -1925,7 +1925,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0000":
@@ -1981,7 +1981,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "350000":
@@ -2013,7 +2013,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "390000":
@@ -2045,7 +2045,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "3D0000":
@@ -2101,7 +2101,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250100":
@@ -2133,7 +2133,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290100":
@@ -2165,7 +2165,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0100":
@@ -2213,7 +2213,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "650000":
@@ -2245,7 +2245,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "690000":
@@ -2277,7 +2277,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6D0000":
@@ -2375,7 +2375,7 @@ var RPGHelper = function () {
 											
 										case "100000":
 											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
 											break;
 											
 										case "100":
@@ -2433,7 +2433,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250000":
@@ -2465,7 +2465,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290000":
@@ -2497,7 +2497,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0000":
@@ -2553,7 +2553,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "350000":
@@ -2585,7 +2585,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "390000":
@@ -2617,7 +2617,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "3D0000":
@@ -2673,7 +2673,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250100":
@@ -2705,7 +2705,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290100":
@@ -2737,7 +2737,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0100":
@@ -2785,7 +2785,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "650000":
@@ -2817,7 +2817,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "690000":
@@ -2849,7 +2849,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "6D0000":
@@ -2896,7 +2896,7 @@ var RPGHelper = function () {
 										
 									case "100":
 										//後ろに行くと隠れる
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 1);
+										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
 										break;
 										
 									case "200":
@@ -2949,7 +2949,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250000":
@@ -2981,7 +2981,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290000":
@@ -3013,7 +3013,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0000":
@@ -3069,7 +3069,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "350000":
@@ -3101,7 +3101,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "390000":
@@ -3133,7 +3133,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "3D0000":
@@ -3189,7 +3189,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250100":
@@ -3221,7 +3221,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290100":
@@ -3253,7 +3253,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0100":
@@ -3301,7 +3301,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "650000":
@@ -3333,7 +3333,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "690000":
@@ -3365,7 +3365,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "6D0000":
@@ -3465,7 +3465,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250000":
@@ -3497,7 +3497,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290000":
@@ -3529,7 +3529,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0000":
@@ -3585,7 +3585,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "350000":
@@ -3617,7 +3617,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "390000":
@@ -3649,7 +3649,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "3D0000":
@@ -3705,7 +3705,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null, 1);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250100":
@@ -3737,7 +3737,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null, 1);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290100":
@@ -3769,7 +3769,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null, 1);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0100":
@@ -3817,7 +3817,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "650000":
@@ -3849,7 +3849,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "690000":
@@ -3881,7 +3881,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6D0000":
@@ -3979,7 +3979,7 @@ var RPGHelper = function () {
 											
 										case "100000":
 											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
 											break;
 											
 										case "100":
@@ -4037,7 +4037,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250000":
@@ -4069,7 +4069,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290000":
@@ -4101,7 +4101,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0000":
@@ -4157,7 +4157,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "350000":
@@ -4189,7 +4189,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "390000":
@@ -4221,7 +4221,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "3D0000":
@@ -4277,7 +4277,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250100":
@@ -4309,7 +4309,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290100":
@@ -4341,7 +4341,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0100":
@@ -4389,7 +4389,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "650000":
@@ -4421,7 +4421,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "690000":
@@ -4453,7 +4453,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "6D0000":
@@ -4553,7 +4553,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250000":
@@ -4585,7 +4585,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290000":
@@ -4617,7 +4617,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0000":
@@ -4673,7 +4673,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "350000":
@@ -4705,7 +4705,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "390000":
@@ -4737,7 +4737,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "3D0000":
@@ -4793,7 +4793,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250100":
@@ -4825,7 +4825,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290100":
@@ -4857,7 +4857,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0100":
@@ -4905,7 +4905,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "650000":
@@ -4937,7 +4937,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "690000":
@@ -4969,7 +4969,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "6D0000":
@@ -5069,7 +5069,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250000":
@@ -5101,7 +5101,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290000":
@@ -5133,7 +5133,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0000":
@@ -5189,7 +5189,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "350000":
@@ -5221,7 +5221,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "390000":
@@ -5253,7 +5253,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "3D0000":
@@ -5309,7 +5309,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250100":
@@ -5341,7 +5341,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290100":
@@ -5373,7 +5373,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0100":
@@ -5421,7 +5421,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "650000":
@@ -5453,7 +5453,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "690000":
@@ -5485,7 +5485,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6D0000":
@@ -5583,7 +5583,7 @@ var RPGHelper = function () {
 											
 										case "100000":
 											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
 											break;
 											
 										case "100":
@@ -5641,7 +5641,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250000":
@@ -5673,7 +5673,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290000":
@@ -5705,7 +5705,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○]
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0000":
@@ -5761,7 +5761,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "350000":
@@ -5793,7 +5793,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "390000":
@@ -5825,7 +5825,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 常にキャラの上に表示
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "3D0000":
@@ -5881,7 +5881,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "250100":
@@ -5913,7 +5913,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "290100":
@@ -5945,7 +5945,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 後ろに行くと隠れる
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "2D0100":
@@ -5993,7 +5993,7 @@ var RPGHelper = function () {
 											 *[○, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "650000":
@@ -6025,7 +6025,7 @@ var RPGHelper = function () {
 											 *[×, ○]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "690000":
@@ -6057,7 +6057,7 @@ var RPGHelper = function () {
 											 *[×, ×]
 											 *[○, ○] + 下半身が半透明に
 											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 											break;
 											
 										case "6D0000":
@@ -6085,7 +6085,6 @@ var RPGHelper = function () {
 											break;
 									}
 								}
-                                
 							} else {
 								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
 									case "0":
@@ -6158,7 +6157,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250000":
@@ -6190,7 +6189,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290000":
@@ -6222,7 +6221,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○]
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0000":
@@ -6278,7 +6277,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "350000":
@@ -6310,7 +6309,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "390000":
@@ -6342,7 +6341,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 常にキャラの上に表示
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "3D0000":
@@ -6398,7 +6397,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "250100":
@@ -6430,7 +6429,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "290100":
@@ -6462,7 +6461,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 後ろに行くと隠れる
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "2D0100":
@@ -6510,7 +6509,7 @@ var RPGHelper = function () {
 										 *[○, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "650000":
@@ -6542,7 +6541,7 @@ var RPGHelper = function () {
 										 *[×, ○]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "690000":
@@ -6574,7 +6573,7 @@ var RPGHelper = function () {
 										 *[×, ×]
 										 *[○, ○] + 下半身が半透明に
 										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 										break;
 										
 									case "6D0000":
@@ -6674,7 +6673,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250000":
@@ -6706,7 +6705,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290000":
@@ -6738,7 +6737,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○]
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0000":
@@ -6794,7 +6793,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "350000":
@@ -6826,7 +6825,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "390000":
@@ -6858,7 +6857,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 常にキャラの上に表示
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "3D0000":
@@ -6914,7 +6913,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "250100":
@@ -6946,7 +6945,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "290100":
@@ -6978,7 +6977,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 後ろに行くと隠れる
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "2D0100":
@@ -7026,7 +7025,7 @@ var RPGHelper = function () {
 									 *[○, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "650000":
@@ -7058,7 +7057,7 @@ var RPGHelper = function () {
 									 *[×, ○]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "690000":
@@ -7090,7 +7089,7 @@ var RPGHelper = function () {
 									 *[×, ×]
 									 *[○, ○] + 下半身が半透明に
 									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
 									break;
 									
 								case "6D0000":
