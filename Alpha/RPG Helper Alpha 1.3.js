@@ -425,6 +425,8 @@ var RPGHelper = function () {
 		TipSettingData: null,
 		MapData: null,
 		
+		Timers: [],
+		
 		/*/
 		 *##################################################
 		 *#【Show】
@@ -451,8 +453,10 @@ var RPGHelper = function () {
 				document.getElementById("Map4").parentElement.removeChild(document.getElementById("Map4"));
 			}
 			
-			for (var i = 0; i < Timers.length; i++) {
-				clearInterval(Timers[i]);
+			if (Timers) {
+				for (var i = 0; i < Timers.length; i++) {
+					clearInterval(Timers[i]);
+				}
 			}
 			
 			var TipImg = new Image();
@@ -529,8 +533,6 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas4);
 				
-			var Timers = [];
-			
 			TipImg.onload = function () {
 				var Ctx1 = MapCanvas1.getContext("2d");
 				var Ctx2 = MapCanvas2.getContext("2d");
