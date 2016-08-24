@@ -535,54 +535,56 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas4);
 				
-			TipImg.onload = function () {
-				var Ctx1 = MapCanvas1.getContext("2d");
-				var Ctx2 = MapCanvas2.getContext("2d");
-				var Ctx3 = MapCanvas3.getContext("2d");
-				var Ctx4 = MapCanvas4.getContext("2d");
-				
-				for (var y = 0; y < MapData[0].length; y++) {
- 					for (var x = 0; x < MapData[0][y].length; x++) {
- 						if (MapData[0][y][x] != -1 && typeof MapData[0][y][x] == "number") {
- 							Ctx1.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
- 						}
- 					}
- 				}
- 				
-				for (var y = 0; y < MapData[1].length; y++) {
-					for (var x = 0; x < MapData[1][y].length; x++) {
-						if (MapData[1][y][x] != -1 && typeof MapData[1][y][x] == "number") {
-							Ctx2.drawImage(TipImg, 16 * (MapData[1][y][x] % 8), 16 * (Math.floor(MapData[1][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
-						}
-					}
-				}
-				
-				for (var y = 0; y < MapData[2].length; y++) {
-					for (var x = 0; x < MapData[2][y].length; x++) {
-						if (MapData[2][y][x] != -1 && typeof MapData[2][y][x] == "number") {
-							Ctx3.drawImage(TipImg, 16 * (MapData[2][y][x] % 8), 16 * (Math.floor(MapData[2][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
-						}
-					}
-				}
-				
-				for (var EventID = 0; EventID < MapData[3].length; EventID++) {
-					Ctx4.drawImage(TipImg, 16 * (MapData[3][EventID]["TipID"] % 8), 16 * (Math.floor(MapData[3][EventID]["TipID"] / 8)), 16, 16, 16 * MapData[3][EventID]["Position"][0], 16 * MapData[3][EventID]["Position"][1], 16, 16);
+			TipImg.onload = (function (Timers) {
+				return function () {
+					var Ctx1 = MapCanvas1.getContext("2d");
+					var Ctx2 = MapCanvas2.getContext("2d");
+					var Ctx3 = MapCanvas3.getContext("2d");
+					var Ctx4 = MapCanvas4.getContext("2d");
 					
-					switch (MapData[3][EventID]["Type"]) {
-						case 1:
-							var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
-							var Fuc = EventFucs[EventID];
-							
-							this.Timers.push(setInterval(function () {
-								if (CharaPos[0] == X && CharaPos[1] == Y) {
-									Fuc();
-								}
-							}, 10));
-							
-							break;
+					for (var y = 0; y < MapData[0].length; y++) {
+	 					for (var x = 0; x < MapData[0][y].length; x++) {
+	 						if (MapData[0][y][x] != -1 && typeof MapData[0][y][x] == "number") {
+	 							Ctx1.drawImage(TipImg, 16 * (MapData[0][y][x] % 8), 16 * (Math.floor(MapData[0][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
+	 						}
+	 					}
+	 				}
+	 				
+					for (var y = 0; y < MapData[1].length; y++) {
+						for (var x = 0; x < MapData[1][y].length; x++) {
+							if (MapData[1][y][x] != -1 && typeof MapData[1][y][x] == "number") {
+								Ctx2.drawImage(TipImg, 16 * (MapData[1][y][x] % 8), 16 * (Math.floor(MapData[1][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
+							}
+						}
+					}
+					
+					for (var y = 0; y < MapData[2].length; y++) {
+						for (var x = 0; x < MapData[2][y].length; x++) {
+							if (MapData[2][y][x] != -1 && typeof MapData[2][y][x] == "number") {
+								Ctx3.drawImage(TipImg, 16 * (MapData[2][y][x] % 8), 16 * (Math.floor(MapData[2][y][x] / 8)), 16, 16, 16 * x, 16 * y, 16, 16);
+							}
+						}
+					}
+					
+					for (var EventID = 0; EventID < MapData[3].length; EventID++) {
+						Ctx4.drawImage(TipImg, 16 * (MapData[3][EventID]["TipID"] % 8), 16 * (Math.floor(MapData[3][EventID]["TipID"] / 8)), 16, 16, 16 * MapData[3][EventID]["Position"][0], 16 * MapData[3][EventID]["Position"][1], 16, 16);
+						
+						switch (MapData[3][EventID]["Type"]) {
+							case 1:
+								var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
+								var Fuc = EventFucs[EventID];
+								
+								Timers.push(setInterval(function () {
+									if (CharaPos[0] == X && CharaPos[1] == Y) {
+										Fuc();
+									}
+								}, 10));
+								
+								break;
+						}
 					}
 				}
-			}
+			})();
 			
 			return [MapCanvas1, MapCanvas2, MapCanvas3, MapCanvas4];
 		},
