@@ -610,8 +610,12 @@ var RPGHelper = function () {
 				document.getElementById("Map4").parentElement.removeChild(document.getElementById("Map4"));
 			}
 			
-			for (var i = 0; i < Timers.length; i++) {
-				clearInterval(Timers[i]);
+			if (this.Timers != []) {
+				for (var i = 0; i < this.Timers.length; i++) {
+					clearInterval(this.Timers[i]);
+				}
+				
+				this.Timers = [];
 			}
 		}
 	}
