@@ -584,7 +584,7 @@ var RPGHelper = function () {
 						}
 					}
 				}
-			})();
+			})(this.Timers);
 			
 			return [MapCanvas1, MapCanvas2, MapCanvas3, MapCanvas4];
 		},
