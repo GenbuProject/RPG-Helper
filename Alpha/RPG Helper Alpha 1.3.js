@@ -435,8 +435,24 @@ var RPGHelper = function () {
 		 *##################################################
 		/*/
 		Show: function (ID, EventFucs) {
-			if (document.getElementById("Map")) {
-				document.getElementById("Map").parentElement.removeChild(document.getElementById("Map"));
+			if (document.getElementById("Map1")) {
+				document.getElementById("Map1").parentElement.removeChild(document.getElementById("Map1"));
+			}
+			
+			if (document.getElementById("Map2")) {
+				document.getElementById("Map2").parentElement.removeChild(document.getElementById("Map2"));
+			}
+			
+			if (document.getElementById("Map3")) {
+				document.getElementById("Map3").parentElement.removeChild(document.getElementById("Map3"));
+			}
+			
+			if (document.getElementById("Map4")) {
+				document.getElementById("Map4").parentElement.removeChild(document.getElementById("Map4"));
+			}
+			
+			for (var i = 0; i < Timers.length; i++) {
+				clearInterval(Timers[i]);
 			}
 			
 			var TipImg = new Image();
@@ -513,6 +529,8 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas4);
 				
+			var Timers = [];
+			
 			TipImg.onload = function () {
 				var Ctx1 = MapCanvas1.getContext("2d");
 				var Ctx2 = MapCanvas2.getContext("2d");
@@ -551,11 +569,11 @@ var RPGHelper = function () {
 							var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
 							var Fuc = EventFucs[EventID];
 							
-							setInterval(function () {
+							Timers.push(setInterval(function () {
 								if (CharaPos[0] == X && CharaPos[1] == Y) {
 									Fuc();
 								}
-							}, 10);
+							}, 10));
 							
 							break;
 					}
@@ -586,6 +604,10 @@ var RPGHelper = function () {
 			
 			if (document.getElementById("Map4")) {
 				document.getElementById("Map4").parentElement.removeChild(document.getElementById("Map4"));
+			}
+			
+			for (var i = 0; i < Timers.length; i++) {
+				clearInterval(Timers[i]);
 			}
 		}
 	}
