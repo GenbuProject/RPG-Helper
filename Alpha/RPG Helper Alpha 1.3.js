@@ -453,10 +453,12 @@ var RPGHelper = function () {
 				document.getElementById("Map4").parentElement.removeChild(document.getElementById("Map4"));
 			}
 			
-			if (Timers) {
-				for (var i = 0; i < Timers.length; i++) {
-					clearInterval(Timers[i]);
+			if (this.Timers != []) {
+				for (var i = 0; i < this.Timers.length; i++) {
+					clearInterval(this.Timers[i]);
 				}
+				
+				this.Timers = [];
 			}
 			
 			var TipImg = new Image();
@@ -571,7 +573,7 @@ var RPGHelper = function () {
 							var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
 							var Fuc = EventFucs[EventID];
 							
-							Timers.push(setInterval(function () {
+							this.Timers.push(setInterval(function () {
 								if (CharaPos[0] == X && CharaPos[1] == Y) {
 									Fuc();
 								}
