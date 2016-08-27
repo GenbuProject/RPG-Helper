@@ -14,7 +14,7 @@ var RPGHelper = function () {
 	this.SE = [];
 	this.Util = [];
 	
-	this.CharaPos = [null, null];
+	this.CharaPos = [null, null, null]; //X座標(int), Y座標(int), 方向(R.DIRECTION.*)
 	
 	/*/
 	 *##################################################
@@ -22,7 +22,7 @@ var RPGHelper = function () {
 	 *#レイアウトシステム定数
 	 *##################################################
 	/*/
-	this.R = {
+	R = {
 		COLOR: {
 			BLACK: "Black",
 			BLUE: "Blue",
@@ -426,6 +426,7 @@ var RPGHelper = function () {
 		MapData: null,
 		
 		Timers: [],
+		Keys: [],
 		
 		/*/
 		 *##################################################
@@ -459,6 +460,14 @@ var RPGHelper = function () {
 				}
 				
 				this.Timers = [];
+			}
+			
+			if (this.Keys != []) {
+				for (var i = 0; i < this.Keys.length; i++) {
+					document.removeEventListener("keydown", this.Keys[i], false);
+				}
+				
+				this.Keys = [];
 			}
 			
 			var TipImg = new Image();
@@ -535,7 +544,7 @@ var RPGHelper = function () {
 				
 				this.Canvas.appendChild(MapCanvas4);
 				
-			TipImg.onload = (function (Timers) {
+			TipImg.onload = (function (Timers, Keys) {
 				return function () {
 					var Ctx1 = MapCanvas1.getContext("2d");
 					var Ctx2 = MapCanvas2.getContext("2d");
@@ -581,10 +590,32 @@ var RPGHelper = function () {
 								}, 10));
 								
 								break;
+								
+							case 2:
+								var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
+								var Fuc = EventFucs[EventID];
+								
+								Keys.push(function (Event) {
+									if (Event.keyCode == Resource.SystemData.Key.Decide) {
+										if ((CharaPos[0] == X && CharaPos[1] == Y - 1) && CharaPos[2] == R.DIRECTION.N) {
+											Fuc();
+										} else if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.S) {
+											Fuc();
+										} else if ((CharaPos[0] == X - 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.W) {
+											Fuc();
+										} else if ((CharaPos[0] == X + 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.E) {
+											Fuc();
+										}
+									}
+								});
+								
+								document.addEventListener("keydown", Keys[i]);
+								
+								break;
 						}
 					}
 				}
-			})(this.Timers);
+			})(this.Timers, this.Keys);
 			
 			return [MapCanvas1, MapCanvas2, MapCanvas3, MapCanvas4];
 		},
@@ -630,7 +661,6 @@ var RPGHelper = function () {
 	/*/
 	this.Character = {
 		Canvas: this.Canvas,
-		R: this.R,
 		
 		/*/
 		 *##################################################
@@ -681,53 +711,51 @@ var RPGHelper = function () {
 					this.Canvas.insertBefore(CharaCanvas, document.getElementById("Map" + (AppendLayerID + 1)));
 				}
 				
-			CharaImg.onload = (function (R) {
-				return function () {
-					var Ctx = CharaCanvas.getContext("2d");
-					
-					if (VisibleTip == null) {
-						Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
-					} else if (VisibleTip instanceof Array) {
-						if (VisibleTip[0] == 0x0000) {
-							if (VisibleTip[1] == 0x0000) {
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
-							} else if (VisibleTip[1] == 0x0001) {
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
-							} else if (VisibleTip[1] == 0x0002) {
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
-								
-								Ctx.globalAlpha = 0.5;
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
-							}
-						} else if (VisibleTip[0] == 0x0001) {
-							if (VisibleTip[1] == 0x0000) {
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
-							} else if (VisibleTip[1] == 0x0001) {
-								
-							} else if (VisibleTip[1] == 0x0002) {
-								Ctx.globalAlpha = 0.5;
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
-							}
-						} else if (VisibleTip[0] == 0x0002) {
-							if (VisibleTip[1] == 0x0000) {
-								Ctx.globalAlpha = 0.5;
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
-								
-								Ctx.globalAlpha = 1.0;
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
-							} else if (VisibleTip[1] == 0x0001) {
-								Ctx.globalAlpha = 0.5;
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
-							} else if (VisibleTip[1] == 0x0002) {
-								Ctx.globalAlpha = 0.5;
-								Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
-							}
+			CharaImg.onload = function () {
+				var Ctx = CharaCanvas.getContext("2d");
+				
+				if (VisibleTip == null) {
+					Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
+				} else if (VisibleTip instanceof Array) {
+					if (VisibleTip[0] == 0x0000) {
+						if (VisibleTip[1] == 0x0000) {
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
+						} else if (VisibleTip[1] == 0x0001) {
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+						} else if (VisibleTip[1] == 0x0002) {
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+							
+							Ctx.globalAlpha = 0.5;
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
+						}
+					} else if (VisibleTip[0] == 0x0001) {
+						if (VisibleTip[1] == 0x0000) {
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
+						} else if (VisibleTip[1] == 0x0001) {
+							
+						} else if (VisibleTip[1] == 0x0002) {
+							Ctx.globalAlpha = 0.5;
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
+						}
+					} else if (VisibleTip[0] == 0x0002) {
+						if (VisibleTip[1] == 0x0000) {
+							Ctx.globalAlpha = 0.5;
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+							
+							Ctx.globalAlpha = 1.0;
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 120 : Direction == R.DIRECTION.W ? 72 : Direction == R.DIRECTION.S ? 24 : Direction == R.DIRECTION.N ? 168 : 24, 32, 24, 16 * Position[0], 16 * (Position[1]), 16, 16);
+						} else if (VisibleTip[1] == 0x0001) {
+							Ctx.globalAlpha = 0.5;
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 24, 16 * Position[0], 16 * (Position[1] - 1), 16, 16);
+						} else if (VisibleTip[1] == 0x0002) {
+							Ctx.globalAlpha = 0.5;
+							Ctx.drawImage(CharaImg, 32, Direction == R.DIRECTION.E ? 96 : Direction == R.DIRECTION.W ? 48 : Direction == R.DIRECTION.S ? 0 : Direction == R.DIRECTION.N ? 144 : 0, 32, 48, 16 * Position[0], 16 * (Position[1] - 1), 16, 32);
 						}
 					}
 				}
-			})(this.R);
+			}
 			
-			CharaPos = [Position[0], Position[1]];
+			CharaPos = [Position[0], Position[1], Direction];
 		},
 		
 		/*/
@@ -746,12 +774,10 @@ var RPGHelper = function () {
 	this.GamePad = {
 		PadFunc: null,
 		
-		R: this.R,
 		Map: this.Map,
 		Character: this.Character,
 		
 		KeyboardType: function (CharacterID) {
-			var R = this.R;
 			var Map = this.Map;
 			var Character = this.Character;
 			
@@ -7215,17 +7241,17 @@ var RPGHelper = function () {
 			this.Canvas.appendChild(Dialog);
 			
 		switch (Pos) {
-			case this.R.POS.TOP:
+			case R.POS.TOP:
 				Dialog.style.top = "0px";
 				Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 4 - 5) + "px"; //【縦横500pxの時】500px / 4 - 5px[ボーダー幅] = 120px
 				break;
 				
-			case this.R.POS.BOTTOM:
+			case R.POS.BOTTOM:
 				Dialog.style.top = (this.Canvas.style.height.split("px")[0] - (this.Canvas.style.height.split("px")[0] / 4)) + "px"; //【縦横500pxの時】500px - (500px / 4) = 500px - 125px = 375px
 				Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 4 - 10) + "px"; //【縦横500pxの時】500px / 4 - 10px[ボーダー幅 * 2] = 115px
 				break;
 				
-			case this.R.POS.CENTER:
+			case R.POS.CENTER:
 				Dialog.style.top = ((this.Canvas.style.height.split("px")[0] / 2) - (this.Canvas.style.height.split("px")[0] / 4)) + "px"; //【縦横500pxの時】(500px / 2) - (500px - 2) = 250px - 125px = 125px
 				Dialog.style.height = (this.Canvas.style.height.split("px")[0] / 2 - 5) + "px"; //【縦横500pxの時】500px / 2 - 5 = 245px
 				break;
