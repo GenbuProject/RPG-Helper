@@ -597,13 +597,13 @@ var RPGHelper = function () {
 								
 								Keys.push(function (Event) {
 									if (Event.keyCode == Resource.SystemData.Key.Decide) {
-										if ((CharaPos[0] == X && CharaPos[1] == Y - 1) && CharaPos[2] == R.DIRECTION.N) {
+										if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.N) {
 											Fuc();
-										} else if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.S) {
+										} else if ((CharaPos[0] == X && CharaPos[1] == Y - 1) && CharaPos[2] == R.DIRECTION.S) {
 											Fuc();
-										} else if ((CharaPos[0] == X - 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.W) {
+										} else if ((CharaPos[0] == X + 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.W) {
 											Fuc();
-										} else if ((CharaPos[0] == X + 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.E) {
+										} else if ((CharaPos[0] == X - 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.E) {
 											Fuc();
 										}
 									}
@@ -649,6 +649,14 @@ var RPGHelper = function () {
 				}
 				
 				this.Timers = [];
+			}
+			
+			if (this.Keys != []) {
+				for (var i = 0; i < this.Keys.length; i++) {
+					document.removeEventListener("keydown", this.Keys[i], false);
+				}
+				
+				this.Keys = [];
 			}
 		}
 	}
