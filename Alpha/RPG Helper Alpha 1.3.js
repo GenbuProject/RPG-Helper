@@ -597,8 +597,8 @@ var RPGHelper = function () {
 								var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
 								var Fuc = EventFucs[EventID];
 								
-								Keys.push(function (Event) {
-									(function (X, Y, Fuc) {
+								(function (X, Y, Fuc) {
+									Keys.push(function (Event) {
 										if (Event.keyCode == Resource.SystemData.Key.Decide) {
 											if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.N) {
 												Fuc();
@@ -610,8 +610,8 @@ var RPGHelper = function () {
 												Fuc();
 											}
 										}
-									})(X, Y, Fuc);
-								});
+									});
+								})(X, Y, Fuc);
 								
 								document.addEventListener("keydown", Keys[i]);
 								
