@@ -583,11 +583,13 @@ var RPGHelper = function () {
 								var X = MapData[3][EventID]["Position"][0], Y = MapData[3][EventID]["Position"][1];
 								var Fuc = EventFucs[EventID];
 								
-								Timers.push(setInterval(function () {
-									if (CharaPos[0] == X && CharaPos[1] == Y) {
-										Fuc();
+								Timers.push(setInterval((function (X, Y, Fuc) {
+									return function () {
+										if (CharaPos[0] == X && CharaPos[1] == Y) {
+											Fuc();
+										}
 									}
-								}, 10));
+								})(X, Y, Fuc), 10));
 								
 								break;
 								
@@ -596,17 +598,19 @@ var RPGHelper = function () {
 								var Fuc = EventFucs[EventID];
 								
 								Keys.push(function (Event) {
-									if (Event.keyCode == Resource.SystemData.Key.Decide) {
-										if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.N) {
-											Fuc();
-										} else if ((CharaPos[0] == X && CharaPos[1] == Y - 1) && CharaPos[2] == R.DIRECTION.S) {
-											Fuc();
-										} else if ((CharaPos[0] == X + 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.W) {
-											Fuc();
-										} else if ((CharaPos[0] == X - 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.E) {
-											Fuc();
+									(function (X, Y, Fuc) {
+										if (Event.keyCode == Resource.SystemData.Key.Decide) {
+											if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.N) {
+												Fuc();
+											} else if ((CharaPos[0] == X && CharaPos[1] == Y - 1) && CharaPos[2] == R.DIRECTION.S) {
+												Fuc();
+											} else if ((CharaPos[0] == X + 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.W) {
+												Fuc();
+											} else if ((CharaPos[0] == X - 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.E) {
+												Fuc();
+											}
 										}
-									}
+									})(X, Y, Fuc);
 								});
 								
 								document.addEventListener("keydown", Keys[i]);
