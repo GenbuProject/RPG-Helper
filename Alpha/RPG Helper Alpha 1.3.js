@@ -613,7 +613,9 @@ var RPGHelper = function () {
 									});
 								})(X, Y, Fuc);
 								
-								document.addEventListener("keydown", Keys[i]);
+								var ID = Keys.length - 1;
+								
+								document.addEventListener("keydown", Keys[ID]);
 								
 								break;
 						}
