@@ -7246,6 +7246,8 @@ var RPGHelper = function () {
 	 *##################################################
 	/*/
 	this.MsgBox = function (Pos, Speed, Color, Content, ClickFuc) {
+		GamePad.Disable();
+		
 		var Dialog = document.createElement("RPGHelper-MsgBox");
 			Dialog.style.position = "Absolute";
 			Dialog.style.width = (this.Canvas.attributes["width"].value - 10) + "px";
