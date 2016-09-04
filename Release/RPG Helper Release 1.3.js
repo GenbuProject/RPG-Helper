@@ -7300,6 +7300,7 @@ var RPGHelper = function () {
 		
 		return Dialog;
 	}
+	this.MsgBox.this = this;
 	
 	this.Menu = {
 		Canvas: this.Canvas,
