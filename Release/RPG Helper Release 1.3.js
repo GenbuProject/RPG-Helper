@@ -52,7 +52,9 @@ var RPGHelper = function () {
 			W: "West",
 			S: "South",
 			N: "North"
-		}
+		},
+		
+		THIS: this
 	}
 	
 	/*/
@@ -7300,7 +7302,6 @@ var RPGHelper = function () {
 		
 		return Dialog;
 	}
-	this.MsgBox.this = this;
 	
 	this.Menu = {
 		Canvas: this.Canvas,
