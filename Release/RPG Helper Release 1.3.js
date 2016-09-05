@@ -98,50 +98,39 @@ var RPGHelper = function () {
 			var Ctx = new AudioContext();
 			
 			var BGM = this.BGM;
-				var BGMCount = 0;
-				
 			var SE = this.SE;
-				var SECount = 0;
-				
 			var Util = this.Util;
-				var UtilCount = 0;
-				
+			
 			for (var Key in Resource.SystemData.Audio.BGM) {
-				BGM[BGMCount] = new Audio("Audio/" + Key);
-					BGM[BGMCount].loop = true;
-					BGM[BGMCount].volume = Resource.SystemData.Audio.BGM[Key].Volume;
+				BGM[Resource.SystemData.Audio.BGM[Key].ID] = new Audio("Audio/" + Key);
+					BGM[Resource.SystemData.Audio.BGM[Key].ID].loop = true;
+					BGM[Resource.SystemData.Audio.BGM[Key].ID].volume = Resource.SystemData.Audio.BGM[Key].Volume;
 					
-					BGM[BGMCount].onload = function () {
-						var Source = Ctx.createMediaElementSource(BGM[BGMCount]);
+					BGM[Resource.SystemData.Audio.BGM[Key].ID].onload = function () {
+						var Source = Ctx.createMediaElementSource(BGM[Resource.SystemData.Audio.BGM[Key].ID]);
 							Source.connect(Ctx.destination);
 					}
-					
-				BGMCount++;
 			}
 			
 			for (var Key in Resource.SystemData.Audio.SE) {
-				SE[SECount] = new Audio("Audio/SE/" + Key);
-					SE[SECount].loop = false;
-					SE[SECount].volume = Resource.SystemData.Audio.SE[Key].Volume;
+				SE[Resource.SystemData.Audio.SE[Key].ID] = new Audio("Audio/SE/" + Key);
+					SE[Resource.SystemData.Audio.SE[Key].ID].loop = false;
+					SE[Resource.SystemData.Audio.SE[Key].ID].volume = Resource.SystemData.Audio.SE[Key].Volume;
 					
-					SE[SECount].onload = function () {
-						var Source = Ctx.createMediaElementSource(SE[SECount]);
+					SE[Resource.SystemData.Audio.SE[Key].ID].onload = function () {
+						var Source = Ctx.createMediaElementSource(SE[Resource.SystemData.Audio.BGM[Key].ID]);
 							Source.connect(Ctx.destination);
 					}
-					
-				SECount++;
 			}
 			
 			for (var Key in Resource.SystemData.Audio.Util) {
-				Util[UtilCount] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
-					Util[UtilCount].loop = false;
+				Util[Resource.SystemData.Audio.Util[Key].ID] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
+					Util[Resource.SystemData.Audio.Util[Key].ID].loop = false;
 					
-					Util[UtilCount].onload = function () {
-						var Source = Ctx.createMediaElementSource(Util[UtilCount]);
+					Util[Resource.SystemData.Audio.Util[Key].ID].onload = function () {
+						var Source = Ctx.createMediaElementSource(Util[Resource.SystemData.Audio.Util[Key].ID]);
 							Source.connect(Ctx.destination);
 					}
-					
-				UtilCount++;
 			}
 			
 			LoadFuc();
@@ -159,16 +148,16 @@ var RPGHelper = function () {
 		PlayBGM: function (ID) {
 			for (var Key in Resource.SystemData.Audio.BGM) {
 				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
-					if (!this.BGM[Resource.SystemData.Audio.BGM[Key].ID - 1].paused) {
-						this.BGM[Resource.SystemData.Audio.BGM[Key].ID - 1].pause();
+					if (!this.BGM[Resource.SystemData.Audio.BGM[Key].ID].paused) {
+						this.BGM[Resource.SystemData.Audio.BGM[Key].ID].pause();
 					}
 				}
 			}
 			
 			for (var Key in Resource.SystemData.Audio.BGM) {
 				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
-					this.BGM[Resource.SystemData.Audio.BGM[Key].ID - 1].load();
-					this.BGM[Resource.SystemData.Audio.BGM[Key].ID - 1].play();
+					this.BGM[Resource.SystemData.Audio.BGM[Key].ID].load();
+					this.BGM[Resource.SystemData.Audio.BGM[Key].ID].play();
 				}
 			}
 		},
@@ -182,14 +171,14 @@ var RPGHelper = function () {
 		StopBGM: function (ID) {
 			if (ID == undefined) {
 				for (var i = 0; i < this.BGM.length; i++) {
-					if (!this.BGM[i].paused) {
+					if (this.BGM[i] != undefined && !this.BGM[i].paused) {
 						this.BGM[i].pause();
 					}
 				}
 			} else {
 				for (var Key in Resource.SystemData.Audio.BGM) {
 					if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
-						this.BGM[Resource.SystemData.Audio.BGM[Key].ID - 1].pause();
+						this.BGM[Resource.SystemData.Audio.BGM[Key].ID].pause();
 					}
 				}
 			}
@@ -208,8 +197,8 @@ var RPGHelper = function () {
 			if (typeof arguments[0] == "number") {
 				for (var Key in Resource.SystemData.Audio.SE) {
 					if (Resource.SystemData.Audio.SE[Key].ID == ID) {
-						this.SE[Resource.SystemData.Audio.SE[Key].ID - 1].load();
-						this.SE[Resource.SystemData.Audio.SE[Key].ID - 1].play();
+						this.SE[Resource.SystemData.Audio.SE[Key].ID].load();
+						this.SE[Resource.SystemData.Audio.SE[Key].ID].play();
 					}
 				}
 			} else if (typeof arguments[0] == "string") {
