@@ -99,7 +99,8 @@ var RPGHelper = function () {
 			
 			var BGM = this.BGM;
 			var SE = this.SE;
-			var Util = this.Util;
+			var Util = this.Util,
+				UtilCound = 0;
 			
 			for (var Key in Resource.SystemData.Audio.BGM) {
 				BGM[Resource.SystemData.Audio.BGM[Key].ID] = new Audio("Audio/" + Key);
@@ -124,13 +125,15 @@ var RPGHelper = function () {
 			}
 			
 			for (var Key in Resource.SystemData.Audio.Util) {
-				Util[Resource.SystemData.Audio.Util[Key].ID] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
-					Util[Resource.SystemData.Audio.Util[Key].ID].loop = false;
+				Util[UtilCount] = new Audio("Audio/" + Resource.SystemData.Audio.Util[Key]);
+					Util[UtilCount].loop = false;
 					
-					Util[Resource.SystemData.Audio.Util[Key].ID].onload = function () {
-						var Source = Ctx.createMediaElementSource(Util[Resource.SystemData.Audio.Util[Key].ID]);
+					Util[UtilCount].onload = function () {
+						var Source = Ctx.createMediaElementSource(Util[UtilCount]);
 							Source.connect(Ctx.destination);
 					}
+					
+				UtilCount++;
 			}
 			
 			LoadFuc();
