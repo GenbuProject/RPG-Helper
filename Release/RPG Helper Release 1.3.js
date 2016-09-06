@@ -100,7 +100,7 @@ var RPGHelper = function () {
 			var BGM = this.BGM;
 			var SE = this.SE;
 			var Util = this.Util,
-				UtilCound = 0;
+				UtilCount = 0;
 			
 			for (var Key in Resource.SystemData.Audio.BGM) {
 				BGM[Resource.SystemData.Audio.BGM[Key].ID] = new Audio("Audio/" + Key);
