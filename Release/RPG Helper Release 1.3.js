@@ -57,6 +57,8 @@ var RPGHelper = function () {
 		THIS: this
 	}
 	
+	Object.freeze(R);
+	
 	/*/
 	 *##################################################
 	 *#【Resource】
