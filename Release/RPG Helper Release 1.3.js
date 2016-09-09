@@ -315,9 +315,10 @@ var RPGHelper = function () {
 		 *#≪引数≫
 		 *#Sec : int型
 		 *#Delay : int型
+		 *#FinishFuc : Function型
 		 *##################################################
 		/*/
-		BlackOut: function (Sec, Delay) {
+		BlackOut: function (Sec, Delay, FinishFuc) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
 				Style.innerHTML = "@keyframes BlackOut {0% {BackGround: Transparent;} 100% {BackGround: Black;}}";
@@ -335,6 +336,8 @@ var RPGHelper = function () {
 			setTimeout(function () {
 				Effecter.parentElement.removeChild(Effecter);
 				document.head.removeChild(Style);
+				
+				FinishFuc();
 			}, (Sec + Delay) * 1000);
 			
 			return Effecter;
@@ -342,15 +345,16 @@ var RPGHelper = function () {
 		
 		/*/
 		 *##################################################
-		 *#【BlackOut】
-		 *#黒色へフェーズインする
+		 *#【WhiteOut】
+		 *#白色へフェーズインする
 		 *#
 		 *#≪引数≫
 		 *#Sec : int型
 		 *#Delay : int型
+		 *#FinishFuc : Function型
 		 *##################################################
 		/*/
-		WhiteOut: function (Sec, Delay) {
+		WhiteOut: function (Sec, Delay, FinishFuc) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
 				Style.innerHTML = "@keyframes WhiteOut {0% {BackGround: Transparent;} 100% {BackGround: White;}}";
@@ -368,6 +372,8 @@ var RPGHelper = function () {
 			setTimeout(function () {
 				Effecter.parentElement.removeChild(Effecter);
 				document.head.removeChild(Style);
+				
+				FinishFuc();
 			}, (Sec + Delay) * 1000);
 			
 			return Effecter;
@@ -375,16 +381,17 @@ var RPGHelper = function () {
 		
 		/*/
 		 *##################################################
-		 *#【BlackOut】
-		 *#黒色へフェーズインする
+		 *#【ColorOut】
+		 *#指定色へフェーズアウトする
 		 *#
 		 *#≪引数≫
 		 *#Sec : int型
 		 *#Delay : int型
 		 *#Color : R.COLOR型 || String型
+		 *#FinishFuc : Function型
 		 *##################################################
 		/*/
-		ColorOut: function (Sec, Delay, Color) {
+		ColorOut: function (Sec, Delay, Color, FinishFuc) {
 			var Style = document.createElement("Style");
 				Style.id = "RPGHelper-Effect";
 				Style.innerHTML = "@keyframes BlackOut {0% {BackGround: " + Color + ";} 100% {BackGround: Transparent;}}";
@@ -402,6 +409,8 @@ var RPGHelper = function () {
 			setTimeout(function () {
 				Effecter.parentElement.removeChild(Effecter);
 				document.head.removeChild(Style);
+				
+				FinishFuc();
 			}, (Sec + Delay) * 1000);
 			
 			return Effecter;
