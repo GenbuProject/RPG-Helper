@@ -272,7 +272,7 @@ var RPGHelper = function () {
 					Reader.readAsText(Event.target.files[0]);
 					
 					Reader.onload = function () {
-						Resource.UserData = JSON.parse(Reader.readAsText(Event.target.files[0]));
+						Resource.UserData = JSON.parse(Reader.result);
 						LoadFuc();
 					}
 			});
