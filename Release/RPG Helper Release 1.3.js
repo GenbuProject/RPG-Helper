@@ -1,6 +1,6 @@
 /*/
  *######################################################################
- *#RPG Helper Release 1.3 [Last Updated: 2016/08/31]
+ *#RPG Helper Release 1.3 [Last Updated: 2016/09/11]
  *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
  *######################################################################
 /*/
@@ -272,6 +272,7 @@ var RPGHelper = function () {
 					Reader.readAsText(Event.target.files[0]);
 					
 					Reader.onload = function () {
+						Resource.UserData = JSON.parse(Reader.readAsText(Event.target.files[0]));
 						LoadFuc();
 					}
 			});
@@ -382,7 +383,7 @@ var RPGHelper = function () {
 		/*/
 		 *##################################################
 		 *#【ColorOut】
-		 *#指定色へフェーズアウトする
+		 *#指定色からフェーズアウトする
 		 *#
 		 *#≪引数≫
 		 *#Sec : int型
@@ -7541,4 +7542,6 @@ var RPGHelper = function () {
 			
 			document.head.appendChild(BackStyle);
 	}
+	
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 }
