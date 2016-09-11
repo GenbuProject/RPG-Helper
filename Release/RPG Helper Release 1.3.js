@@ -382,7 +382,7 @@ var RPGHelper = function () {
 		/*/
 		 *##################################################
 		 *#【ColorOut】
-		 *#指定色へフェーズアウトする
+		 *#指定色からフェーズアウトする
 		 *#
 		 *#≪引数≫
 		 *#Sec : int型
@@ -7541,4 +7541,6 @@ var RPGHelper = function () {
 			
 			document.head.appendChild(BackStyle);
 	}
+	
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 }
