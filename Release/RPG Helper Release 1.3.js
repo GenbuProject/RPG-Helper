@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*/
  *######################################################################
  *#RPG Helper Release 1.3 [Last Updated: 2016/09/11]
@@ -15091,5 +15090,4 @@ var RPGHelper = function () {
 	}
 	
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
->>>>>>> origin/gh-pages
 }
