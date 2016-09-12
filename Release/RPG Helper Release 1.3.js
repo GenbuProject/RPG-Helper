@@ -7405,7 +7405,7 @@ var RPGHelper = function () {
 				
 			ParentPanel.appendChild(Dialog);
 			
-			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
+			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.style.left.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
 			} else {
 				Dialog.style.width = Dialog.style.width.split("px")[0] - 5 + "px";
 			}
@@ -7458,7 +7458,7 @@ var RPGHelper = function () {
 				
 			ParentPanel.appendChild(Dialog);
 			
-			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
+			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.style.left.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
 			} else {
 				Dialog.style.width = Dialog.style.width.split("px")[0] - 5 + "px";
 			}
@@ -7523,7 +7523,7 @@ var RPGHelper = function () {
 				
 			ParentPanel.appendChild(Dialog);
 			
-			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
+			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.style.left.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
 			} else {
 				Dialog.style.width = Dialog.style.width.split("px")[0] - 5 + "px";
 			}
