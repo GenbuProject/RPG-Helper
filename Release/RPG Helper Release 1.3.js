@@ -7532,6 +7532,17 @@ var RPGHelper = function () {
 		}
 	}
 	
+	this.Util = {
+		GetIconData: function (URL) {
+			var Img = new Image();
+				Img.src = URL;
+				
+				Img.onload = function () {
+					return Img;
+				}
+		}
+	}
+	
 	this.SystemLoad();
 	this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
 	
