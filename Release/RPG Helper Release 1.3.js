@@ -7410,6 +7410,11 @@ var RPGHelper = function () {
 				Dialog.style.width = Dialog.style.width.split("px")[0] - 5 + "px";
 			}
 			
+			if ((Dialog.style.height.split("px")[0] - 0) + (Dialog.style.top.split("px")[0] - 0) + (Dialog.parentElement.style.top.split("px")[0] - 0) < this.Canvas.style.height.split("px")[0] - 5) {
+			} else {
+				Dialog.style.height = Dialog.style.height.split("px")[0] - 5 + "px";
+			}
+			
 			return Dialog;
 		},
 		
@@ -7461,6 +7466,11 @@ var RPGHelper = function () {
 			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.style.left.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
 			} else {
 				Dialog.style.width = Dialog.style.width.split("px")[0] - 5 + "px";
+			}
+			
+			if ((Dialog.style.height.split("px")[0] - 0) + (Dialog.style.top.split("px")[0] - 0) + (Dialog.parentElement.style.top.split("px")[0] - 0) < this.Canvas.style.height.split("px")[0] - 5) {
+			} else {
+				Dialog.style.height = Dialog.style.height.split("px")[0] - 5 + "px";
 			}
 			
 			return Dialog;
@@ -7526,6 +7536,11 @@ var RPGHelper = function () {
 			if ((Dialog.style.width.split("px")[0] - 0) + (Dialog.style.left.split("px")[0] - 0) + (Dialog.parentElement.style.left.split("px")[0] - 0) < this.Canvas.style.width.split("px")[0] - 5) {
 			} else {
 				Dialog.style.width = Dialog.style.width.split("px")[0] - 5 + "px";
+			}
+			
+			if ((Dialog.style.height.split("px")[0] - 0) + (Dialog.style.top.split("px")[0] - 0) + (Dialog.parentElement.style.top.split("px")[0] - 0) < this.Canvas.style.height.split("px")[0] - 5) {
+			} else {
+				Dialog.style.height = Dialog.style.height.split("px")[0] - 5 + "px";
 			}
 			
 			return Dialog;
