@@ -7269,9 +7269,9 @@ var RPGHelper = function () {
 				Dialog.insertBefore(Face, Dialog.children[0]);
 				
 			if (Pos == R.POS.CENTER) {
-				Face.height = "50%";
+				Face.style.height = "50%";
 			} else {
-				Face.height = "100%";
+				Face.style.height = "100%";
 			}
 		}
 		
