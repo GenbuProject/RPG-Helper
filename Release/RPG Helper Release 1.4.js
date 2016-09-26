@@ -7247,17 +7247,32 @@ var RPGHelper = function () {
 	 *#ClickFuc : Function型
 	 *##################################################
 	/*/
-	this.MsgBox = function (Pos, Speed, Color, Content, ClickFuc) {
+	this.MsgBox = function (Pos, Speed, Color, Content, FaceURL, ClickFuc) {
 		this.GamePad.Disable();
 		
 		var Dialog = document.createElement("RPGHelper-MsgBox");
 			Dialog.style.position = "Absolute";
 			Dialog.style.width = (this.Canvas.attributes["width"].value - 10) + "px";
 			Dialog.style.color = Color;
-			Dialog.Clicked = false;
 			
 			this.Canvas.appendChild(Dialog);
 			
+		var Texts = document.createElement("Span");
+			Texts.style.position = "Absolute";
+			
+			Dialog.appendChild(Texts);
+			
+		if (FaceURL != "") {
+			var Face = new Image(FaceURL);
+				Dialog.insertBefore(Face, Dialog.children[0]);
+				
+			if (Pos == R.POS.CENTER) {
+				Face.height = "50%";
+			} else {
+				Face.height = "100%";
+			}
+		}
+		
 		switch (Pos) {
 			case R.POS.TOP:
 				Dialog.style.top = "0px";
@@ -7292,7 +7307,6 @@ var RPGHelper = function () {
 		
 		Dialog.onclick = (function (Canvas, Sound) {
 			return function () {
-				this.Clicked = true;
 				Canvas.removeChild(Dialog);
 				
 				Sound.PlaySE("Click");
