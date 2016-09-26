@@ -7263,7 +7263,9 @@ var RPGHelper = function () {
 			Dialog.appendChild(Texts);
 			
 		if (FaceURL != "") {
-			var Face = new Image(FaceURL);
+			var Face = new Image();
+				Face.src = FaceURL;
+				
 				Dialog.insertBefore(Face, Dialog.children[0]);
 				
 			if (Pos == R.POS.CENTER) {
