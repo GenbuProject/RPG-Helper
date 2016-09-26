@@ -7299,7 +7299,7 @@ var RPGHelper = function () {
 			
 			var Timer = setInterval(function () {
 				if (Counter <= Content.length) {
-					Dialog.innerHTML = Content.substr(0, Counter);
+					Texts.innerHTML = Content.substr(0, Counter);
 					Counter++;
 				} else {
 					clearInterval(Timer);
