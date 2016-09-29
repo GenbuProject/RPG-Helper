@@ -803,7 +803,7 @@ var RPGHelper = function () {
 				document.removeEventListener("keydown", this.PadFunc, false);
 			}
 			
-			this.MoveFuc = function (Key) {
+			R.THIS.MoveFuc = function (Key) {
 				var MemPos = [Key == Resource.SystemData.Key.Left ? CharaPos[0] - 1 : Key == Resource.SystemData.Key.Right ? CharaPos[0] + 1 : CharaPos[0], Key == Resource.SystemData.Key.Up ? CharaPos[1] - 1 : Key == Resource.SystemData.Key.Down ? CharaPos[1] + 1 : CharaPos[1]];
 				var Direction = Key == Resource.SystemData.Key.Up ? R.DIRECTION.N : Key == Resource.SystemData.Key.Down ? R.DIRECTION.S : Key == Resource.SystemData.Key.Left ? R.DIRECTION.W : Key == Resource.SystemData.Key.Right ? R.DIRECTION.E : R.DIRECTION.N;
 				
@@ -2406,18 +2406,18 @@ var RPGHelper = function () {
 			}
 			
 			//キーボード関数
-			this.PadFunc = function (Event) {
+			R.THIS.PadFunc = function (Event) {
 				Event.preventDefault();
-				this.MoveFuc(Event.keyCode);
+				R.THIS.MoveFuc(Event.keyCode);
 			}
 			
-			document.addEventListener("keydown", this.PadFunc);
+			document.addEventListener("keydown", R.THIS.PadFunc);
 			sessionStorage.setItem("GamePad", "Keyboard");
 		},
 		
 		Disable: function () {
 			if (sessionStorage.getItem("GamePad") != null) {
-				document.removeEventListener("keydown", this.PadFunc, false);
+				document.removeEventListener("keydown", R.THIS.PadFunc, false);
 				sessionStorage.removeItem("GamePad");
 			}
 		}
