@@ -54,7 +54,6 @@ var RPGHelper = function () {
 			N: "North"
 		},
 		
-		PadFunc: null,
 		THIS: this
 	}
 	
@@ -2756,9 +2755,7 @@ var RPGHelper = function () {
 			var Img = new Image();
 				Img.src = URL;
 				
-				Img.onload = function () {
-					return Img;
-				}
+			return Img;
 		},
 		
 		DrawTip: function (URL, TipID, Position, Fucs) {
