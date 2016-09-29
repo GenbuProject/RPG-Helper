@@ -2441,20 +2441,20 @@ var RPGHelper = function () {
 				sessionStorage.removeItem("GamePad");
 			}
 			
-			if (this.Timers != []) {
-				for (var i = 0; i < this.Timers.length; i++) {
-					clearInterval(this.Timers[i]);
+			if (R.THIS.Map.Timers != []) {
+				for (var i = 0; i < R.THIS.Map.Timers.length; i++) {
+					clearInterval(R.THIS.Map.Timers[i]);
 				}
 				
-				this.Timers = [];
+				R.THIS.Map.Timers = [];
 			}
 			
-			if (this.Keys != []) {
-				for (var i = 0; i < this.Keys.length; i++) {
-					document.removeEventListener("keydown", this.Keys[i], false);
+			if (R.THIS.Map.Keys != []) {
+				for (var i = 0; i < R.THIS.Map.Keys.length; i++) {
+					document.removeEventListener("keydown", R.THIS.Map.Keys[i], false);
 				}
 				
-				this.Keys = [];
+				R.THIS.Map.Keys = [];
 			}
 		}
 	}
