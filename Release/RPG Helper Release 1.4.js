@@ -54,6 +54,7 @@ var RPGHelper = function () {
 			N: "North"
 		},
 		
+		PadFunc: null,
 		THIS: this
 	}
 	
@@ -2421,22 +2422,6 @@ var RPGHelper = function () {
 			if (sessionStorage.getItem("GamePad") != null) {
 				document.removeEventListener("keydown", R.THIS.PadFunc, false);
 				sessionStorage.removeItem("GamePad");
-			}
-			
-			if (R.THIS.Map.Timers != []) {
-				for (var i = 0; i < R.THIS.Map.Timers.length; i++) {
-					clearInterval(R.THIS.Map.Timers[i]);
-				}
-				
-				R.THIS.Map.Timers = [];
-			}
-			
-			if (R.THIS.Map.Keys != []) {
-				for (var i = 0; i < R.THIS.Map.Keys.length; i++) {
-					document.removeEventListener("keydown", R.THIS.Map.Keys[i], false);
-				}
-				
-				R.THIS.Map.Keys = [];
 			}
 		}
 	}
