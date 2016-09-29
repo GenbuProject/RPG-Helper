@@ -790,8 +790,6 @@ var RPGHelper = function () {
 	}
 	
 	this.GamePad = {
-		PadFunc: null,
-		
 		Map: this.Map,
 		Character: this.Character,
 		
