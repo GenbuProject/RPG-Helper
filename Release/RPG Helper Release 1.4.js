@@ -805,7 +805,11 @@ var RPGHelper = function () {
 			
 			R.THIS.MoveFuc = function (Key) {
 				var MemPos = [Key == Resource.SystemData.Key.Left ? CharaPos[0] - 1 : Key == Resource.SystemData.Key.Right ? CharaPos[0] + 1 : CharaPos[0], Key == Resource.SystemData.Key.Up ? CharaPos[1] - 1 : Key == Resource.SystemData.Key.Down ? CharaPos[1] + 1 : CharaPos[1]];
-				var Direction = Key == Resource.SystemData.Key.Up ? R.DIRECTION.N : Key == Resource.SystemData.Key.Down ? R.DIRECTION.S : Key == Resource.SystemData.Key.Left ? R.DIRECTION.W : Key == Resource.SystemData.Key.Right ? R.DIRECTION.E : return true;
+				var Direction = Key == Resource.SystemData.Key.Up ? R.DIRECTION.N : Key == Resource.SystemData.Key.Down ? R.DIRECTION.S : Key == Resource.SystemData.Key.Left ? R.DIRECTION.W : Key == Resource.SystemData.Key.Right ? R.DIRECTION.E : null;
+				
+				if ((Key != Resource.SystemData.Key.Up) && (Key != Resource.SystemData.Key.Down) && (Key != Resource.SystemData.Key.Left) && (Key != Resource.SystemData.Key.Right)) {
+					return true;
+				}
 				
 				if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
 					if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
