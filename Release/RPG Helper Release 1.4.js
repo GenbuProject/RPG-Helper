@@ -2408,7 +2408,7 @@ var RPGHelper = function () {
 			//キーボード関数
 			this.PadFunc = function (Event) {
 				Event.preventDefault();
-				MoveFuc(Event.keyCode);
+				this.MoveFuc(Event.keyCode);
 			}
 			
 			document.addEventListener("keydown", this.PadFunc);
