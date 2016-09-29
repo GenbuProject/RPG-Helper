@@ -432,7 +432,9 @@ var RPGHelper = function () {
 		MapData: null,
 		
 		Timers: [],
+		EtcTimers: [],
 		Keys: [],
+		EtcKeys: [],
 		
 		/*/
 		 *##################################################
@@ -801,6425 +803,1613 @@ var RPGHelper = function () {
 				document.removeEventListener("keydown", this.PadFunc, false);
 			}
 			
+			var MoveFuc = function (Key) {
+				Event.preventDefault();
+				
+				var MemPos = [Key == Resource.SystemData.Key.Left ? CharaPos[0] - 1 : Key == Resource.SystemData.Key.Right ? CharaPos[0] + 1 : CharaPos[0], Key == Resource.SystemData.Key.Up ? CharaPos[1] - 1 : Key == Resource.SystemData.Key.Down ? CharaPos[1] + 1 : CharaPos[1]];
+				var Direction = Key == Resource.SystemData.Key.Up ? R.DIRECTION.N : Key == Resource.SystemData.Key.Down ? R.DIRECTION.S : Key == Resource.SystemData.Key.Left ? R.DIRECTION.W : Key == Resource.SystemData.Key.Right ? R.DIRECTION.E : R.DIRECTION.N;
+				
+				if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
+					if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
+						if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
+							//通行可能
+							Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], null);
+						}
+					}
+				}
+				
+				if ((TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" && MapData[2][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
+					if ((TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" && MapData[1][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
+						if ((TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" && MapData[0][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
+							//通行可能
+							if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200") {
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+							} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300") {
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+							} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+							} else {
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], null);
+							}
+						} else {
+							switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
+								case "0":
+									//通行可能
+									Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], null);
+									break;
+									
+								case "F0000":
+									//通行不可
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "100000":
+									//常にキャラの上に表示
+									Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
+									break;
+									
+								case "100":
+									//後ろに行くと隠れる
+									Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+									break;
+									
+								case "200":
+									//下レイヤーに合わせる
+									break;
+									
+								case "400000":
+									//下半身が半透明に
+									Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+									break;
+									
+								case "100200":
+									//常にキャラの上に表示 + 下レイヤーに合わせる
+									break;
+									
+								case "300":
+									//後ろに行くと隠れる + 下レイヤーに合わせる
+									break;
+									
+								case "400200":
+									//下半身が半透明に + 下レイヤーに合わせる
+									break;
+									
+								case "210000":
+									/*/
+									 *[○, ○]
+									 *[○, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "220000":
+									/*/
+									 *[○, ○]
+									 *[×, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "230000":
+									/*/
+									 *[○, ○]
+									 *[×, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "240000":
+									/*/
+									 *[○, ×]
+									 *[○, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "250000":
+									/*/
+									 *[○, ×]
+									 *[○, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "260000":
+									/*/
+									 *[○, ×]
+									 *[×, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "270000":
+									/*/
+									 *[○, ×]
+									 *[×, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "280000":
+									/*/
+									 *[×, ○]
+									 *[○, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "290000":
+									/*/
+									 *[×, ○]
+									 *[○, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2A0000":
+									/*/
+									 *[×, ○]
+									 *[×, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2B0000":
+									/*/
+									 *[×, ○]
+									 *[×, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2C0000":
+									/*/
+									 *[×, ×]
+									 *[○, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2D0000":
+									/*/
+									 *[×, ×]
+									 *[○, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2E0000":
+									/*/
+									 *[×, ×]
+									 *[×, ○]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2F0000":
+									/*/
+									 *[×, ×]
+									 *[×, ×]
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "310000":
+									/*/
+									 *[○, ○]
+									 *[○, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "320000":
+									/*/
+									 *[○, ○]
+									 *[×, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "330000":
+									/*/
+									 *[○, ○]
+									 *[×, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "340000":
+									/*/
+									 *[○, ×]
+									 *[○, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "350000":
+									/*/
+									 *[○, ×]
+									 *[○, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "360000":
+									/*/
+									 *[○, ×]
+									 *[×, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "370000":
+									/*/
+									 *[○, ×]
+									 *[×, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "380000":
+									/*/
+									 *[×, ○]
+									 *[○, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "390000":
+									/*/
+									 *[×, ○]
+									 *[○, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "3A0000":
+									/*/
+									 *[×, ○]
+									 *[×, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "3B0000":
+									/*/
+									 *[×, ○]
+									 *[×, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "3C0000":
+									/*/
+									 *[×, ×]
+									 *[○, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "3D0000":
+									/*/
+									 *[×, ×]
+									 *[○, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "3E0000":
+									/*/
+									 *[×, ×]
+									 *[×, ○] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "3F0000":
+									/*/
+									 *[×, ×]
+									 *[×, ×] + 常にキャラの上に表示
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "210100":
+									/*/
+									 *[○, ○]
+									 *[○, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "220100":
+									/*/
+									 *[○, ○]
+									 *[×, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "230100":
+									/*/
+									 *[○, ○]
+									 *[×, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "240100":
+									/*/
+									 *[○, ×]
+									 *[○, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "250100":
+									/*/
+									 *[○, ×]
+									 *[○, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "260100":
+									/*/
+									 *[○, ×]
+									 *[×, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "270100":
+									/*/
+									 *[○, ×]
+									 *[×, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "280100":
+									/*/
+									 *[×, ○]
+									 *[○, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "290100":
+									/*/
+									 *[×, ○]
+									 *[○, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2A0100":
+									/*/
+									 *[×, ○]
+									 *[×, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2B0100":
+									/*/
+									 *[×, ○]
+									 *[×, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2C0100":
+									/*/
+									 *[×, ×]
+									 *[○, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2D0100":
+									/*/
+									 *[×, ×]
+									 *[○, ×] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "2E0100":
+									/*/
+									 *[×, ×]
+									 *[×, ○] + 後ろに行くと隠れる
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "610000":
+									/*/
+									 *[○, ○]
+									 *[○, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "620000":
+									/*/
+									 *[○, ○]
+									 *[×, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "630000":
+									/*/
+									 *[○, ○]
+									 *[×, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "640000":
+									/*/
+									 *[○, ×]
+									 *[○, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "650000":
+									/*/
+									 *[○, ×]
+									 *[○, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "660000":
+									/*/
+									 *[○, ×]
+									 *[×, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "670000":
+									/*/
+									 *[○, ×]
+									 *[×, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "680000":
+									/*/
+									 *[×, ○]
+									 *[○, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "690000":
+									/*/
+									 *[×, ○]
+									 *[○, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "6A0000":
+									/*/
+									 *[×, ○]
+									 *[×, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "6B0000":
+									/*/
+									 *[×, ○]
+									 *[×, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "6C0000":
+									/*/
+									 *[×, ×]
+									 *[○, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "6D0000":
+									/*/
+									 *[×, ×]
+									 *[○, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "6E0000":
+									/*/
+									 *[×, ×]
+									 *[×, ○] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+									
+								case "6F0000":
+									/*/
+									 *[×, ×]
+									 *[×, ×] + 下半身が半透明に
+									/*/
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+									break;
+							}
+						}
+					} else {
+						switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
+							case "0":
+								//通行可能
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], null);
+								break;
+								
+							case "F0000":
+								//通行不可
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "100000":
+								//常にキャラの上に表示
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+								break;
+								
+							case "100":
+								//後ろに行くと隠れる
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+								break;
+								
+							case "200":
+								//下レイヤーに合わせる
+								break;
+								
+							case "400000":
+								//下半身が半透明に
+								Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+								break;
+								
+							case "100200":
+								//常にキャラの上に表示 + 下レイヤーに合わせる
+								break;
+								
+							case "300":
+								//後ろに行くと隠れる + 下レイヤーに合わせる
+								break;
+								
+							case "400200":
+								//下半身が半透明に + 下レイヤーに合わせる
+								break;
+								
+							case "210000":
+								/*/
+								 *[○, ○]
+								 *[○, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "220000":
+								/*/
+								 *[○, ○]
+								 *[×, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "230000":
+								/*/
+								 *[○, ○]
+								 *[×, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "240000":
+								/*/
+								 *[○, ×]
+								 *[○, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "250000":
+								/*/
+								 *[○, ×]
+								 *[○, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "260000":
+								/*/
+								 *[○, ×]
+								 *[×, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "270000":
+								/*/
+								 *[○, ×]
+								 *[×, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "280000":
+								/*/
+								 *[×, ○]
+								 *[○, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "290000":
+								/*/
+								 *[×, ○]
+								 *[○, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2A0000":
+								/*/
+								 *[×, ○]
+								 *[×, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2B0000":
+								/*/
+								 *[×, ○]
+								 *[×, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2C0000":
+								/*/
+								 *[×, ×]
+								 *[○, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2D0000":
+								/*/
+								 *[×, ×]
+								 *[○, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2E0000":
+								/*/
+								 *[×, ×]
+								 *[×, ○]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2F0000":
+								/*/
+								 *[×, ×]
+								 *[×, ×]
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "310000":
+								/*/
+								 *[○, ○]
+								 *[○, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "320000":
+								/*/
+								 *[○, ○]
+								 *[×, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "330000":
+								/*/
+								 *[○, ○]
+								 *[×, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "340000":
+								/*/
+								 *[○, ×]
+								 *[○, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "350000":
+								/*/
+								 *[○, ×]
+								 *[○, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "360000":
+								/*/
+								 *[○, ×]
+								 *[×, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "370000":
+								/*/
+								 *[○, ×]
+								 *[×, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "380000":
+								/*/
+								 *[×, ○]
+								 *[○, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "390000":
+								/*/
+								 *[×, ○]
+								 *[○, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "3A0000":
+								/*/
+								 *[×, ○]
+								 *[×, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "3B0000":
+								/*/
+								 *[×, ○]
+								 *[×, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "3C0000":
+								/*/
+								 *[×, ×]
+								 *[○, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "3D0000":
+								/*/
+								 *[×, ×]
+								 *[○, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "3E0000":
+								/*/
+								 *[×, ×]
+								 *[×, ○] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "3F0000":
+								/*/
+								 *[×, ×]
+								 *[×, ×] + 常にキャラの上に表示
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "210100":
+								/*/
+								 *[○, ○]
+								 *[○, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "220100":
+								/*/
+								 *[○, ○]
+								 *[×, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "230100":
+								/*/
+								 *[○, ○]
+								 *[×, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "240100":
+								/*/
+								 *[○, ×]
+								 *[○, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "250100":
+								/*/
+								 *[○, ×]
+								 *[○, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "260100":
+								/*/
+								 *[○, ×]
+								 *[×, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "270100":
+								/*/
+								 *[○, ×]
+								 *[×, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "280100":
+								/*/
+								 *[×, ○]
+								 *[○, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "290100":
+								/*/
+								 *[×, ○]
+								 *[○, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2A0100":
+								/*/
+								 *[×, ○]
+								 *[×, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2B0100":
+								/*/
+								 *[×, ○]
+								 *[×, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2C0100":
+								/*/
+								 *[×, ×]
+								 *[○, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2D0100":
+								/*/
+								 *[×, ×]
+								 *[○, ×] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "2E0100":
+								/*/
+								 *[×, ×]
+								 *[×, ○] + 後ろに行くと隠れる
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "610000":
+								/*/
+								 *[○, ○]
+								 *[○, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "620000":
+								/*/
+								 *[○, ○]
+								 *[×, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "630000":
+								/*/
+								 *[○, ○]
+								 *[×, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "640000":
+								/*/
+								 *[○, ×]
+								 *[○, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "650000":
+								/*/
+								 *[○, ×]
+								 *[○, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "660000":
+								/*/
+								 *[○, ×]
+								 *[×, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "670000":
+								/*/
+								 *[○, ×]
+								 *[×, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "680000":
+								/*/
+								 *[×, ○]
+								 *[○, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "690000":
+								/*/
+								 *[×, ○]
+								 *[○, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "6A0000":
+								/*/
+								 *[×, ○]
+								 *[×, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "6B0000":
+								/*/
+								 *[×, ○]
+								 *[×, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "6C0000":
+								/*/
+								 *[×, ×]
+								 *[○, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "6D0000":
+								/*/
+								 *[×, ×]
+								 *[○, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "6E0000":
+								/*/
+								 *[×, ×]
+								 *[×, ○] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+								
+							case "6F0000":
+								/*/
+								 *[×, ×]
+								 *[×, ×] + 下半身が半透明に
+								/*/
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+								break;
+						}
+					}
+				} else {
+					switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
+						case "0":
+							//通行可能
+							Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], null);
+							break;
+							
+						case "F0000":
+							//通行不可
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "100000":
+							//常にキャラの上に表示
+							Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+							break;
+							
+						case "100":
+							//後ろに行くと隠れる
+							Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
+							break;
+							
+						case "200":
+							//下レイヤーに合わせる
+							break;
+							
+						case "400000":
+							//下半身が半透明に
+							Character.Warp(CharacterID, Direction, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
+							break;
+							
+						case "100200":
+							//常にキャラの上に表示 + 下レイヤーに合わせる
+							break;
+							
+						case "300":
+							//後ろに行くと隠れる + 下レイヤーに合わせる
+							break;
+							
+						case "400200":
+							//下半身が半透明に + 下レイヤーに合わせる
+							break;
+							
+						case "210000":
+							/*/
+							 *[○, ○]
+							 *[○, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "220000":
+							/*/
+							 *[○, ○]
+							 *[×, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "230000":
+							/*/
+							 *[○, ○]
+							 *[×, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "240000":
+							/*/
+							 *[○, ×]
+							 *[○, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "250000":
+							/*/
+							 *[○, ×]
+							 *[○, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "260000":
+							/*/
+							 *[○, ×]
+							 *[×, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "270000":
+							/*/
+							 *[○, ×]
+							 *[×, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "280000":
+							/*/
+							 *[×, ○]
+							 *[○, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "290000":
+							/*/
+							 *[×, ○]
+							 *[○, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2A0000":
+							/*/
+							 *[×, ○]
+							 *[×, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2B0000":
+							/*/
+							 *[×, ○]
+							 *[×, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2C0000":
+							/*/
+							 *[×, ×]
+							 *[○, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2D0000":
+							/*/
+							 *[×, ×]
+							 *[○, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2E0000":
+							/*/
+							 *[×, ×]
+							 *[×, ○]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2F0000":
+							/*/
+							 *[×, ×]
+							 *[×, ×]
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "310000":
+							/*/
+							 *[○, ○]
+							 *[○, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "320000":
+							/*/
+							 *[○, ○]
+							 *[×, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "330000":
+							/*/
+							 *[○, ○]
+							 *[×, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "340000":
+							/*/
+							 *[○, ×]
+							 *[○, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "350000":
+							/*/
+							 *[○, ×]
+							 *[○, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "360000":
+							/*/
+							 *[○, ×]
+							 *[×, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "370000":
+							/*/
+							 *[○, ×]
+							 *[×, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "380000":
+							/*/
+							 *[×, ○]
+							 *[○, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "390000":
+							/*/
+							 *[×, ○]
+							 *[○, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "3A0000":
+							/*/
+							 *[×, ○]
+							 *[×, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "3B0000":
+							/*/
+							 *[×, ○]
+							 *[×, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "3C0000":
+							/*/
+							 *[×, ×]
+							 *[○, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "3D0000":
+							/*/
+							 *[×, ×]
+							 *[○, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "3E0000":
+							/*/
+							 *[×, ×]
+							 *[×, ○] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "3F0000":
+							/*/
+							 *[×, ×]
+							 *[×, ×] + 常にキャラの上に表示
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "210100":
+							/*/
+							 *[○, ○]
+							 *[○, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "220100":
+							/*/
+							 *[○, ○]
+							 *[×, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "230100":
+							/*/
+							 *[○, ○]
+							 *[×, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "240100":
+							/*/
+							 *[○, ×]
+							 *[○, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "250100":
+							/*/
+							 *[○, ×]
+							 *[○, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "260100":
+							/*/
+							 *[○, ×]
+							 *[×, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "270100":
+							/*/
+							 *[○, ×]
+							 *[×, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "280100":
+							/*/
+							 *[×, ○]
+							 *[○, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "290100":
+							/*/
+							 *[×, ○]
+							 *[○, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2A0100":
+							/*/
+							 *[×, ○]
+							 *[×, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2B0100":
+							/*/
+							 *[×, ○]
+							 *[×, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2C0100":
+							/*/
+							 *[×, ×]
+							 *[○, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2D0100":
+							/*/
+							 *[×, ×]
+							 *[○, ×] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "2E0100":
+							/*/
+							 *[×, ×]
+							 *[×, ○] + 後ろに行くと隠れる
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "610000":
+							/*/
+							 *[○, ○]
+							 *[○, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "620000":
+							/*/
+							 *[○, ○]
+							 *[×, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "630000":
+							/*/
+							 *[○, ○]
+							 *[×, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "640000":
+							/*/
+							 *[○, ×]
+							 *[○, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "650000":
+							/*/
+							 *[○, ×]
+							 *[○, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "660000":
+							/*/
+							 *[○, ×]
+							 *[×, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "670000":
+							/*/
+							 *[○, ×]
+							 *[×, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "680000":
+							/*/
+							 *[×, ○]
+							 *[○, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "690000":
+							/*/
+							 *[×, ○]
+							 *[○, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "6A0000":
+							/*/
+							 *[×, ○]
+							 *[×, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "6B0000":
+							/*/
+							 *[×, ○]
+							 *[×, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "6C0000":
+							/*/
+							 *[×, ×]
+							 *[○, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "6D0000":
+							/*/
+							 *[×, ×]
+							 *[○, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "6E0000":
+							/*/
+							 *[×, ×]
+							 *[×, ○] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+							
+						case "6F0000":
+							/*/
+							 *[×, ×]
+							 *[×, ×] + 下半身が半透明に
+							/*/
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], null);
+							break;
+					}
+				}
+
+				if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
+					if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
+						if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
+							if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6F0000") {
+								if (TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6F0000") {
+									if (TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6F0000") {
+										Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [0x0000, 0x0000]);
+									} else {
+										Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
+									}
+								} else {
+									Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
+								}
+							} else {
+								Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
+							}
+						} else {
+							Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
+						}
+					} else {
+						Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
+					}
+				} else {
+					Character.Warp(CharacterID, Direction, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
+				}
+			}
+			
 			//キーボード関数
 			this.PadFunc = function (Event) {
-				switch (Event.keyCode) {
-					case 38: //上キー
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0], CharaPos[1] - 1];
-						
-						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
-							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
-								if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
-								}
-							}
-						}
-						
-						if ((TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" && MapData[2][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
-							if ((TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" && MapData[1][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
-								if ((TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" && MapData[0][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-									//通行可能
-									if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200") {
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300") {
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
-									}
-								} else {
-									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
-										case "0":
-											//通行可能
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
-											break;
-											
-										case "F0000":
-											//通行不可
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "100000":
-											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
-											break;
-											
-										case "100":
-											//後ろに行くと隠れる
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-											break;
-											
-										case "200":
-											//下レイヤーに合わせる
-											break;
-											
-										case "400000":
-											//下半身が半透明に
-											Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-											break;
-											
-										case "100200":
-											//常にキャラの上に表示 + 下レイヤーに合わせる
-											break;
-											
-										case "300":
-											//後ろに行くと隠れる + 下レイヤーに合わせる
-											break;
-											
-										case "400200":
-											//下半身が半透明に + 下レイヤーに合わせる
-											break;
-											
-										case "210000":
-											/*/
-											 *[○, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220000":
-											/*/
-											 *[○, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230000":
-											/*/
-											 *[○, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240000":
-											/*/
-											 *[○, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250000":
-											/*/
-											 *[○, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260000":
-											/*/
-											 *[○, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270000":
-											/*/
-											 *[○, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280000":
-											/*/
-											 *[×, ○]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290000":
-											/*/
-											 *[×, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "310000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "320000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "330000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "340000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "350000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "360000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "370000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "380000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "390000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "210100":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220100":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230100":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240100":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250100":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260100":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270100":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280100":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290100":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0100":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0100":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0100":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0100":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0100":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "610000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "620000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "630000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "640000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "650000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "660000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "670000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "680000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "690000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-											break;
-									}
-								}
-							} else {
-								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
-									case "0":
-										//通行可能
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
-										break;
-										
-									case "F0000":
-										//通行不可
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "100000":
-										//常にキャラの上に表示
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "100":
-										//後ろに行くと隠れる
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "200":
-										//下レイヤーに合わせる
-										break;
-										
-									case "400000":
-										//下半身が半透明に
-										Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-										break;
-										
-									case "100200":
-										//常にキャラの上に表示 + 下レイヤーに合わせる
-										break;
-										
-									case "300":
-										//後ろに行くと隠れる + 下レイヤーに合わせる
-										break;
-										
-									case "400200":
-										//下半身が半透明に + 下レイヤーに合わせる
-										break;
-										
-									case "210000":
-										/*/
-										 *[○, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220000":
-										/*/
-										 *[○, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230000":
-										/*/
-										 *[○, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240000":
-										/*/
-										 *[○, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250000":
-										/*/
-										 *[○, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260000":
-										/*/
-										 *[○, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270000":
-										/*/
-										 *[○, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280000":
-										/*/
-										 *[×, ○]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290000":
-										/*/
-										 *[×, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "310000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "320000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "330000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "340000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "350000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "360000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "370000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "380000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "390000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "210100":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220100":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230100":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240100":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250100":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260100":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270100":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280100":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290100":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0100":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0100":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0100":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0100":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0100":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "610000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "620000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "630000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "640000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "650000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "660000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "670000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "680000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "690000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-										break;
-								}
-							}
-						} else {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
-								case "0":
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], null);
-									break;
-									
-								case "F0000":
-									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "100000":
-									//常にキャラの上に表示
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "100":
-									//後ろに行くと隠れる
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "200":
-									//下レイヤーに合わせる
-									break;
-									
-								case "400000":
-									//下半身が半透明に
-									Character.Warp(CharacterID, R.DIRECTION.N, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									break;
-									
-								case "100200":
-									//常にキャラの上に表示 + 下レイヤーに合わせる
-									break;
-									
-								case "300":
-									//後ろに行くと隠れる + 下レイヤーに合わせる
-									break;
-									
-								case "400200":
-									//下半身が半透明に + 下レイヤーに合わせる
-									break;
-									
-								case "210000":
-									/*/
-									 *[○, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220000":
-									/*/
-									 *[○, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230000":
-									/*/
-									 *[○, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240000":
-									/*/
-									 *[○, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250000":
-									/*/
-									 *[○, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260000":
-									/*/
-									 *[○, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270000":
-									/*/
-									 *[○, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280000":
-									/*/
-									 *[×, ○]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290000":
-									/*/
-									 *[×, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "310000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "320000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "330000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "340000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "350000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "360000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "370000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "380000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "390000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "210100":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220100":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230100":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240100":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250100":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260100":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270100":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280100":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290100":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0100":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0100":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0100":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0100":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0100":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "610000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "620000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "630000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "640000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "650000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "660000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "670000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "680000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "690000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], null);
-									break;
-							}
-						}
-						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-							if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-									if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-										if (TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-											if (TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-												Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, 0x0000]);
-											} else {
-												Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-											}
-										} else {
-											Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-										}
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-									}
-								} else {
-									Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-								}
-							} else {
-								Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-							}
-						} else {
-							Character.Warp(CharacterID, R.DIRECTION.N, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-						}
-						
-						break;
-						
-					case 40: //下キー
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0], CharaPos[1] + 1];
-						
-						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
-							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
-								if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
-								}
-							}
-						}
-						
-						if ((TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" && MapData[2][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
-							if ((TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" && MapData[1][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
-								if ((TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" && MapData[0][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-									//通行可能
-									if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200") {
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300") {
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
-									}
-								} else {
-									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
-										case "0":
-											//通行可能
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
-											break;
-											
-										case "F0000":
-											//通行不可
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "100000":
-											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
-											break;
-											
-										case "100":
-											//後ろに行くと隠れる
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-											break;
-											
-										case "200":
-											//下レイヤーに合わせる
-											break;
-											
-										case "400000":
-											//下半身が半透明に
-											Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-											break;
-											
-										case "100200":
-											//常にキャラの上に表示 + 下レイヤーに合わせる
-											break;
-											
-										case "300":
-											//後ろに行くと隠れる + 下レイヤーに合わせる
-											break;
-											
-										case "400200":
-											//下半身が半透明に + 下レイヤーに合わせる
-											break;
-											
-										case "210000":
-											/*/
-											 *[○, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220000":
-											/*/
-											 *[○, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230000":
-											/*/
-											 *[○, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240000":
-											/*/
-											 *[○, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250000":
-											/*/
-											 *[○, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260000":
-											/*/
-											 *[○, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270000":
-											/*/
-											 *[○, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280000":
-											/*/
-											 *[×, ○]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290000":
-											/*/
-											 *[×, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "310000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "320000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "330000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "340000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "350000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "360000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "370000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "380000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "390000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "210100":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220100":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230100":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240100":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250100":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260100":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270100":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280100":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290100":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0100":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0100":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0100":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0100":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0100":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "610000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "620000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "630000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "640000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "650000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "660000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "670000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "680000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "690000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-											break;
-									}
-								}
-							} else {
-								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
-									case "0":
-										//通行可能
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
-										break;
-										
-									case "F0000":
-										//通行不可
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "100000":
-										//常にキャラの上に表示
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "100":
-										//後ろに行くと隠れる
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "200":
-										//下レイヤーに合わせる
-										break;
-										
-									case "400000":
-										//下半身が半透明に
-										Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-										break;
-										
-									case "100200":
-										//常にキャラの上に表示 + 下レイヤーに合わせる
-										break;
-										
-									case "300":
-										//後ろに行くと隠れる + 下レイヤーに合わせる
-										break;
-										
-									case "400200":
-										//下半身が半透明に + 下レイヤーに合わせる
-										break;
-										
-									case "210000":
-										/*/
-										 *[○, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220000":
-										/*/
-										 *[○, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230000":
-										/*/
-										 *[○, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240000":
-										/*/
-										 *[○, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250000":
-										/*/
-										 *[○, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260000":
-										/*/
-										 *[○, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270000":
-										/*/
-										 *[○, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280000":
-										/*/
-										 *[×, ○]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290000":
-										/*/
-										 *[×, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "310000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "320000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "330000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "340000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "350000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "360000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "370000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "380000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "390000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "210100":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220100":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230100":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240100":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250100":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260100":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270100":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280100":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290100":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0100":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0100":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0100":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0100":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0100":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "610000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "620000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "630000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "640000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "650000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "660000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "670000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "680000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "690000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-										break;
-								}
-							}
-						} else {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
-								case "0":
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], null);
-									break;
-									
-								case "F0000":
-									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "100000":
-									//常にキャラの上に表示
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "100":
-									//後ろに行くと隠れる
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "200":
-									//下レイヤーに合わせる
-									break;
-									
-								case "400000":
-									//下半身が半透明に
-									Character.Warp(CharacterID, R.DIRECTION.S, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									break;
-									
-								case "100200":
-									//常にキャラの上に表示 + 下レイヤーに合わせる
-									break;
-									
-								case "300":
-									//後ろに行くと隠れる + 下レイヤーに合わせる
-									break;
-									
-								case "400200":
-									//下半身が半透明に + 下レイヤーに合わせる
-									break;
-									
-								case "210000":
-									/*/
-									 *[○, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220000":
-									/*/
-									 *[○, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230000":
-									/*/
-									 *[○, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240000":
-									/*/
-									 *[○, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250000":
-									/*/
-									 *[○, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260000":
-									/*/
-									 *[○, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270000":
-									/*/
-									 *[○, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280000":
-									/*/
-									 *[×, ○]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290000":
-									/*/
-									 *[×, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "310000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "320000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "330000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "340000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "350000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "360000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "370000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "380000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "390000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "210100":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220100":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230100":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240100":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250100":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260100":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270100":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280100":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290100":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0100":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0100":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0100":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0100":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0100":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "610000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "620000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "630000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "640000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "650000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "660000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "670000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "680000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "690000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], null);
-									break;
-							}
-						}
-						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-							if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-									if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-										if (TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-											if (TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-												Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, 0x0000]);
-											} else {
-												Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-											}
-										} else {
-											Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-										}
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-									}
-								} else {
-									Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-								}
-							} else {
-								Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-							}
-						} else {
-							Character.Warp(CharacterID, R.DIRECTION.S, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-						}
-						
-						break;
-						
-					case 37: //左キー
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0] - 1, CharaPos[1]];
-						
-						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
-							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
-								if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
-								}
-							}
-						}
-						
-						if ((TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" && MapData[2][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
-							if ((TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" && MapData[1][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
-								if ((TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" && MapData[0][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-									//通行可能
-									if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200") {
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300") {
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
-									}
-								} else {
-									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
-										case "0":
-											//通行可能
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
-											break;
-											
-										case "F0000":
-											//通行不可
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "100000":
-											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
-											break;
-											
-										case "100":
-											//後ろに行くと隠れる
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-											break;
-											
-										case "200":
-											//下レイヤーに合わせる
-											break;
-											
-										case "400000":
-											//下半身が半透明に
-											Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-											break;
-											
-										case "100200":
-											//常にキャラの上に表示 + 下レイヤーに合わせる
-											break;
-											
-										case "300":
-											//後ろに行くと隠れる + 下レイヤーに合わせる
-											break;
-											
-										case "400200":
-											//下半身が半透明に + 下レイヤーに合わせる
-											break;
-											
-										case "210000":
-											/*/
-											 *[○, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220000":
-											/*/
-											 *[○, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230000":
-											/*/
-											 *[○, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240000":
-											/*/
-											 *[○, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250000":
-											/*/
-											 *[○, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260000":
-											/*/
-											 *[○, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270000":
-											/*/
-											 *[○, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280000":
-											/*/
-											 *[×, ○]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290000":
-											/*/
-											 *[×, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "310000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "320000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "330000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "340000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "350000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "360000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "370000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "380000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "390000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "210100":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220100":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230100":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240100":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250100":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260100":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270100":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280100":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290100":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0100":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0100":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0100":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0100":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0100":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "610000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "620000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "630000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "640000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "650000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "660000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "670000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "680000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "690000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-											break;
-									}
-								}
-							} else {
-								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
-									case "0":
-										//通行可能
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
-										break;
-										
-									case "F0000":
-										//通行不可
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "100000":
-										//常にキャラの上に表示
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "100":
-										//後ろに行くと隠れる
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "200":
-										//下レイヤーに合わせる
-										break;
-										
-									case "400000":
-										//下半身が半透明に
-										Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-										break;
-										
-									case "100200":
-										//常にキャラの上に表示 + 下レイヤーに合わせる
-										break;
-										
-									case "300":
-										//後ろに行くと隠れる + 下レイヤーに合わせる
-										break;
-										
-									case "400200":
-										//下半身が半透明に + 下レイヤーに合わせる
-										break;
-										
-									case "210000":
-										/*/
-										 *[○, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220000":
-										/*/
-										 *[○, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230000":
-										/*/
-										 *[○, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240000":
-										/*/
-										 *[○, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250000":
-										/*/
-										 *[○, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260000":
-										/*/
-										 *[○, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270000":
-										/*/
-										 *[○, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280000":
-										/*/
-										 *[×, ○]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290000":
-										/*/
-										 *[×, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "310000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "320000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "330000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "340000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "350000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "360000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "370000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "380000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "390000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "210100":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220100":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230100":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240100":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250100":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260100":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270100":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280100":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290100":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0100":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0100":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0100":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0100":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0100":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "610000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "620000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "630000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "640000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "650000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "660000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "670000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "680000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "690000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-										break;
-								}
-							}
-						} else {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
-								case "0":
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], null);
-									break;
-									
-								case "F0000":
-									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "100000":
-									//常にキャラの上に表示
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "100":
-									//後ろに行くと隠れる
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "200":
-									//下レイヤーに合わせる
-									break;
-									
-								case "400000":
-									//下半身が半透明に
-									Character.Warp(CharacterID, R.DIRECTION.W, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									break;
-									
-								case "100200":
-									//常にキャラの上に表示 + 下レイヤーに合わせる
-									break;
-									
-								case "300":
-									//後ろに行くと隠れる + 下レイヤーに合わせる
-									break;
-									
-								case "400200":
-									//下半身が半透明に + 下レイヤーに合わせる
-									break;
-									
-								case "210000":
-									/*/
-									 *[○, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220000":
-									/*/
-									 *[○, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230000":
-									/*/
-									 *[○, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240000":
-									/*/
-									 *[○, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250000":
-									/*/
-									 *[○, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260000":
-									/*/
-									 *[○, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270000":
-									/*/
-									 *[○, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280000":
-									/*/
-									 *[×, ○]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290000":
-									/*/
-									 *[×, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "310000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "320000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "330000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "340000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "350000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "360000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "370000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "380000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "390000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "210100":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220100":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230100":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240100":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250100":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260100":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270100":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280100":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290100":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0100":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0100":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0100":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0100":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0100":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "610000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "620000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "630000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "640000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "650000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "660000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "670000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "680000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "690000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], null);
-									break;
-							}
-						}
-						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-							if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-									if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-										if (TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-											if (TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-												Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, 0x0000]);
-											} else {
-												Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-											}
-										} else {
-											Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-										}
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-									}
-								} else {
-									Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-								}
-							} else {
-								Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-							}
-						} else {
-							Character.Warp(CharacterID, R.DIRECTION.W, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-						}
-						
-						break;
-						
-					case 39: //右キー
-						Event.preventDefault();
-						
-						var MemPos = [CharaPos[0] + 1, CharaPos[1]];
-						
-						if (MapData[0][MemPos[1]][MemPos[0]] == -1) {
-							if (MapData[1][MemPos[1]][MemPos[0]] == -1) {
-								if (MapData[2][MemPos[1]][MemPos[0]] == -1) {
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
-								}
-							}
-						}
-						
-						if ((TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "0" && MapData[2][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200") {
-							if ((TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "0" && MapData[1][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200") {
-								if ((TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "0" && MapData[0][MemPos[1]][MemPos[0]] == -1) || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300" || TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-									//通行可能
-									if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "100200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "100200") {
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "300" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "300") {
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									} else if (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[1][MemPos[1]][MemPos[0]]] == "400200" && TipSettingData[MapData[0][MemPos[1]][MemPos[0]]] == "400200") {
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
-									}
-								} else {
-									switch (TipSettingData[MapData[0][MemPos[1]][MemPos[0]]]) {
-										case "0":
-											//通行可能
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
-											break;
-											
-										case "F0000":
-											//通行不可
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "100000":
-											//常にキャラの上に表示
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001], 0);
-											break;
-											
-										case "100":
-											//後ろに行くと隠れる
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-											break;
-											
-										case "200":
-											//下レイヤーに合わせる
-											break;
-											
-										case "400000":
-											//下半身が半透明に
-											Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-											break;
-											
-										case "100200":
-											//常にキャラの上に表示 + 下レイヤーに合わせる
-											break;
-											
-										case "300":
-											//後ろに行くと隠れる + 下レイヤーに合わせる
-											break;
-											
-										case "400200":
-											//下半身が半透明に + 下レイヤーに合わせる
-											break;
-											
-										case "210000":
-											/*/
-											 *[○, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220000":
-											/*/
-											 *[○, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230000":
-											/*/
-											 *[○, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240000":
-											/*/
-											 *[○, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250000":
-											/*/
-											 *[○, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260000":
-											/*/
-											 *[○, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270000":
-											/*/
-											 *[○, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280000":
-											/*/
-											 *[×, ○]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290000":
-											/*/
-											 *[×, ○]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×]
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "310000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "320000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "330000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "340000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "350000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "360000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "370000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "380000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "390000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "3F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 常にキャラの上に表示
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "210100":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "220100":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "230100":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "240100":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "250100":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "260100":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "270100":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "280100":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "290100":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2A0100":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2B0100":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2C0100":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2D0100":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "2E0100":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 後ろに行くと隠れる
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "610000":
-											/*/
-											 *[○, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "620000":
-											/*/
-											 *[○, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "630000":
-											/*/
-											 *[○, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "640000":
-											/*/
-											 *[○, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "650000":
-											/*/
-											 *[○, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "660000":
-											/*/
-											 *[○, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "670000":
-											/*/
-											 *[○, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "680000":
-											/*/
-											 *[×, ○]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "690000":
-											/*/
-											 *[×, ○]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6A0000":
-											/*/
-											 *[×, ○]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6B0000":
-											/*/
-											 *[×, ○]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6C0000":
-											/*/
-											 *[×, ×]
-											 *[○, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6D0000":
-											/*/
-											 *[×, ×]
-											 *[○, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6E0000":
-											/*/
-											 *[×, ×]
-											 *[×, ○] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-											
-										case "6F0000":
-											/*/
-											 *[×, ×]
-											 *[×, ×] + 下半身が半透明に
-											/*/
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-											break;
-									}
-								}
-							} else {
-								switch (TipSettingData[MapData[1][MemPos[1]][MemPos[0]]]) {
-									case "0":
-										//通行可能
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
-										break;
-										
-									case "F0000":
-										//通行不可
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "100000":
-										//常にキャラの上に表示
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "100":
-										//後ろに行くと隠れる
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-										break;
-										
-									case "200":
-										//下レイヤーに合わせる
-										break;
-										
-									case "400000":
-										//下半身が半透明に
-										Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-										break;
-										
-									case "100200":
-										//常にキャラの上に表示 + 下レイヤーに合わせる
-										break;
-										
-									case "300":
-										//後ろに行くと隠れる + 下レイヤーに合わせる
-										break;
-										
-									case "400200":
-										//下半身が半透明に + 下レイヤーに合わせる
-										break;
-										
-									case "210000":
-										/*/
-										 *[○, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220000":
-										/*/
-										 *[○, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230000":
-										/*/
-										 *[○, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240000":
-										/*/
-										 *[○, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250000":
-										/*/
-										 *[○, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260000":
-										/*/
-										 *[○, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270000":
-										/*/
-										 *[○, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280000":
-										/*/
-										 *[×, ○]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290000":
-										/*/
-										 *[×, ○]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×]
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "310000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "320000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "330000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "340000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "350000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "360000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "370000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "380000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "390000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "3F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 常にキャラの上に表示
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "210100":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "220100":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "230100":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "240100":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "250100":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "260100":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "270100":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "280100":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "290100":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2A0100":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2B0100":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2C0100":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2D0100":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "2E0100":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 後ろに行くと隠れる
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "610000":
-										/*/
-										 *[○, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "620000":
-										/*/
-										 *[○, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "630000":
-										/*/
-										 *[○, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "640000":
-										/*/
-										 *[○, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "650000":
-										/*/
-										 *[○, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "660000":
-										/*/
-										 *[○, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "670000":
-										/*/
-										 *[○, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "680000":
-										/*/
-										 *[×, ○]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "690000":
-										/*/
-										 *[×, ○]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6A0000":
-										/*/
-										 *[×, ○]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6B0000":
-										/*/
-										 *[×, ○]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6C0000":
-										/*/
-										 *[×, ×]
-										 *[○, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6D0000":
-										/*/
-										 *[×, ×]
-										 *[○, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6E0000":
-										/*/
-										 *[×, ×]
-										 *[×, ○] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-										
-									case "6F0000":
-										/*/
-										 *[×, ×]
-										 *[×, ×] + 下半身が半透明に
-										/*/
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-										break;
-								}
-							}
-						} else {
-							switch (TipSettingData[MapData[2][MemPos[1]][MemPos[0]]]) {
-								case "0":
-									//通行可能
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], null);
-									break;
-									
-								case "F0000":
-									//通行不可
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "100000":
-									//常にキャラの上に表示
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "100":
-									//後ろに行くと隠れる
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0001]);
-									break;
-									
-								case "200":
-									//下レイヤーに合わせる
-									break;
-									
-								case "400000":
-									//下半身が半透明に
-									Character.Warp(CharacterID, R.DIRECTION.E, [MemPos[0], MemPos[1]], [0x0000, 0x0002]);
-									break;
-									
-								case "100200":
-									//常にキャラの上に表示 + 下レイヤーに合わせる
-									break;
-									
-								case "300":
-									//後ろに行くと隠れる + 下レイヤーに合わせる
-									break;
-									
-								case "400200":
-									//下半身が半透明に + 下レイヤーに合わせる
-									break;
-									
-								case "210000":
-									/*/
-									 *[○, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220000":
-									/*/
-									 *[○, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230000":
-									/*/
-									 *[○, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240000":
-									/*/
-									 *[○, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250000":
-									/*/
-									 *[○, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260000":
-									/*/
-									 *[○, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270000":
-									/*/
-									 *[○, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280000":
-									/*/
-									 *[×, ○]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290000":
-									/*/
-									 *[×, ○]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×]
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "310000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "320000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "330000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "340000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "350000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "360000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "370000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "380000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "390000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "3F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 常にキャラの上に表示
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "210100":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "220100":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "230100":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "240100":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "250100":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "260100":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "270100":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "280100":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "290100":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2A0100":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2B0100":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2C0100":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2D0100":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "2E0100":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 後ろに行くと隠れる
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "610000":
-									/*/
-									 *[○, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "620000":
-									/*/
-									 *[○, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "630000":
-									/*/
-									 *[○, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "640000":
-									/*/
-									 *[○, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "650000":
-									/*/
-									 *[○, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "660000":
-									/*/
-									 *[○, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "670000":
-									/*/
-									 *[○, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "680000":
-									/*/
-									 *[×, ○]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "690000":
-									/*/
-									 *[×, ○]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6A0000":
-									/*/
-									 *[×, ○]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6B0000":
-									/*/
-									 *[×, ○]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6C0000":
-									/*/
-									 *[×, ×]
-									 *[○, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6D0000":
-									/*/
-									 *[×, ×]
-									 *[○, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6E0000":
-									/*/
-									 *[×, ×]
-									 *[×, ○] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-									
-								case "6F0000":
-									/*/
-									 *[×, ×]
-									 *[×, ×] + 下半身が半透明に
-									/*/
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], null);
-									break;
-							}
-						}
-						
-						if (TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-							if (TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-								if (TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] != "6F0000") {
-									if (TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-										if (TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-											if (TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "100200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "300" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "400200" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "310000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "320000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "330000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "340000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "350000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "360000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "370000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "380000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "390000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "3F0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "210100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "220100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "230100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "240100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "250100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "260100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "270100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "280100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "290100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2A0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2B0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2C0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2D0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2E0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "2F0100" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "610000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "620000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "630000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "640000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "650000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "660000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "670000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "680000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "690000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6A0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6B0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6C0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6D0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6E0000" && TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] != "6F0000") {
-												Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, 0x0000]);
-											} else {
-												Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-											}
-										} else {
-											Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-										}
-									} else {
-										Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-									}
-								} else {
-									Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[0][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0 : undefined);
-								}
-							} else {
-								Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[1][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 1 : undefined);
-							}
-						} else {
-							Character.Warp(CharacterID, R.DIRECTION.E, [CharaPos[0], CharaPos[1]], [TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1] - 1][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000, TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "310000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "320000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "330000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "340000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "350000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "360000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "370000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "380000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "390000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "3F0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 0x0001 : TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "400200" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "610000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "620000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "630000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "640000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "650000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "660000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "670000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "680000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "690000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6A0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6B0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6C0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6D0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6E0000" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "6F0000" ? 0x0002 : 0x0000], TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "300" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "210100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "220100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "230100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "240100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "250100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "260100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "270100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "280100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "290100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2A0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2B0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2C0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2D0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2E0100" || TipSettingData[MapData[2][CharaPos[1]][CharaPos[0]]] == "2F0100" ? 2 : undefined);
-						}
-						
-						break;
-				}
+				MoveFuc(Event.keyCode);
 			}
 			
 			document.addEventListener("keydown", this.PadFunc);
@@ -7569,7 +2759,7 @@ var RPGHelper = function () {
 				}
 		},
 		
-		DrawTip: function (URL, TipID, Pos, AppendLayerID) {
+		DrawTip: function (URL, TipID, Position, Fucs) {
 			var TipImg = new Image();
 			
 			var TipLoader = new XMLHttpRequest();
@@ -7595,21 +2785,15 @@ var RPGHelper = function () {
 				TipCanvas.height = this.Canvas.style.height.split("px")[0];
 				TipCanvas.style.position = "Absolute";
 				
-				if (AppendLayerID == undefined) {
-					this.Canvas.appendChild(CharaCanvas);
-				} else {
-					this.Canvas.insertBefore(TipCanvas, document.getElementById("Map" + (AppendLayerID + 1)));
-				}
-				
 			TipImg.onload = function () {
 				var Ctx = TipCanvas.getContext("2d");
-					Ctx.drawImage(TipImg, 16 * (TipID % 8), 16 * (Math.floor(TipID / 8)), 16, 16, 16 * Pos[0], 16 * Pos[1], 16, 16);
+					Ctx.drawImage(TipImg, 16 * (TipID % 8), 16 * (Math.floor(TipID / 8)), 16, 16, 16 * Position[0], 16 * Position[1], 16, 16);
 			}
 			
 			return [TipCanvas];
 		},
 		
-		DrawCharacter: function (URL, Direction, Position, VisibleTip, AppendLayerID) {
+		DrawCharacter: function (URL, Direction, Position, VisibleTip, AppendLayerID, Type, Fuc) {
 			var CharaImg = new Image();
 			
 			var CharaLoader = new XMLHttpRequest();
@@ -7685,7 +2869,47 @@ var RPGHelper = function () {
 				}
 			}
 			
-			CharaPos = [Position[0], Position[1], Direction];
+			switch (Type) {
+				case 1:
+					var X = Position[0], Y = Position[1];
+					var Fuc = Fuc;
+					
+					this.Map.EtcTimers.push(setInterval((function (X, Y, Fuc) {
+						return function () {
+							if (CharaPos[0] == X && CharaPos[1] == Y) {
+								Fuc();
+							}
+						}
+					})(X, Y, Fuc), 10));
+					
+					break;
+					
+				case 2:
+					var X = Position[0], Y = Position[1];
+					var Fuc = Fuc;
+					
+					(function (X, Y, Fuc) {
+						this.Map.Keys.push(function (Event) {
+							if (Event.keyCode == Resource.SystemData.Key.Decide) {
+								if ((CharaPos[0] == X && CharaPos[1] == Y + 1) && CharaPos[2] == R.DIRECTION.N) {
+									Fuc();
+								} else if ((CharaPos[0] == X && CharaPos[1] == Y - 1) && CharaPos[2] == R.DIRECTION.S) {
+									Fuc();
+								} else if ((CharaPos[0] == X + 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.W) {
+									Fuc();
+								} else if ((CharaPos[0] == X - 1 && CharaPos[1] == Y) && CharaPos[2] == R.DIRECTION.E) {
+									Fuc();
+								}
+							}
+						});
+					})(X, Y, Fuc);
+					
+					var ID = Keys.length - 1;
+					
+					document.addEventListener("keydown", Keys[ID]);
+					
+					break;
+			}
 		}
 	}
 	
