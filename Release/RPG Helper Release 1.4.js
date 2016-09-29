@@ -800,7 +800,23 @@ var RPGHelper = function () {
 			var Character = this.Character;
 			
 			if (sessionStorage.getItem("GamePad") != null) {
-				document.removeEventListener("keydown", this.PadFunc, false);
+				document.removeEventListener("keydown", R.THIS.PadFunc, false);
+			}
+			
+			if (this.Timers != []) {
+				for (var i = 0; i < this.Timers.length; i++) {
+					clearInterval(this.Timers[i]);
+				}
+				
+				this.Timers = [];
+			}
+			
+			if (this.Keys != []) {
+				for (var i = 0; i < this.Keys.length; i++) {
+					document.removeEventListener("keydown", this.Keys[i], false);
+				}
+				
+				this.Keys = [];
 			}
 			
 			R.THIS.MoveFuc = function (Key) {
@@ -2423,6 +2439,22 @@ var RPGHelper = function () {
 			if (sessionStorage.getItem("GamePad") != null) {
 				document.removeEventListener("keydown", R.THIS.PadFunc, false);
 				sessionStorage.removeItem("GamePad");
+			}
+			
+			if (this.Timers != []) {
+				for (var i = 0; i < this.Timers.length; i++) {
+					clearInterval(this.Timers[i]);
+				}
+				
+				this.Timers = [];
+			}
+			
+			if (this.Keys != []) {
+				for (var i = 0; i < this.Keys.length; i++) {
+					document.removeEventListener("keydown", this.Keys[i], false);
+				}
+				
+				this.Keys = [];
 			}
 		}
 	}
