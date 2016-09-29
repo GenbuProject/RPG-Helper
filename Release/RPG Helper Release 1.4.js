@@ -803,9 +803,7 @@ var RPGHelper = function () {
 				document.removeEventListener("keydown", this.PadFunc, false);
 			}
 			
-			var MoveFuc = function (Key) {
-				Event.preventDefault();
-				
+			this.MoveFuc = function (Key) {
 				var MemPos = [Key == Resource.SystemData.Key.Left ? CharaPos[0] - 1 : Key == Resource.SystemData.Key.Right ? CharaPos[0] + 1 : CharaPos[0], Key == Resource.SystemData.Key.Up ? CharaPos[1] - 1 : Key == Resource.SystemData.Key.Down ? CharaPos[1] + 1 : CharaPos[1]];
 				var Direction = Key == Resource.SystemData.Key.Up ? R.DIRECTION.N : Key == Resource.SystemData.Key.Down ? R.DIRECTION.S : Key == Resource.SystemData.Key.Left ? R.DIRECTION.W : Key == Resource.SystemData.Key.Right ? R.DIRECTION.E : R.DIRECTION.N;
 				
@@ -2409,6 +2407,7 @@ var RPGHelper = function () {
 			
 			//キーボード関数
 			this.PadFunc = function (Event) {
+				Event.preventDefault();
 				MoveFuc(Event.keyCode);
 			}
 			
