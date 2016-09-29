@@ -152,10 +152,8 @@ var RPGHelper = function () {
 		/*/
 		PlayBGM: function (ID) {
 			for (var Key in Resource.SystemData.Audio.BGM) {
-				if (Resource.SystemData.Audio.BGM[Key].ID == ID) {
-					if (!this.BGM[Resource.SystemData.Audio.BGM[Key].ID].paused) {
-						this.BGM[Resource.SystemData.Audio.BGM[Key].ID].pause();
-					}
+				if (!this.BGM[Resource.SystemData.Audio.BGM[Key].ID].paused) {
+					this.BGM[Resource.SystemData.Audio.BGM[Key].ID].pause();
 				}
 			}
 			
