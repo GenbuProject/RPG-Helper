@@ -1,10 +1,10 @@
 /*/
- *######################################################################
- *#RPG Helper Release 1.4 [Last Updated: 2016/09/19]
- *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
- *######################################################################
+ *###########################################################################
+ *#RPG Helper Release 1.5 [Last Updated: 2017/01/09]
+ *#Copyright (C) Genbu Project & Genbu Hase 2016 - 2017 All Rights Reversed.
+ *###########################################################################
 /*/
-var RPGHelper = function () {
+var RPGHelper = function (DoesAutoRun) {
 	this.Canvas = document.getElementById("RPGHelper-Main");
 		this.Canvas.style.width = this.Canvas.attributes["width"].value + "px";
 		this.Canvas.style.height = this.Canvas.attributes["height"].value + "px";
@@ -2914,15 +2914,17 @@ var RPGHelper = function () {
 		}
 	}
 	
-	this.SystemLoad();
-	this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
-	
-	if (Resource.SystemData.BackGround.Dialog != "" && !document.getElementById("RPGHelper-BackStyle")) {
-		var BackStyle = document.createElement("Style");
-			BackStyle.id = "RPGHelper-BackStyle";
-			BackStyle.textContent = 'RPGHelper-MsgBox, RPGHelper-Menu-MenuPanel {\n\tBackGround: URL("Image/' + Resource.SystemData.BackGround.Dialog + '");\n}';
-			
-			document.head.appendChild(BackStyle);
+	if (DoesAutoRun) {
+		this.SystemLoad();
+		this.Canvas.style.background = "URL('Image/" + Resource.SystemData.BackGround.Title + "')";
+		
+		if (Resource.SystemData.BackGround.Dialog != "" && !document.getElementById("RPGHelper-BackStyle")) {
+			var BackStyle = document.createElement("Style");
+				BackStyle.id = "RPGHelper-BackStyle";
+				BackStyle.textContent = 'RPGHelper-MsgBox, RPGHelper-Menu-MenuPanel {\n\tBackGround: URL("Image/' + Resource.SystemData.BackGround.Dialog + '");\n}';
+				
+				document.head.appendChild(BackStyle);
+		}
 	}
 	
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
