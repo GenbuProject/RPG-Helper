@@ -1,7 +1,7 @@
 /*/
  *######################################################################
  *#RPG Helper Release 1.4 [Last Updated: 2016/09/19]
- *#Copyright (C) Genbu Project & Genbu Hase 2016 All Rights Reversed.
+ *#Copyright (C) Genbu Project 2016 All Rights Reversed.
  *######################################################################
 /*/
 var RPGHelper = function () {
