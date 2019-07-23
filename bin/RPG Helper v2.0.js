@@ -13,18 +13,26 @@ const RPGHelper = (() => {
 		}
 
 		get canvas () { return document.getElementById("RPGHelper-Main") }
-		get loaded () { return; }
+		get initialized () { return this.data.projectField ? true : false }
 
+		/**
+		 * イベントを登録します
+		 * 
+		 * @param {string} eventType
+		 * @param { (RPGHelper) => {} } [callback]
+		 * 
+		 * @return {Promise<RPGHelper>}
+		 */
 		on (eventType, callback) {
 			let detector;
 
 			switch (eventType) {
 				default:
 					break;
-				case RPGHelper.EVENTTYPE.LOADED:
+				case RPGHelper.EVENTTYPE.INITIALIZED:
 					return new Promise(resolve => {
 						detector = setInterval(() => {
-							if (this.loaded) {
+							if (this.initialized) {
 								clearInterval(detector);
 
 								if (callback) callback(this);
@@ -34,15 +42,22 @@ const RPGHelper = (() => {
 					});
 			}
 		}
-
+		
+		/**
+		 * 各種データの読込を行います
+		 * 
+		 * @param {string} type
+		 * @param {string} path
+		 * 
+		 * @return {Promise}
+		 */
 		load (type, path) {
 			switch (type) {
 				case RPGHelper.LOADTYPE.PROJECT:
 					return fetch(path, { headers: { "Content-Type": "application/json" } }).then(resp => {
 						if (resp.status !== 200) throw RPGHelper.ERRORS["LOAD_FILE-FAILURE--PROJECT"];
 						return resp.json();
-					}).then(data => this.data.projectData = data);
-					
+					}).then(data => this.data.projectField = data);
 				case RPGHelper.LOADTYPE.BGM:
 					return;
 				case RPGHelper.LOADTYPE.SE:
@@ -62,7 +77,7 @@ const RPGHelper = (() => {
 
 
 	RPGHelper.VERSION = "v2.0";
-	RPGHelper.EVENTTYPE = { LOADED: "loaded" };
+	RPGHelper.EVENTTYPE = { INITIALIZED: "initialized" };
 	RPGHelper.LOADTYPE = { PROJECT: "PROJECT", BGM: "BGM", SE: "SE" };
 
 	RPGHelper.ERRORS = {
@@ -73,7 +88,8 @@ const RPGHelper = (() => {
 	Object.defineProperties(RPGHelper, {
 		VERSION: { configurable: false, writable: false },
 		EVENTTYPE: { configurable: false, writable: false },
-		LOADTYPE: { configurable: false, writable: false }
+		LOADTYPE: { configurable: false, writable: false },
+		ERRORS: { configurable: false, writable: false }
 	});
 
 
