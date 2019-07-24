@@ -1,0 +1,254 @@
+{
+	"title": "The Called Name",
+	"version": "Alpha 1.0",
+	"author": "Genbu Hase",
+
+	"directories": {
+		"bgm": "./sounds/bgm",
+		"se": "./sounds/se",
+		
+	},
+
+	"resources": {
+		"images": {
+			"background": [
+				{ "name": "title", "file": "Title.png" },
+				{ "name": "dialog", "file": "Dialog.png" }
+			]
+		},
+
+		"sounds": {
+			"bgm": [
+				{ "id": 1, "file": "The Called Name.wav", "volume": 1 },
+				{ "id": 2, "file": "The Called Name - Serious.wav", "volume": 1 },
+				{ "id": 3, "file": "The Called Name - Strange.wav", "volume": 1 },
+				{ "id": 4, "file": "Sadness.wav", "volume": 1 },
+				{ "id": 5, "file": "Comical.wav", "volume": 1 },
+	
+				{ "id": 11, "file": "Elum Village.wav", "volume": 1 },
+				{ "id": 12, "file": "Prospering Elum Village.wav", "volume": 1 },
+				{ "id": 13, "file": "Elum Forest.wav", "volume": 1 },
+				
+				{ "id": 51, "file": "Birds.wav", "volume": 1 },
+				{ "id": 52, "file": "Siren.wav", "volume": 1 },
+	
+				{ "id": 101, "file": "Battle 1.wav", "volume": 1 },
+				{ "id": 102, "file": "Battle 2.wav", "volume": 1 },
+				{ "id": 103, "file": "Boss Battle 1.wav", "volume": 1 },
+				{ "id": 104, "file": "Boss Battle(Elum Forest).wav", "volume": 1 }
+			],
+
+			"se": [
+				{ "id": 1, "file": "Click.wav", "volume": 1 },
+				{ "id": 2, "file": "Mystery.wav", "volume": 1 },
+				{ "id": 3, "file": "Crow.wav", "volume": 1 },
+
+				{ "id": 101, "file": "Encount.wav", "volume": 1 },
+				{ "id": 102, "file": "Attack - Blow.wav", "volume": 1 },
+				{ "id": 103, "file": "Attack - Slash.wav", "volume": 1 },
+				{ "id": 104, "file": "Attack - Fire.wav", "volume": 1 },
+				{ "id": 105, "file": "Attack - Water.wav", "volume": 1 },
+				{ "id": 106, "file": "Attack - Wind.wav", "volume": 1 },
+				{ "id": 107, "file": "Attack - Shock.wav", "volume": 1 },
+				{ "id": 108, "file": "Attack - Mechanic.wav", "volume": 1 },
+				{ "id": 109, "file": "Escape.wav", "volume": 1 },
+
+				{ "id": 110, "file": "MainCharacter - Damage1.wav", "volume": 1 }
+			]
+		},
+
+		"videos": []
+	},
+
+	"system": {
+		"world": {
+			"tiles": [
+				{ "name": "Town", "file": "Town.png" },
+				{ "name": "World", "file": "World.png" }
+			],
+
+			"maps": [
+				{ "name": "エルム村", "file": "エルム村.map", "tileId": 0 },
+				{ "name": "エルム村", "file": "エルム村(勇者探し).map", "tileId": 0 },
+				{ "name": "蔵書庫", "file": "エルム村 - 蔵書庫.map", "tileId": 0 },
+
+				{ "name": "エルム森", "file": "エルム森/0005.map", "tileId": 0 },
+				{ "name": "エルム森", "file": "エルム森/0009.map", "tileId": 0 },
+				{ "name": "エルム森", "file": "エルム森/0010.map", "tileId": 0 },
+				{ "name": "エルム森", "file": "エルム森/0014 - Before.map", "tileId": 0 },
+				{ "name": "エルム森", "file": "エルム森/0014 - After.map", "tileId": 0 }
+			]
+		},
+
+		"monster": {
+			"monsters": [],
+			"groups": []
+		},
+
+		"items": [],
+		"magics": [],
+		
+
+
+		"Magic": [
+			{
+				"ID": 1,
+				"Name": "ファイア",
+				"Type": "Fire",
+				
+				"GenericDamage": 3,
+				"UseMP": 2,
+				"DamageRange": 1
+			},
+			
+			{
+				"ID": 2,
+				"Name": "ファイラ",
+				"Type": "Fire",
+				
+				"GenericDamage": 5,
+				"UseMP": 3,
+				"DamageRange": 1
+			},
+			
+			{
+				"ID": 3,
+				"Name": "ファイガ",
+				"Type": "Fire",
+				
+				"GenericDamage": 8,
+				"UseMP": 5,
+				"DamageRange": 1
+			},
+			
+			{
+				"ID": 4,
+				"Name": "サマファイア",
+				"Type": "Fire",
+				
+				"GenericDamage": 2,
+				"UseMP": 3,
+				"DamageRange": "All"
+			},
+			
+			{
+				"ID": 5,
+				"Name": "サマファイラ",
+				"Type": "Fire",
+				
+				"GenericDamage": 4,
+				"UseMP": 7,
+				"DamageRange": "All"
+			},
+			
+			{
+				"ID": 6,
+				"Name": "サマファイガ",
+				"Type": "Fire",
+				
+				"GenericDamage": 7,
+				"UseMP": 12,
+				"DamageRange": "All"
+			},
+			
+			{
+				"ID": 101,
+				"Name": "IP開示",
+				"Type": "Other",
+				
+				"GenericDamage": 2,
+				"UseMP": 2,
+				"DamageRange": 1
+			}
+		],
+		
+		"Monster": [
+			{
+				"Name": "ゴブリン(赤)",
+				"MonsterGraphic": "Goblin(Red).png",
+				
+				"HP": 25,
+				"MP": 0,
+				"ATK": 2,
+				"DEF": 1,
+				"MAG": 1,
+				"SPD": 2,
+				"LUK": 3,
+				
+				"EXP": 2
+			},
+			
+			{
+				"Name": "ゴブリン(青)",
+				"MonsterGraphic": "Goblin(Blue).png",
+				
+				"HP": 32,
+				"MP": 0,
+				"ATK": 6,
+				"DEF": 4,
+				"MAG": 4,
+				"SPD": 2,
+				"LUK": 4,
+				
+				"EXP": 6
+			},
+			
+			{
+				"Name": "ゴブリン(緑)",
+				"MonsterGraphic": "Goblin(Green).png",
+				
+				"HP": 65,
+				"MP": 0,
+				"ATK": 13,
+				"DEF": 6,
+				"MAG": 5,
+				"SPD": 4,
+				"LUK": 4,
+				
+				"EXP": 15
+			},
+			
+			{
+				"Name": "エンリコ",
+				"MonsterGraphic": "Enlico.png",
+				
+				"HP": 30,
+				"MP": 0,
+				"ATK": 3,
+				"DEF": 2,
+				"MAG": 0,
+				"SPD": 1,
+				"LUK": 2,
+				
+				"EXP": 20,
+				
+				"AI": "MonsterAI/Enlico.js"
+			},
+			
+			{
+				"Name": "弁護士唐澤貴洋弁護士",
+				"MonsterGraphic": "Karasawa.png",
+				
+				"HP": 50,
+				"MP": 12,
+				"ATK": 2,
+				"DEF": 1,
+				"MAG": 2,
+				"SPD": 2,
+				"LUK": 5,
+				
+				"EXP": 25,
+				
+				"AI": "MonsterAI/Karasawa.js"
+			}
+		],
+		
+		"Group": [
+			[0, 0, 0],
+			[1, 1, 1],
+			[2, 2, 2],
+			[3],
+			[4]
+		]
+	}
+}

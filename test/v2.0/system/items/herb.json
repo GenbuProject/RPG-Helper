@@ -1,0 +1,7 @@
+{
+	"id": 2,
+	"type": "item",
+
+	"name": "ハーブ",
+	"description": "いい香りのハーブ。${terms.generic.health}が50回復する。"
+}
