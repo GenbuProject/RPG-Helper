@@ -1,4 +1,5 @@
 namespace Project {
+	/** プロジェクトファイルの設定構成 */
 	export interface Project {
 		title: string;
 		version: string | number;
@@ -7,6 +8,11 @@ namespace Project {
 		directories: {
 			bgm: DirectoryPath;
 			se: DirectoryPath;
+
+			world: {
+				maps: DirectoryPath;
+				tiles: DirectoryPath;
+			}
 		}
 
 		resources: {
@@ -24,8 +30,8 @@ namespace Project {
 
 		system: {
 			world: {
-				tiles: TileObject[];
 				maps: MapObject[];
+				tiles: TileObject[];
 			}
 
 			monster?: {
@@ -40,12 +46,14 @@ namespace Project {
 		}
 	}
 
-	interface ImageObject extends LoadableObject { name: string }
+	interface ImageObject extends LoadableObject { name: string, file: FilePath }
 	interface AudioObject extends LoadableObject { id: number, volume: number }
-	interface TileObject extends LoadableObject { name: string }
 	interface MapObject extends LoadableObject { name: string, tileId: number }
+	interface TileObject extends LoadableObject { name: string }
 
-	interface LoadableObject { file: FilePath }
+	interface LoadableObject { file: FilePath | FileName }
+
+	type FileName = string;
 	type DirectoryPath = string;
 	type FilePath = string;
 }

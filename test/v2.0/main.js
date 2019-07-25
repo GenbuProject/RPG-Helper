@@ -1,5 +1,5 @@
 /* global RPGHelper */
-const rpg = new RPGHelper("../v1.4/SystemData.Json");
+const rpg = new RPGHelper("./system/project.json");
 rpg.on("initialized").then(() => {
 	console.log(rpg.data);
 });

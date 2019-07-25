@@ -7,6 +7,10 @@
 		"bgm": "./sounds/bgm",
 		"se": "./sounds/se",
 		
+		"world": {
+			"maps": "./world/maps",
+			"tiles": "./world/tiles"
+		}
 	},
 
 	"resources": {
@@ -62,11 +66,6 @@
 
 	"system": {
 		"world": {
-			"tiles": [
-				{ "name": "Town", "file": "Town.png" },
-				{ "name": "World", "file": "World.png" }
-			],
-
 			"maps": [
 				{ "name": "エルム村", "file": "エルム村.map", "tileId": 0 },
 				{ "name": "エルム村", "file": "エルム村(勇者探し).map", "tileId": 0 },
@@ -77,6 +76,11 @@
 				{ "name": "エルム森", "file": "エルム森/0010.map", "tileId": 0 },
 				{ "name": "エルム森", "file": "エルム森/0014 - Before.map", "tileId": 0 },
 				{ "name": "エルム森", "file": "エルム森/0014 - After.map", "tileId": 0 }
+			],
+
+			"tiles": [
+				{ "name": "Town", "file": "Town.png" },
+				{ "name": "World", "file": "World.png" }
 			]
 		},
 

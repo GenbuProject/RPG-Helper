@@ -6,14 +6,36 @@
 /*/
 const RPGHelper = (() => {
 	class RPGHelper {
+		/**
+		 * RPG Helperを構築します
+		 * @param {string} projectFile
+		 */
 		constructor (projectFile) {
-			this.data = {};
+			this.audioManager = new AudioManager();
 
-			if (projectFile) this.load(RPGHelper.LOADTYPE.PROJECT, projectFile);
+			this.data = {
+				userField: null,
+				projectField: null
+			};
+
+			if (projectFile) this.init(projectFile);
 		}
 
 		get canvas () { return document.getElementById("RPGHelper-Main") }
 		get initialized () { return this.data.projectField ? true : false }
+
+		/**
+		 * プロジェクトデータの読込を行います
+		 * 
+		 * @param {string} path
+		 * @return {Promise}
+		 */
+		init (path) {
+			return fetch(path, { headers: { "Content-Type": "application/json" } }).then(resp => {
+				if (resp.status !== 200) throw RPGHelper.ERRORS["LOAD_FILE-FAILURE--PROJECT"];
+				return resp.json();
+			}).then(data => this.data.projectField = data);
+		}
 
 		/**
 		 * イベントを登録します
@@ -42,26 +64,23 @@ const RPGHelper = (() => {
 					});
 			}
 		}
-		
-		/**
-		 * 各種データの読込を行います
-		 * 
-		 * @param {string} type
-		 * @param {string} path
-		 * 
-		 * @return {Promise}
-		 */
+
+		applyStyleVariables () {
+
+		}
+	}
+
+	class AudioManager {
+		constructor () {
+			this.buffers = [];
+		}
+
 		load (type, path) {
 			switch (type) {
-				case RPGHelper.LOADTYPE.PROJECT:
-					return fetch(path, { headers: { "Content-Type": "application/json" } }).then(resp => {
-						if (resp.status !== 200) throw RPGHelper.ERRORS["LOAD_FILE-FAILURE--PROJECT"];
-						return resp.json();
-					}).then(data => this.data.projectField = data);
 				case RPGHelper.LOADTYPE.BGM:
-					return;
+					break;
 				case RPGHelper.LOADTYPE.SE:
-					return;
+					break;
 			}
 		}
 	}
@@ -81,6 +100,7 @@ const RPGHelper = (() => {
 	RPGHelper.LOADTYPE = { PROJECT: "PROJECT", BGM: "BGM", SE: "SE" };
 
 	RPGHelper.ERRORS = {
+		"GENERAL_NOT_INITIALIZED": new RPGHelperError("プロジェクトデータが読み込まれていません"),
 		"LOAD_FILE-FAILURE": new RPGHelperError("ファイルの読込に失敗しました"),
 		"LOAD_FILE-FAILURE--PROJECT": new RPGHelperError("プロジェクトデータの読込に失敗しました")
 	};
@@ -91,6 +111,7 @@ const RPGHelper = (() => {
 		LOADTYPE: { configurable: false, writable: false },
 		ERRORS: { configurable: false, writable: false }
 	});
+
 
 
 	return RPGHelper;
