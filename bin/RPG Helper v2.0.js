@@ -11,6 +11,7 @@ const RPGHelper = (() => {
 		 * @param {string} projectFile
 		 */
 		constructor (projectFile) {
+			this.rootDir = Utilizes.getRootDir(projectFile);
 			this.audioManager = new AudioManager();
 
 			this.data = {
@@ -31,7 +32,9 @@ const RPGHelper = (() => {
 		 * @return {Promise}
 		 */
 		init (path) {
-			return fetch(path, { headers: { "Content-Type": "application/json" } }).then(resp => {
+			return fetch(path, {
+				headers: { "Content-Type": "application/json" }
+			}).then(resp => {
 				if (resp.status !== 200) throw RPGHelper.ERRORS["LOAD_FILE-FAILURE--PROJECT"];
 				return resp.json();
 			}).then(data => this.data.projectField = data);
@@ -67,6 +70,21 @@ const RPGHelper = (() => {
 
 		applyStyleVariables () {
 
+		}
+	}
+
+	class Utilizes {
+		/**
+		 * プロジェクトのルートディレクトリURLを取得します
+		 * 
+		 * @param {string} projectPath プロジェクトファイルのパス
+		 * @return {string}
+		 */
+		static getRootDir (projectPath) {
+			let docUrl = location.href;
+			if (!docUrl.match(/[a-zA-Z:/.-_]+\/$/)) docUrl += "/";
+
+			return new URL(docUrl + projectPath.split("/").slice(0, -1).join("/")).href;
 		}
 	}
 
