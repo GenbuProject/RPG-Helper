@@ -11,7 +11,7 @@ namespace Item {
 
 	interface ItemEvent {
 		event: "get" | "use" | "beforeDrop" | "drop" | "attack";
-		callback (rpghelper: RPGHelper)
+		callback (rpghelper: RPGHelper);
 	}
 
 	interface WeaponExtra {
