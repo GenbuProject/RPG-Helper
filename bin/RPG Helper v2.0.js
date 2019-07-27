@@ -35,7 +35,7 @@ const RPGHelper = (() => {
 			return fetch(projectFile, {
 				headers: { "Content-Type": "application/json" }
 			}).then(resp => {
-				if (resp.status !== 200) throw RPGHelper.ERRORS["LOAD_FAILURE--PROJECT"];
+				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS["LOAD_FAILURE--PROJECT"]);
 				return resp.json();
 			}).then(data => this.data.projectField = data);
 		}
@@ -103,12 +103,12 @@ const RPGHelper = (() => {
 		 */
 		load (audioType, file) {
 			const { rpghelper } = this;
-			if (!rpghelper.initialized) throw RPGHelper.ERRORS["GENERAL_NOT-INITIALIZED"];
+			if (!rpghelper.initialized) throw new RPGHelperError(RPGHelper.ERRORS["GENERAL_NOT-INITIALIZED"]);
 
 			const { directories } = rpghelper.data.projectField;
 
 			switch (audioType) {
-				default: throw RPGHelper.ERRORS["AUDIO_UNACCEPTED-TYPE"];
+				default: throw new RPGHelperError(RPGHelper.ERRORS["AUDIO_UNACCEPTED-TYPE"]);
 				
 				case RPGHelper.LOADTYPE.BGM:
 				case RPGHelper.LOADTYPE.SE:
@@ -129,7 +129,7 @@ const RPGHelper = (() => {
 			}
 
 			fetch(file).then(resp => {
-				if (resp.status !== 200) throw RPGHelper.ERRORS.LOAD_FAILURE;
+				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS.LOAD_FAILURE);
 				return resp.arrayBuffer();
 			}).then(buffer => {
 				buffer; // ToDo: Arrayベース、要素検索メソッドを持つクラス実装する
@@ -171,10 +171,10 @@ const RPGHelper = (() => {
 	RPGHelper.LOADTYPE = { PROJECT: "PROJECT", BGM: "BGM", SE: "SE" };
 
 	RPGHelper.ERRORS = {
-		"GENERAL_NOT-INITIALIZED": new RPGHelperError("プロジェクトデータが読み込まれていません"),
-		"LOAD_FAILURE": new RPGHelperError("ファイルの読込に失敗しました"),
-		"LOAD_FAILURE--PROJECT": new RPGHelperError("プロジェクトデータの読込に失敗しました"),
-		"AUDIO_UNACCEPTED-TYPE": new RPGHelperError("音源の種類が無効です")
+		"GENERAL_NOT-INITIALIZED": "プロジェクトデータが読み込まれていません",
+		"LOAD_FAILURE": "ファイルの読込に失敗しました",
+		"LOAD_FAILURE--PROJECT": "プロジェクトデータの読込に失敗しました",
+		"AUDIO_UNACCEPTED-TYPE": "音源の種類が無効です"
 	};
 
 	Object.defineProperties(RPGHelper, {
