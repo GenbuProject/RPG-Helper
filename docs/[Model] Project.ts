@@ -47,7 +47,19 @@ namespace Project {
 	}
 
 	interface ImageObject extends LoadableObject { name: string, file: FilePath }
-	interface AudioObject extends LoadableObject { id: number, volume: number }
+
+	interface AudioObject extends LoadableObject {
+		id: number;
+		volume: number;
+
+		options?: {
+			loop?: boolean;
+			loopStart?: number;
+			loopEnd?: number;
+			playbackRate?: number;
+		}
+	}
+
 	interface MapObject extends LoadableObject { name: string, tileId: number }
 	interface TileObject extends LoadableObject { name: string }
 
