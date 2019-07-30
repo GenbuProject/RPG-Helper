@@ -98,78 +98,96 @@ const RPGHelper = (() => {
 			this.rpghelper = rpghelper;
 			this.ctx = new AudioContext();
 			
-			/** @type { { [audioType: string]: Map<string, AudioBuffer> } } */
+			/** @type { { [audioType: string]: WeakMap<AudioObject, AudioBuffer> } } */
 			this.buffers = {
-				[RPGHelper.LOADTYPE.BGM]: new Map(),
-				[RPGHelper.LOADTYPE.SE]: new Map()
+				[RPGHelper.LOADTYPE.BGM]: new WeakMap(),
+				[RPGHelper.LOADTYPE.SE]: new WeakMap()
 			};
-		}
-
-		/**
-		 * 指定された音源のバッファを取得します
-		 * 
-		 * @param {string} audioType
-		 * @param {string} file
-		 * 
-		 * @return {undefined | AudioBuffer}
-		 */
-		get (audioType, file) {
-			const { rpghelper } = this;
-			rpghelper._checkInitialized();
-
-			return this.buffers[audioType].get(this._getFileUrl(audioType, file));
 		}
 
 		/**
 		 * 指定された音源を読み込みます
 		 * 
 		 * @param {string} audioType
-		 * @param {string} file
+		 * @param {AudioObject} audio
 		 * 
 		 * @return {Promise<AudioBuffer>}
 		 */
-		load (audioType, file) {
+		load (audioType, audio) {
 			const { rpghelper } = this;
 			rpghelper._checkInitialized();
 
-			file = this._getFileUrl(audioType, file);
+			const url = this._getFileUrl(audioType, audio.file);
 
-			if (this.buffers[audioType].has(file)) {
+			if (this.buffers[audioType].has(audio)) {
 				console.warn(new RPGHelperError(RPGHelper.ERRORS.LOAD["DUPLICATED-AUDIO"]));
-				return Promise.resolve(this.buffers[audioType].get(file));
+				return Promise.resolve(this.buffers[audioType].get(audio));
 			}
 
-			return fetch(file).then(resp => {
+			return fetch(url).then(resp => {
 				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS.LOAD.NOT_FOUND);
 				return resp.arrayBuffer();
 			}).then(buffer => this.ctx.decodeAudioData(buffer)).catch(error => {
 				if (error.constructor == RPGHelperError) throw error;
 				throw new RPGHelperError(RPGHelper.ERRORS.AUDIO["FAILURE-COMPILE"]);
 			}).then(decodedBuffer => {
-				this.buffers[audioType].set(file, decodedBuffer);
+				this.buffers[audioType].set(audio, decodedBuffer);
 				return decodedBuffer;
 			});
+		}
+
+		/**
+		 * 指定された音源のバッファを取得します
+		 * 
+		 * @param {string} audioType
+		 * @param {AudioObject | number} audioOrAudioId
+		 * 
+		 * @return {undefined | AudioBuffer}
+		 */
+		get (audioType, audioOrAudioId) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+			return this.buffers[audioType].get(audioOrAudioId);
 		}
 
 		/**
 		 * 指定された音源を再生します
 		 * 
 		 * @param {string} audioType
-		 * @param {string} file
+		 * @param {AudioObject | number} audioOrAudioId
 		 */
-		play (audioType, file) {
+		play (audioType, audioOrAudioId) {
 			const { rpghelper, ctx } = this;
 			rpghelper._checkInitialized();
 
-			const buffer = this.get(audioType, file);
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+
+			const buffer = this.get(audioType, audioOrAudioId);
 			if (!buffer) throw new RPGHelperError(RPGHelper.ERRORS.AUDIO.NOT_LOADED);
 
 			const source = ctx.createBufferSource();
 			source.buffer = buffer;
-			source; // ToDo: オプションと紐付けるために引数を全部変更
+			for (const option in audioOrAudioId.options) source[option] = audioOrAudioId.options[option];
 
 			source.connect(ctx.destination);
 			source.start(0);
+		}
+
+		/**
+		 * @param {string} audioType
+		 * @param {number} id
+		 * 
+		 * @return {AudioObject}
+		 */
+		_getAudioById (audioType, id) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (!(audioType in this.buffers)) throw new RPGHelperError(RPGHelper.ERRORS.AUDIO["UNACCEPTED_TYPE"]);
+
+			return rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()].find(audio => audio.id === id);
 		}
 
 		/**
@@ -260,6 +278,21 @@ const RPGHelper = (() => {
 		LOADTYPE: { configurable: false, writable: false },
 		ERRORS: { configurable: false, writable: false }
 	});
+
+	/**
+	 * @typedef {object} AudioObject
+	 * 
+	 * @prop {number} id
+	 * @prop {string} file
+	 * @prop {number} volume
+	 * 
+	 * @prop {object} [options]
+	 * @prop {boolean} [options.loop]
+	 * @prop {number} [options.loopStart]
+	 * @prop {number} [options.loopEnd]
+	 * @prop {number} [options.playbackRate]
+	 */
+	void(0);
 
 
 
