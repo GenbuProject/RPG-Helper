@@ -8,10 +8,9 @@ const RPGHelper = (() => {
 	class RPGHelper {
 		/**
 		 * RPG Helperを構築します
-		 * @param {string} projectFile
+		 * @param {string} [projectFile]
 		 */
 		constructor (projectFile) {
-			this.rootDir = Utilizes.getRootDir(projectFile);
 			this.audioManager = new AudioManager(this);
 
 			this.data = {
@@ -26,7 +25,7 @@ const RPGHelper = (() => {
 		get initialized () { return this.data.projectField ? true : false }
 
 		/**
-		 * プロジェクトデータを読み込みます
+		 * 指定されたプロジェクトデータを読み込みます
 		 * 
 		 * @param {string} projectFile
 		 * @return {Promise<void>}
@@ -35,9 +34,14 @@ const RPGHelper = (() => {
 			return fetch(projectFile, {
 				headers: { "Content-Type": "application/json" }
 			}).then(resp => {
-				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS["LOAD_FAILURE--PROJECT"]);
+				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS.LOAD["FAILURE-PROJECT"]);
 				return resp.json();
-			}).then(data => this.data.projectField = data);
+			}).then(data => {
+				this.data.projectField = data;
+
+				/** プロジェクトのルートディレクトリ */
+				this.rootDir = Utilizes.getRootDir(projectFile);
+			});
 		}
 
 		/**
@@ -69,7 +73,7 @@ const RPGHelper = (() => {
 		}
 
 		/**
-		 * 相対パスを絶対パスに変換します
+		 * 指定された相対パスを絶対パスに変換します
 		 * 
 		 * @param {string} path
 		 * @return {string}
@@ -78,7 +82,11 @@ const RPGHelper = (() => {
 			return new URL(this.rootDir + path).href;
 		}
 
-		applyStyleVariables () {
+		_checkInitialized () {
+			if (!this.initialized) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["NOT_INITIALIZED"]);
+		}
+
+		_applyStyleVariables () {
 
 		}
 	}
@@ -88,32 +96,61 @@ const RPGHelper = (() => {
 		/** @param {RPGHelper} rpghelper */
 		constructor (rpghelper) {
 			this.rpghelper = rpghelper;
+			this.ctx = new AudioContext();
 
 			this.buffers = {
-				[RPGHelper.LOADTYPE.BGM]: [],
-				[RPGHelper.LOADTYPE.SE]: []
+				[RPGHelper.LOADTYPE.BGM]: new Map(),
+				[RPGHelper.LOADTYPE.SE]: new Map()
 			};
 		}
 
 		/**
-		 * 音源を読み込みます
+		 * 指定された音源を読み込みます
 		 * 
 		 * @param {string} audioType
 		 * @param {string} file
 		 */
 		load (audioType, file) {
 			const { rpghelper } = this;
-			if (!rpghelper.initialized) throw new RPGHelperError(RPGHelper.ERRORS["GENERAL_NOT-INITIALIZED"]);
-
-			const { directories } = rpghelper.data.projectField;
+			rpghelper._checkInitialized();
 
 			switch (audioType) {
-				default: throw new RPGHelperError(RPGHelper.ERRORS["AUDIO_UNACCEPTED-TYPE"]);
+				default: throw new RPGHelperError(RPGHelper.ERRORS.AUDIO["UNACCEPTED_TYPE"]);
 				
 				case RPGHelper.LOADTYPE.BGM:
 				case RPGHelper.LOADTYPE.SE:
+					file = this.getFileUrl(audioType, file);
 					break;
 			}
+
+			if (this.buffers[audioType].has(file)) return console.warn(new RPGHelperError(RPGHelper.ERRORS.LOAD["DUPLICATED-AUDIO"]));
+
+			fetch(file).then(resp => {
+				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS.LOAD.NOT_FOUND);
+				return resp.arrayBuffer();
+			}).then(buffer => this.ctx.decodeAudioData(buffer)).catch(error => {
+				if (error.constructor == RPGHelperError) throw error;
+				throw new RPGHelperError(RPGHelper.ERRORS.AUDIO["FAILURE-COMPILE"]);
+			}).then(decodedBuffer => {
+				this.buffers[audioType].set(file, decodedBuffer);
+			});
+
+			console.log(file);
+		}
+
+		/**
+		 * 指定された音源のパスを絶対パスに変換します
+		 * 
+		 * @param {string} audioType
+		 * @param {string} file
+		 * 
+		 * @return {string}
+		 */
+		getFileUrl (audioType, file) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			const { directories } = rpghelper.data.projectField;
 
 			try {
 				new URL(file); // fileが絶対パスかどうか判定
@@ -128,14 +165,7 @@ const RPGHelper = (() => {
 				}
 			}
 
-			fetch(file).then(resp => {
-				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS.LOAD_FAILURE);
-				return resp.arrayBuffer();
-			}).then(buffer => {
-				buffer; // ToDo: Arrayベース、要素検索メソッドを持つクラス実装する
-			});
-
-			console.log(file);
+			return file;
 		}
 	}
 
@@ -171,10 +201,22 @@ const RPGHelper = (() => {
 	RPGHelper.LOADTYPE = { PROJECT: "PROJECT", BGM: "BGM", SE: "SE" };
 
 	RPGHelper.ERRORS = {
-		"GENERAL_NOT-INITIALIZED": "プロジェクトデータが読み込まれていません",
-		"LOAD_FAILURE": "ファイルの読込に失敗しました",
-		"LOAD_FAILURE--PROJECT": "プロジェクトデータの読込に失敗しました",
-		"AUDIO_UNACCEPTED-TYPE": "音源の種類が無効です"
+		GENERAL: {
+			"NOT_INITIALIZED": "プロジェクトデータが読み込まれていません"
+		},
+
+		LOAD: {
+			"NOT_FOUND": "ファイルが存在しません",
+			"FAILURE": "ファイルの読込に失敗しました",
+			"FAILURE-PROJECT": "プロジェクトデータの読込に失敗しました",
+			"DUPLICATED": "既に存在するファイルです",
+			"DUPLICATED-AUDIO": "既に読込済みの音源です"
+		},
+		
+		AUDIO: {
+			"UNACCEPTED_TYPE": "音源の種類が無効です",
+			"FAILURE-COMPILE": "無効な音源ファイルです"
+		}
 	};
 
 	Object.defineProperties(RPGHelper, {
