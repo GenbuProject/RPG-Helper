@@ -98,10 +98,16 @@ const RPGHelper = (() => {
 			this.rpghelper = rpghelper;
 			this.ctx = new AudioContext();
 			
-			/** @type { { [audioType: string]: WeakMap<AudioObject, AudioBuffer> } } */
+			/** @type {{ [audioType: string]: WeakMap<AudioObject, AudioBuffer> }} */
 			this.buffers = {
-				[RPGHelper.LOADTYPE.BGM]: new WeakMap(),
-				[RPGHelper.LOADTYPE.SE]: new WeakMap()
+				[RPGHelper.AUDIOTYPE.BGM]: new WeakMap(),
+				[RPGHelper.AUDIOTYPE.SE]: new WeakMap()
+			};
+
+			/** @type {{ [audioType: string]: WeakMap<AudioObject, AudioBufferSourceNode> }} */
+			this.sources = {
+				[RPGHelper.AUDIOTYPE.BGM]: new WeakMap(),
+				[RPGHelper.AUDIOTYPE.SE]: new WeakMap()
 			};
 		}
 
@@ -116,6 +122,8 @@ const RPGHelper = (() => {
 		load (audioType, audio) {
 			const { rpghelper } = this;
 			rpghelper._checkInitialized();
+
+			if (!AudioObject.isValid(audio)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audio", "AudioObject"));
 
 			const url = this._getFileUrl(audioType, audio.file);
 
@@ -149,7 +157,9 @@ const RPGHelper = (() => {
 			rpghelper._checkInitialized();
 
 			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
-			return this.buffers[audioType].get(audioOrAudioId);
+			else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
+
+			return audioOrAudioId === undefined ? undefined : this.buffers[audioType].get(audioOrAudioId);
 		}
 
 		/**
@@ -162,8 +172,6 @@ const RPGHelper = (() => {
 			const { rpghelper, ctx } = this;
 			rpghelper._checkInitialized();
 
-			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
-
 			const buffer = this.get(audioType, audioOrAudioId);
 			if (!buffer) throw new RPGHelperError(RPGHelper.ERRORS.AUDIO.NOT_LOADED);
 
@@ -173,13 +181,19 @@ const RPGHelper = (() => {
 
 			source.connect(ctx.destination);
 			source.start(0);
+
+			// ToDo: 生成したAudioBufferSourceNodeを保管し、停止メソッドなどを実装
+		}
+
+		stop (audioType, audioOrAudioId) {
+
 		}
 
 		/**
 		 * @param {string} audioType
 		 * @param {number} id
 		 * 
-		 * @return {AudioObject}
+		 * @return {undefined | AudioObject}
 		 */
 		_getAudioById (audioType, id) {
 			const { rpghelper } = this;
@@ -208,10 +222,10 @@ const RPGHelper = (() => {
 				new URL(file); // fileが絶対パスかどうか判定
 			} catch (error) {
 				switch (audioType) {
-					case RPGHelper.LOADTYPE.BGM:
+					case RPGHelper.AUDIOTYPE.BGM:
 						file = rpghelper.getAbsoluteUrl(`/${directories.bgm}/${file}`);
 						break;
-					case RPGHelper.LOADTYPE.SE:
+					case RPGHelper.AUDIOTYPE.SE:
 						file = rpghelper.getAbsoluteUrl(`/${directories.se}/${file}`);
 						break;
 				}
@@ -235,6 +249,14 @@ const RPGHelper = (() => {
 
 			return new URL(docUrl + projectPath.split("/").slice(0, -1).join("/")).href;
 		}
+
+		/**
+		 * 指定されたオブジェクトの型を返します
+		 * 
+		 * @param {any} obj
+		 * @return {string}
+		 */
+		static getClass (obj) { return Object.prototype.toString.call(obj).slice(8, -1) }
 	}
 
 	class RPGHelperError extends Error {
@@ -250,11 +272,19 @@ const RPGHelper = (() => {
 	/** RPG Helperのバージョン */
 	RPGHelper.VERSION = "v2.0";
 	RPGHelper.EVENTTYPE = { INITIALIZED: "initialized" };
-	RPGHelper.LOADTYPE = { PROJECT: "PROJECT", BGM: "BGM", SE: "SE" };
+	RPGHelper.AUDIOTYPE = { BGM: "BGM", SE: "SE" };
 
 	RPGHelper.ERRORS = {
 		GENERAL: {
-			"NOT_INITIALIZED": "プロジェクトデータが読み込まれていません"
+			"NOT_INITIALIZED": "プロジェクトデータが読み込まれていません",
+
+			/**
+			 * @param {string} param
+			 * @param {string | string[]} acceptableType
+			 * 
+			 * @return {string}
+			 */
+			"UNACCEPTED-PARAM": (param, acceptableType) => `${param} は ${Array.isArray(acceptableType) ? acceptableType.join(", ") : acceptableType} です`
 		},
 
 		LOAD: {
@@ -275,9 +305,11 @@ const RPGHelper = (() => {
 	Object.defineProperties(RPGHelper, {
 		VERSION: { configurable: false, writable: false },
 		EVENTTYPE: { configurable: false, writable: false },
-		LOADTYPE: { configurable: false, writable: false },
+		AUDIOTYPE: { configurable: false, writable: false },
 		ERRORS: { configurable: false, writable: false }
 	});
+
+
 
 	/**
 	 * @typedef {object} AudioObject
@@ -292,7 +324,9 @@ const RPGHelper = (() => {
 	 * @prop {number} [options.loopEnd]
 	 * @prop {number} [options.playbackRate]
 	 */
-	void(0);
+	class AudioObject {
+		static isValid (obj) { return Utilizes.getClass(obj) === "Object" && ["id", "file", "volume"].every(param => param in obj) }
+	}
 
 
 
