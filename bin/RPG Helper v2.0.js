@@ -398,6 +398,26 @@ const RPGHelper = (() => {
 		return AudioManager;
 	})();
 
+	const GamedataManager = (() => {
+		/** ゲームデータを管理するクラス */
+		class GamedataManager {
+			constructor (rpghelper) {
+				this.rpghelper = rpghelper;
+			}
+
+			save (gamedataType, filename) {
+				// ToDo: 書き出しタイプの実装(プレーンJson, バイナリデータ)
+				return new Promise();
+			}
+
+			load (extensions) {
+				return new Promise();
+			}
+		}
+
+		return GamedataManager;
+	})();
+
 	class RPGHelperError extends Error {
 		constructor (message = "") {
 			super(`<RPG Helper ${RPGHelper.VERSION}> ${message}`);
