@@ -50,7 +50,6 @@ namespace Project {
 
 	interface AudioObject extends LoadableObject {
 		id: number;
-		volume: number;
 
 		options?: {
 			loop?: boolean;

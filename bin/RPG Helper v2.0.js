@@ -50,7 +50,11 @@ const RPGHelper = (() => {
 
 			this.data = {
 				userField: null,
-				/** @type {Project} */
+
+				/**
+				 * プロジェクトデータの格納フィールド
+				 * @type {Project}
+				 */
 				projectField: null
 			};
 
@@ -58,7 +62,7 @@ const RPGHelper = (() => {
 		}
 
 		get canvas () { return document.getElementById("RPGHelper-Main") }
-		get initialized () { return this.data.projectField ? true : false }
+		get initialized () { return (this.data.projectField && Project.isValid(this.data.projectField)) ? true : false }
 
 		/**
 		 * 指定されたプロジェクトデータを読み込みます
@@ -196,7 +200,7 @@ const RPGHelper = (() => {
 				}
 
 				return fetch(url).then(resp => {
-					if (resp.status !== 200) throw new RPGHelperError(ERRORS.LOAD.NOT_FOUND);
+					if (!resp.ok) throw new RPGHelperError(ERRORS.LOAD.NOT_FOUND);
 					return resp.arrayBuffer();
 				}).then(buffer => this.ctx.decodeAudioData(buffer)).catch(error => {
 					if (error.constructor == RPGHelperError) throw error;
@@ -205,6 +209,24 @@ const RPGHelper = (() => {
 					this.buffers[audioType].set(audio, decodedBuffer);
 					return decodedBuffer;
 				});
+			}
+
+			/**
+			 * プロジェクトに紐付けられた全ての音源を読み込みます
+			 * @return {Promise<AudioBuffer[]>}
+			 */
+			loadAll () {
+				const { rpghelper } = this;
+				rpghelper._checkInitialized();
+
+				const loading_ques = [];
+
+				for (const audioType of [RPGHelper.AUDIOTYPE.BGM, RPGHelper.AUDIOTYPE.SE]) {
+					const audios = rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()];
+					for (const audio of audios) loading_ques.push(this.load(audioType, audio));
+				}
+
+				return Promise.all(loading_ques);
 			}
 
 			/**
@@ -479,7 +501,6 @@ const RPGHelper = (() => {
 	 * 
 	 * @prop {number} id
 	 * @prop {string} file
-	 * @prop {number} volume
 	 * 
 	 * @prop {object} [options]
 	 * @prop {boolean} [options.loop]

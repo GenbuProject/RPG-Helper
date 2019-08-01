@@ -23,41 +23,41 @@
 
 		"sounds": {
 			"bgm": [
-				{ "id": 1, "file": "The Called Name.wav", "volume": 1 },
-				{ "id": 2, "file": "The Called Name - Serious.wav", "volume": 1 },
-				{ "id": 3, "file": "The Called Name - Strange.wav", "volume": 1 },
-				{ "id": 4, "file": "Sadness.wav", "volume": 1 },
-				{ "id": 5, "file": "Comical.wav", "volume": 1 },
+				{ "id": 1, "file": "The Called Name.wav" },
+				{ "id": 2, "file": "The Called Name - Serious.wav" },
+				{ "id": 3, "file": "The Called Name - Strange.wav" },
+				{ "id": 4, "file": "Sadness.wav" },
+				{ "id": 5, "file": "Comical.wav" },
 	
-				{ "id": 11, "file": "Elum Village.wav", "volume": 1 },
-				{ "id": 12, "file": "Prospering Elum Village.wav", "volume": 1 },
-				{ "id": 13, "file": "Elum Forest.wav", "volume": 1 },
+				{ "id": 11, "file": "Elum Village.wav" },
+				{ "id": 12, "file": "Prospering Elum Village.wav" },
+				{ "id": 13, "file": "Elum Forest.wav" },
 				
-				{ "id": 51, "file": "Birds.wav", "volume": 1 },
-				{ "id": 52, "file": "Siren.wav", "volume": 1 },
+				{ "id": 51, "file": "Birds.wav" },
+				{ "id": 52, "file": "Siren.wav" },
 	
-				{ "id": 101, "file": "Battle 1.wav", "volume": 1 },
-				{ "id": 102, "file": "Battle 2.wav", "volume": 1 },
-				{ "id": 103, "file": "Boss Battle 1.wav", "volume": 1 },
-				{ "id": 104, "file": "Boss Battle(Elum Forest).wav", "volume": 1 }
+				{ "id": 101, "file": "Battle 1.wav" },
+				{ "id": 102, "file": "Battle 2.wav" },
+				{ "id": 103, "file": "Boss Battle 1.wav" },
+				{ "id": 104, "file": "Boss Battle(Elum Forest).wav" }
 			],
 
 			"se": [
-				{ "id": 1, "file": "Click.wav", "volume": 1 },
-				{ "id": 2, "file": "Mystery.wav", "volume": 1 },
-				{ "id": 3, "file": "Crow.wav", "volume": 1 },
+				{ "id": 1, "file": "Click.wav" },
+				{ "id": 2, "file": "Mystery.wav" },
+				{ "id": 3, "file": "Crow.wav" },
 
-				{ "id": 101, "file": "Encount.wav", "volume": 1 },
-				{ "id": 102, "file": "Attack - Blow.wav", "volume": 1 },
-				{ "id": 103, "file": "Attack - Slash.wav", "volume": 1 },
-				{ "id": 104, "file": "Attack - Fire.wav", "volume": 1 },
-				{ "id": 105, "file": "Attack - Water.wav", "volume": 1 },
-				{ "id": 106, "file": "Attack - Wind.wav", "volume": 1 },
-				{ "id": 107, "file": "Attack - Shock.wav", "volume": 1 },
-				{ "id": 108, "file": "Attack - Mechanic.wav", "volume": 1 },
-				{ "id": 109, "file": "Escape.wav", "volume": 1 },
+				{ "id": 101, "file": "Encount.wav" },
+				{ "id": 102, "file": "Attack - Blow.wav" },
+				{ "id": 103, "file": "Attack - Slash.wav" },
+				{ "id": 104, "file": "Attack - Fire.wav" },
+				{ "id": 105, "file": "Attack - Water.wav" },
+				{ "id": 106, "file": "Attack - Wind.wav" },
+				{ "id": 107, "file": "Attack - Shock.wav" },
+				{ "id": 108, "file": "Attack - Mechanic.wav" },
+				{ "id": 109, "file": "Escape.wav" },
 
-				{ "id": 110, "file": "MainCharacter - Damage1.wav", "volume": 1 }
+				{ "id": 110, "file": "MainCharacter - Damage1.wav" }
 			]
 		},
 
