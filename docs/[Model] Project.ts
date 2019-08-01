@@ -17,7 +17,7 @@ namespace Project {
 
 		resources: {
 			images: {
-				background: ImageObject[];
+				[imageName: string]: ImageObject;
 			}
 
 			sounds: {
