@@ -15,6 +15,7 @@ const RPGHelper = (() => {
 
 			this.data = {
 				userField: null,
+				/** @type {Project} */
 				projectField: null
 			};
 
@@ -37,6 +38,7 @@ const RPGHelper = (() => {
 				if (resp.status !== 200) throw new RPGHelperError(RPGHelper.ERRORS.LOAD["FAILURE-PROJECT"]);
 				return resp.json();
 			}).then(data => {
+				if (!Project.isValid(data)) throw new RPGHelperError(RPGHelper.ERRORS.PROJECT["FAILURE-COMPILE"]);
 				this.data.projectField = data;
 
 				/** プロジェクトのルートディレクトリ */
@@ -47,8 +49,8 @@ const RPGHelper = (() => {
 		/**
 		 * 指定されたイベントを登録します
 		 * 
-		 * @param {string} eventType
-		 * @param { (RPGHelper) => {} } [callback]
+		 * @param {EventType} eventType
+		 * @param { (rpghelper: RPGHelper) => {} } [callback]
 		 * 
 		 * @return {Promise<RPGHelper>}
 		 */
@@ -93,6 +95,16 @@ const RPGHelper = (() => {
 
 	/** BGM・SE等の音源を管理するクラス */
 	class AudioManager {
+		/** AudioBufferSourceNodeオプションの初期値 */
+		static get defaultOptions () {
+			return {
+				[RPGHelper.AUDIOTYPE.BGM]: { loop: true },
+				[RPGHelper.AUDIOTYPE.SE]: {  }
+			};
+		}
+
+
+
 		/** @param {RPGHelper} rpghelper */
 		constructor (rpghelper) {
 			this.rpghelper = rpghelper;
@@ -105,16 +117,52 @@ const RPGHelper = (() => {
 			};
 
 			/** @type {{ [audioType: string]: WeakMap<AudioObject, AudioBufferSourceNode> }} */
-			this.sources = {
+			this.ques = {
 				[RPGHelper.AUDIOTYPE.BGM]: new WeakMap(),
 				[RPGHelper.AUDIOTYPE.SE]: new WeakMap()
 			};
 		}
 
 		/**
+		 * 指定された音源のバッファを取得します
+		 * 
+		 * @param {AudioType} audioType
+		 * @param {AudioObject | number} audioOrAudioId
+		 * 
+		 * @return {null | AudioBuffer}
+		 */
+		getBuffer (audioType, audioOrAudioId) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+			else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
+
+			return audioOrAudioId === undefined ? null : (this.buffers[audioType].get(audioOrAudioId) || null);
+		}
+
+		/**
+		 * 指定された音源のキューを取得します
+		 * 
+		 * @param {AudioType} audioType
+		 * @param {AudioObject | number} audioOrAudioId
+		 * 
+		 * @return {null | AudioBufferSourceNode}
+		 */
+		getQue (audioType, audioOrAudioId) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+			else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
+
+			return audioOrAudioId === undefined ? null : (this.ques[audioType].get(audioOrAudioId) || null);
+		}
+
+		/**
 		 * 指定された音源を読み込みます
 		 * 
-		 * @param {string} audioType
+		 * @param {AudioType} audioType
 		 * @param {AudioObject} audio
 		 * 
 		 * @return {Promise<AudioBuffer>}
@@ -127,9 +175,9 @@ const RPGHelper = (() => {
 
 			const url = this._getFileUrl(audioType, audio.file);
 
-			if (this.buffers[audioType].has(audio)) {
+			if (this._hasBuffer(audioType, audio)) {
 				console.warn(new RPGHelperError(RPGHelper.ERRORS.LOAD["DUPLICATED-AUDIO"]));
-				return Promise.resolve(this.buffers[audioType].get(audio));
+				return Promise.resolve(this.getBuffer(audioType, audio));
 			}
 
 			return fetch(url).then(resp => {
@@ -145,67 +193,110 @@ const RPGHelper = (() => {
 		}
 
 		/**
-		 * 指定された音源のバッファを取得します
-		 * 
-		 * @param {string} audioType
-		 * @param {AudioObject | number} audioOrAudioId
-		 * 
-		 * @return {undefined | AudioBuffer}
-		 */
-		get (audioType, audioOrAudioId) {
-			const { rpghelper } = this;
-			rpghelper._checkInitialized();
-
-			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
-			else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
-
-			return audioOrAudioId === undefined ? undefined : this.buffers[audioType].get(audioOrAudioId);
-		}
-
-		/**
 		 * 指定された音源を再生します
 		 * 
-		 * @param {string} audioType
+		 * @param {AudioType} audioType
 		 * @param {AudioObject | number} audioOrAudioId
 		 */
 		play (audioType, audioOrAudioId) {
 			const { rpghelper, ctx } = this;
 			rpghelper._checkInitialized();
 
-			const buffer = this.get(audioType, audioOrAudioId);
+			const buffer = this.getBuffer(audioType, audioOrAudioId);
 			if (!buffer) throw new RPGHelperError(RPGHelper.ERRORS.AUDIO.NOT_LOADED);
+
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+
+			const defaultOptions = AudioManager.defaultOptions[audioType];
 
 			const source = ctx.createBufferSource();
 			source.buffer = buffer;
+
+			for (const option in defaultOptions) source[option] = defaultOptions[option];
 			for (const option in audioOrAudioId.options) source[option] = audioOrAudioId.options[option];
+			
+			switch (audioType) {
+				case RPGHelper.AUDIOTYPE.BGM:
+					this.stop(audioType, audioOrAudioId);
+					break;
+				case RPGHelper.AUDIOTYPE.SE:
+					source.addEventListener("ended", () => this.ques[audioType].delete(audioOrAudioId));
+					break;
+			}
+
+			this.ques[audioType].set(audioOrAudioId, source);
 
 			source.connect(ctx.destination);
 			source.start(0);
-
-			// ToDo: 生成したAudioBufferSourceNodeを保管し、停止メソッドなどを実装
-		}
-
-		stop (audioType, audioOrAudioId) {
-
 		}
 
 		/**
-		 * @param {string} audioType
+		 * 指定された音源を停止します
+		 * 
+		 * @param {AudioType} audioType
+		 * @param {AudioObject | number} audioOrAudioId
+		 */
+		stop (audioType, audioOrAudioId) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (!this._hasQue(audioType, audioOrAudioId)) return;
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+
+			this.getQue(audioType, audioOrAudioId).stop(0);
+			this.ques[audioType].delete(audioOrAudioId);
+		}
+		
+		/**
+		 * @param {AudioType} audioType
+		 * @param {AudioObject | number} audioOrAudioId
+		 * 
+		 * @return {boolean}
+		 */
+		_hasBuffer (audioType, audioOrAudioId) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+			else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
+
+			return audioOrAudioId === undefined ? false : this.buffers[audioType].has(audioOrAudioId);
+		}
+
+		/**
+		 * @param {AudioType} audioType
+		 * @param {AudioObject | number} audioOrAudioId
+		 * 
+		 * @return {boolean}
+		 */
+		_hasQue (audioType, audioOrAudioId) {
+			const { rpghelper } = this;
+			rpghelper._checkInitialized();
+
+			if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
+			else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
+
+			return audioOrAudioId === undefined ? false : this.ques[audioType].has(audioOrAudioId);
+		}
+
+		/**
+		 * @param {AudioType} audioType
 		 * @param {number} id
 		 * 
-		 * @return {undefined | AudioObject}
+		 * @return {null | AudioObject}
 		 */
 		_getAudioById (audioType, id) {
 			const { rpghelper } = this;
 			rpghelper._checkInitialized();
 
 			if (!(audioType in this.buffers)) throw new RPGHelperError(RPGHelper.ERRORS.AUDIO["UNACCEPTED_TYPE"]);
+			if (typeof id !== "number") throw new RPGHelperError(RPGHelper.ERRORS.GENERAL["UNACCEPTED-PARAM"]("id", "Number"));
 
-			return rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()].find(audio => audio.id === id);
+			return rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()].find(audio => audio.id === id) || null;
 		}
 
 		/**
-		 * @param {string} audioType
+		 * @param {AudioType} audioType
 		 * @param {string} file
 		 * 
 		 * @return {string}
@@ -257,6 +348,14 @@ const RPGHelper = (() => {
 		 * @return {string}
 		 */
 		static getClass (obj) { return Object.prototype.toString.call(obj).slice(8, -1) }
+
+		/**
+		 * ネスト参照している文字列を分解します
+		 * 
+		 * @param {string} nestReference
+		 * @return {string}
+		 */
+		static splitNestReference (nestReference) { return nestReference.split(".").reduce((prev, current) => `${prev}["${current}"]`) }
 	}
 
 	class RPGHelperError extends Error {
@@ -271,7 +370,9 @@ const RPGHelper = (() => {
 
 	/** RPG Helperのバージョン */
 	RPGHelper.VERSION = "v2.0";
+	/** @typedef {"initialized"} EventType */
 	RPGHelper.EVENTTYPE = { INITIALIZED: "initialized" };
+	/** @typedef {"BGM" | "SE"} AudioType */
 	RPGHelper.AUDIOTYPE = { BGM: "BGM", SE: "SE" };
 
 	RPGHelper.ERRORS = {
@@ -294,6 +395,10 @@ const RPGHelper = (() => {
 			"DUPLICATED": "既に存在するファイルです",
 			"DUPLICATED-AUDIO": "既に読込済みの音源です"
 		},
+
+		PROJECT: {
+			"FAILURE-COMPILE": "無効なプロジェクトデータです"
+		},
 		
 		AUDIO: {
 			"NOT_LOADED": "音源が読み込まれていません",
@@ -312,6 +417,70 @@ const RPGHelper = (() => {
 
 
 	/**
+	 * @typedef {object} Project
+	 * 
+	 * @prop {string} title
+	 * @prop {string | number} version
+	 * @prop {string} [author]
+	 * 
+	 * @prop {object} directories
+	 * @prop {string} directories.bgm
+	 * @prop {string} directories.se
+	 * @prop {object} directories.world
+	 * @prop {string} directories.world.maps
+	 * @prop {string} directories.world.tiles
+	 * 
+	 * @prop {object} resources
+	 * @prop {{ [imageName: string]: ImageObject }} resources.images
+	 * @prop {object} resources.sounds
+	 * @prop {AudioObject[]} resources.sounds.bgm
+	 * @prop {AudioObject[]} resources.sounds.se
+	 * @prop {Array} resources.videos
+	 * 
+	 * @prop {object} system
+	 * @prop {object} system.world
+	 * @prop {MapObject[]} system.world.maps
+	 * @prop {TileObject[]} system.world.tiles
+	 * @prop {object} [system.monster]
+	 * @prop {string[]} system.monster.monsters
+	 * @prop {string[]} system.monster.groups
+	 * @prop {string[]} [system.items]
+	 * @prop {string[]} [system.magics]
+	 */
+	class Project {
+		/**
+		 * @param {any} obj
+		 * @return {boolean}
+		 */
+		static isValid (obj) {
+			if (Utilizes.getClass(obj) !== "Object") return false;
+
+			// {:Project}.*
+			for (const _1stField of ["title", "version", "directories", "resources", "system"]) if (!(_1stField in obj)) return false;
+			
+			// {:Project}.directories.*
+			for (const _2ndField of ["bgm", "se", "world"]) if (!(_2ndField in obj.directories)) return false;
+			for (const _3ndField of ["maps", "tiles"]) if (!(_3ndField in obj.directories.world)) return false;
+
+			// {:Project}.resources.*
+			for (const _2ndField of ["images", "sounds", "videos"]) if (!(_2ndField in obj.resources)) return false;
+			for (const _3ndField of ["bgm", "se"]) if (!(_3ndField in obj.resources.sounds)) return false;
+
+			// {:Project}.system.*
+			for (const _2ndField of ["world"]) if (!(_2ndField in obj.system)) return false;
+
+			return true;
+		}
+	}
+
+	/**
+	 * @typedef {object} ImageObject
+	 * @prop {string} name
+	 * @prop {string} file
+	 */
+	class ImageObject {}
+
+	/**
 	 * @typedef {object} AudioObject
 	 * 
 	 * @prop {number} id
@@ -325,8 +494,27 @@ const RPGHelper = (() => {
 	 * @prop {number} [options.playbackRate]
 	 */
 	class AudioObject {
+		/**
+		 * @param {any} obj
+		 * @return {boolean}
+		 */
 		static isValid (obj) { return Utilizes.getClass(obj) === "Object" && ["id", "file", "volume"].every(param => param in obj) }
 	}
+
+	/**
+	 * @typedef {object} MapObject
+	 * @prop {string} name
+	 * @prop {string} file
+	 * @prop {number} tileId
+	 */
+	class MapObject {}
+
+	/**
+	 * @typedef {object} TileObject
+	 * @prop {string} name
+	 * @prop {string} file
+	 */
+	class TileObject {}
 
 
 
