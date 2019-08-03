@@ -1,7 +1,8 @@
 {
+	"id": "GP-TheCalledName",
 	"title": "The Called Name",
 	"version": "Alpha 1.0",
-	"author": "Genbu Hase",
+	"author": "Genbu Project",
 
 	"directories": {
 		"bgm": "./sounds/bgm",

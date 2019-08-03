@@ -1,6 +1,7 @@
 namespace Project {
 	/** プロジェクトファイルの設定構成 */
 	export interface Project {
+		id: string;
 		title: string;
 		version: string | number;
 		author?: string;

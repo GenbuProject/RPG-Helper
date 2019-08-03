@@ -22,6 +22,7 @@ const RPGHelper = (() => {
 			"NOT_FOUND": "ファイルが存在しません",
 			"FAILURE": "ファイルの読込に失敗しました",
 			"FAILURE-PROJECT": "プロジェクトデータの読込に失敗しました",
+			"FAILURE-SAVEDATA": "セーブデータの読込に失敗しました。セーブデータが破損している可能性があります。",
 			"DUPLICATED": "既に存在するファイルです",
 			"DUPLICATED-AUDIO": "既に読込済みの音源です"
 		},
@@ -47,9 +48,12 @@ const RPGHelper = (() => {
 		constructor (projectFile) {
 			/** 音源関連の操作を扱うフィールド */
 			this.audio = new AudioManager(this);
+			/** セーブデータの操作を扱うフィールド */
+			this.savedata = new SavedataManager(this);
 
 			this.data = {
-				userField: null,
+				/** ゲームの進捗状況などの格納フィールド */
+				userField: {},
 
 				/**
 				 * プロジェクトデータの格納フィールド
@@ -138,11 +142,14 @@ const RPGHelper = (() => {
 	RPGHelper.EVENTTYPE = { INITIALIZED: "initialized" };
 	/** @typedef {"BGM" | "SE"} AudioType */
 	RPGHelper.AUDIOTYPE = { BGM: "BGM", SE: "SE" };
+	/** @typedef {"BINARY" | "JSON"} GamedataType */
+	RPGHelper.GAMEDATA_TYPE = { BINARY: "BINARY", JSON: "JSON" };
 
 	Object.defineProperties(RPGHelper, {
 		VERSION: { configurable: false, writable: false },
 		EVENTTYPE: { configurable: false, writable: false },
-		AUDIOTYPE: { configurable: false, writable: false }
+		AUDIOTYPE: { configurable: false, writable: false },
+		GAMEDATA_TYPE: { configurable: false, writable: false }
 	});
 
 
@@ -162,7 +169,7 @@ const RPGHelper = (() => {
 
 			/** @param {RPGHelper} rpghelper */
 			constructor (rpghelper) {
-				this.rpghelper = rpghelper;
+				this._rpghelper = rpghelper;
 				this.ctx = new AudioContext();
 				
 				/** @type {{ [audioType: string]: WeakMap<AudioObject, AudioBuffer> }} */
@@ -187,8 +194,8 @@ const RPGHelper = (() => {
 			 * @return {Promise<AudioBuffer>}
 			 */
 			load (audioType, audio) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (!AudioObject.isValid(audio)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("audio", "AudioObject"));
 
@@ -216,13 +223,13 @@ const RPGHelper = (() => {
 			 * @return {Promise<AudioBuffer[]>}
 			 */
 			loadAll () {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				const loading_ques = [];
 
 				for (const audioType of [RPGHelper.AUDIOTYPE.BGM, RPGHelper.AUDIOTYPE.SE]) {
-					const audios = rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()];
+					const audios = _rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()];
 					for (const audio of audios) loading_ques.push(this.load(audioType, audio));
 				}
 
@@ -236,8 +243,8 @@ const RPGHelper = (() => {
 			 * @param {AudioObject | number} audioOrAudioId
 			 */
 			play (audioType, audioOrAudioId) {
-				const { rpghelper, ctx } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper, ctx } = this;
+				_rpghelper._checkInitialized();
 
 				const buffer = this._getBuffer(audioType, audioOrAudioId);
 				if (!buffer) throw new RPGHelperError(ERRORS.AUDIO.NOT_LOADED);
@@ -274,8 +281,8 @@ const RPGHelper = (() => {
 			 * @param {AudioObject | number} audioOrAudioId
 			 */
 			stop (audioType, audioOrAudioId) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (!this._hasQue(audioType, audioOrAudioId)) return;
 				if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
@@ -283,6 +290,8 @@ const RPGHelper = (() => {
 				this._getQue(audioType, audioOrAudioId).stop(0);
 				this.ques[audioType].delete(audioOrAudioId);
 			}
+
+
 			
 			/**
 			 * @param {AudioType} audioType
@@ -291,8 +300,8 @@ const RPGHelper = (() => {
 			 * @return {boolean}
 			 */
 			_hasBuffer (audioType, audioOrAudioId) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
 				else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
@@ -307,8 +316,8 @@ const RPGHelper = (() => {
 			 * @return {null | AudioBuffer}
 			 */
 			_getBuffer (audioType, audioOrAudioId) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
 				else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
@@ -323,8 +332,8 @@ const RPGHelper = (() => {
 			 * @return {boolean}
 			 */
 			_hasQue (audioType, audioOrAudioId) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
 				else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
@@ -339,8 +348,8 @@ const RPGHelper = (() => {
 			 * @return {null | AudioBufferSourceNode}
 			 */
 			_getQue (audioType, audioOrAudioId) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
 				else if (!AudioObject.isValid(audioOrAudioId)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("audioOrAudioId", ["AudioObject", "Number"]));
@@ -355,13 +364,13 @@ const RPGHelper = (() => {
 			 * @return {null | AudioObject}
 			 */
 			_getAudioById (audioType, id) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (!(audioType in this.buffers)) throw new RPGHelperError(ERRORS.AUDIO["UNACCEPTED_TYPE"]);
 				if (typeof id !== "number") throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("id", "Number"));
 
-				return rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()].find(audio => audio.id === id) || null;
+				return _rpghelper.data.projectField.resources.sounds[audioType.toLowerCase()].find(audio => audio.id === id) || null;
 			}
 
 			/**
@@ -371,22 +380,22 @@ const RPGHelper = (() => {
 			 * @return {string}
 			 */
 			_getFileUrl (audioType, file) {
-				const { rpghelper } = this;
-				rpghelper._checkInitialized();
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
 
 				if (!(audioType in this.buffers)) throw new RPGHelperError(ERRORS.AUDIO["UNACCEPTED_TYPE"]);
 
-				const { directories } = rpghelper.data.projectField;
+				const { directories } = _rpghelper.data.projectField;
 
 				try {
 					new URL(file); // fileが絶対パスかどうか判定
 				} catch (error) {
 					switch (audioType) {
 						case RPGHelper.AUDIOTYPE.BGM:
-							file = rpghelper.getAbsoluteUrl(`/${directories.bgm}/${file}`);
+							file = _rpghelper.getAbsoluteUrl(`/${directories.bgm}/${file}`);
 							break;
 						case RPGHelper.AUDIOTYPE.SE:
-							file = rpghelper.getAbsoluteUrl(`/${directories.se}/${file}`);
+							file = _rpghelper.getAbsoluteUrl(`/${directories.se}/${file}`);
 							break;
 					}
 				}
@@ -398,24 +407,90 @@ const RPGHelper = (() => {
 		return AudioManager;
 	})();
 
-	const GamedataManager = (() => {
-		/** ゲームデータを管理するクラス */
-		class GamedataManager {
+	const SavedataManager = (() => {
+		/** セーブデータを管理するクラス */
+		class SavedataManager {
+			/** @param {RPGHelper} rpghelper */
 			constructor (rpghelper) {
-				this.rpghelper = rpghelper;
+				this._rpghelper = rpghelper;
 			}
 
-			save (gamedataType, filename) {
+			get STORAGE_ID_PREFIX () {
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
+
+				return `${_rpghelper.data.projectField.id}_gamedata`;
+			}
+
+			/**
+			 * ゲームの進捗状況をLocalStorage内に保存します
+			 * @param {number} [slotId]
+			 */
+			save (slotId) {
+				const { _rpghelper } = this;
+				localStorage.setItem(this._getStorageId(slotId), JSON.stringify(_rpghelper.data.userField ? _rpghelper.data.userField : {}));
+			}
+
+			/**
+			 * ゲームの進捗状況をLocalStorageから読み込みます
+			 * 
+			 * @param {number} [slotId]
+			 * @return {object}
+			 */
+			load (slotId) {
+				const rawGamedata = localStorage.getItem(this._getStorageId(slotId));
+
+				try {
+					return rawGamedata ? JSON.parse(rawGamedata) : {};
+				} catch (error) {
+					throw new RPGHelperError(ERRORS.LOAD["FAILURE-SAVEDATA"]);
+				}
+			}
+
+			/**
+			 * LocalStorage内のセーブデータを消去します
+			 * @param {number} [slotId]
+			 */
+			delete (slotId) { localStorage.removeItem(this._getStorageId(slotId)) }
+
+			/**
+			 * ゲームの進捗状況をファイルに書き出します
+			 * 
+			 * @param {GamedataType} gamedataType
+			 * @param {string} [filename]
+			 */
+			export (gamedataType, filename) {
 				// ToDo: 書き出しタイプの実装(プレーンJson, バイナリデータ)
+				let blob = null;
+			}
+
+			/**
+			 * ゲームの進捗状況をファイルから読み込みます
+			 * @param {string[]} extensions
+			 */
+			import (extensions) {
 				return new Promise();
 			}
 
-			load (extensions) {
-				return new Promise();
+
+
+			/**
+			 * @param {number} [slotId]
+			 * @return {string}
+			 */
+			_getStorageId (slotId) {
+				let storageId = this.STORAGE_ID_PREFIX;
+
+				if (slotId != undefined) {
+					if (typeof slotId !== "number") throw new RPGHelper(ERRORS.GENERAL["UNACCEPTED-PARAM"]("slotId", "Number"));
+					storageId += `-${slotId}`;
+				}
+
+				return storageId;
 			}
 		}
 
-		return GamedataManager;
+		return SavedataManager;
 	})();
 
 	class RPGHelperError extends Error {
@@ -455,6 +530,7 @@ const RPGHelper = (() => {
 	/**
 	 * @typedef {object} Project
 	 * 
+	 * @prop {string} id
 	 * @prop {string} title
 	 * @prop {string | number} version
 	 * @prop {string} [author]
@@ -492,7 +568,7 @@ const RPGHelper = (() => {
 			if (Utilizes.getClass(obj) !== "Object") return false;
 
 			// {:Project}.*
-			for (const _1stField of ["title", "version", "directories", "resources", "system"]) if (!(_1stField in obj)) return false;
+			for (const _1stField of ["id", "title", "version", "directories", "resources", "system"]) if (!(_1stField in obj)) return false;
 			
 			// {:Project}.directories.*
 			for (const _2ndField of ["bgm", "se", "world"]) if (!(_2ndField in obj.directories)) return false;
@@ -533,7 +609,7 @@ const RPGHelper = (() => {
 		 * @param {any} obj
 		 * @return {boolean}
 		 */
-		static isValid (obj) { return Utilizes.getClass(obj) === "Object" && ["id", "file", "volume"].every(param => param in obj) }
+		static isValid (obj) { return Utilizes.getClass(obj) === "Object" && ["id", "file"].every(param => param in obj) }
 	}
 
 	/**
