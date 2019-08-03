@@ -1,6 +1,7 @@
 namespace Project {
 	/** プロジェクトファイルの設定構成 */
 	export interface Project {
+		/** 利用可能な文字: 英数字62文字(a-zA-Z0-9), ハイフン(-) */
 		id: string;
 		title: string;
 		version: string | number;

@@ -22,7 +22,6 @@ const RPGHelper = (() => {
 			"NOT_FOUND": "ファイルが存在しません",
 			"FAILURE": "ファイルの読込に失敗しました",
 			"FAILURE-PROJECT": "プロジェクトデータの読込に失敗しました",
-			"FAILURE-SAVEDATA": "セーブデータの読込に失敗しました。セーブデータが破損している可能性があります。",
 			"DUPLICATED": "既に存在するファイルです",
 			"DUPLICATED-AUDIO": "既に読込済みの音源です"
 		},
@@ -35,6 +34,11 @@ const RPGHelper = (() => {
 			"NOT_LOADED": "音源が読み込まれていません",
 			"UNACCEPTED_TYPE": "音源の種類が無効です",
 			"FAILURE-COMPILE": "無効な音源ファイルです"
+		},
+
+		SAVEDATA: {
+			"UNACCEPTED_TYPE": "セーブデータの保存形式が無効です",
+			"FAILURE-COMPILE": "セーブデータの読込に失敗しました。セーブデータが破損している可能性があります。",
 		}
 	};
 
@@ -142,14 +146,14 @@ const RPGHelper = (() => {
 	RPGHelper.EVENTTYPE = { INITIALIZED: "initialized" };
 	/** @typedef {"BGM" | "SE"} AudioType */
 	RPGHelper.AUDIOTYPE = { BGM: "BGM", SE: "SE" };
-	/** @typedef {"BINARY" | "JSON"} GamedataType */
-	RPGHelper.GAMEDATA_TYPE = { BINARY: "BINARY", JSON: "JSON" };
+	/** @typedef {"BINARY" | "JSON"} SavedataType */
+	RPGHelper.SAVEDATA_TYPE = { BINARY: "BINARY", JSON: "JSON" };
 
 	Object.defineProperties(RPGHelper, {
 		VERSION: { configurable: false, writable: false },
 		EVENTTYPE: { configurable: false, writable: false },
 		AUDIOTYPE: { configurable: false, writable: false },
-		GAMEDATA_TYPE: { configurable: false, writable: false }
+		SAVEDATA_TYPE: { configurable: false, writable: false }
 	});
 
 
@@ -157,16 +161,6 @@ const RPGHelper = (() => {
 	const AudioManager = (() => {
 		/** BGM・SE等の音源を管理するクラス */
 		class AudioManager {
-			/** AudioBufferSourceNodeオプションの初期値 */
-			static get defaultOptions () {
-				return {
-					[RPGHelper.AUDIOTYPE.BGM]: { loop: true },
-					[RPGHelper.AUDIOTYPE.SE]: {  }
-				};
-			}
-
-
-
 			/** @param {RPGHelper} rpghelper */
 			constructor (rpghelper) {
 				this._rpghelper = rpghelper;
@@ -251,7 +245,7 @@ const RPGHelper = (() => {
 
 				if (typeof audioOrAudioId === "number") audioOrAudioId = this._getAudioById(audioType, audioOrAudioId);
 
-				const defaultOptions = AudioManager.defaultOptions[audioType];
+				const defaultOptions = AudioManager.DEFAULT_OPTIONS[audioType];
 
 				const source = ctx.createBufferSource();
 				source.buffer = buffer;
@@ -404,6 +398,18 @@ const RPGHelper = (() => {
 			}
 		}
 
+		/** AudioBufferSourceNodeオプションの初期値 */
+		AudioManager.DEFAULT_OPTIONS = {
+			[RPGHelper.AUDIOTYPE.BGM]: { loop: true },
+			[RPGHelper.AUDIOTYPE.SE]: {  }
+		};
+
+		Object.defineProperties(AudioManager, {
+			DEFAULT_OPTIONS: { configurable: false, writable: false }
+		});
+
+
+
 		return AudioManager;
 	})();
 
@@ -415,11 +421,18 @@ const RPGHelper = (() => {
 				this._rpghelper = rpghelper;
 			}
 
-			get STORAGE_ID_PREFIX () {
+			get storageIdPrefix () {
 				const { _rpghelper } = this;
 				_rpghelper._checkInitialized();
 
 				return `${_rpghelper.data.projectField.id}_gamedata`;
+			}
+
+			get defaultFilename () {
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
+
+				return `${_rpghelper.data.projectField.id}_${new DateFormatter("YYYYMMDD-hhmmss").format(new Date())}.sav`;
 			}
 
 			/**
@@ -443,7 +456,7 @@ const RPGHelper = (() => {
 				try {
 					return rawGamedata ? JSON.parse(rawGamedata) : {};
 				} catch (error) {
-					throw new RPGHelperError(ERRORS.LOAD["FAILURE-SAVEDATA"]);
+					throw new RPGHelperError(ERRORS.SAVEDATA["FAILURE-COMPILE"]);
 				}
 			}
 
@@ -456,12 +469,39 @@ const RPGHelper = (() => {
 			/**
 			 * ゲームの進捗状況をファイルに書き出します
 			 * 
-			 * @param {GamedataType} gamedataType
+			 * @param {SavedataType} savedataType
 			 * @param {string} [filename]
 			 */
-			export (gamedataType, filename) {
+			export (savedataType, filename = this.defaultFilename) {
 				// ToDo: 書き出しタイプの実装(プレーンJson, バイナリデータ)
+				const { _rpghelper } = this;
+				_rpghelper._checkInitialized();
+
 				let blob = null;
+				switch (savedataType) {
+					default:
+						throw new RPGHelperError(ERRORS.SAVEDATA.UNACCEPTED_TYPE);
+					case RPGHelper.SAVEDATA_TYPE.JSON:
+						blob = new Blob(
+							[ JSON.stringify(_rpghelper.data.userField ? _rpghelper.data.userField : {}) ],
+							{ type: "application/json" }
+						);
+
+						break;
+					case RPGHelper.SAVEDATA_TYPE.BINARY:
+						break;
+				}
+
+				const dispatcher = document.createEvent("MouseEvent");
+				dispatcher.initEvent("click", false, true);
+
+				const link = document.createElement("a");
+				link.href = URL.createObjectURL(blob),
+				link.download = filename,
+				link.target = "_blank";
+				
+				link.dispatchEvent(dispatcher);
+				URL.revokeObjectURL(link.href);
 			}
 
 			/**
@@ -479,7 +519,7 @@ const RPGHelper = (() => {
 			 * @return {string}
 			 */
 			_getStorageId (slotId) {
-				let storageId = this.STORAGE_ID_PREFIX;
+				let storageId = this.storageIdPrefix;
 
 				if (slotId != undefined) {
 					if (typeof slotId !== "number") throw new RPGHelper(ERRORS.GENERAL["UNACCEPTED-PARAM"]("slotId", "Number"));
@@ -499,6 +539,54 @@ const RPGHelper = (() => {
 		}
 
 		get name () { return "RPGHelperError" }
+	}
+
+	/** 日付フォーマットを扱うクラス */
+	class DateFormatter {
+		/** @param {string} dateFormat */
+		constructor (dateFormat) {
+			/**
+			 * 日付の書式
+			 * - 書式例 … `YYYY/MM/DD hh:mm:ss`
+			 * - 利用可能な定数(日付例: `2019/07/30 13:05:00`)
+			 *   - **年(Year)** = `YYYY` | `YY`
+			 *     - ex: 2019(`YYYY`) | 19(`YY`)
+			 *   - **月(Month)** = `MM` | `M`
+			 *     - ex: 07(`MM`) | 7(`M`)
+			 *   - **日(Day)** = `DD` | `D`
+			 *     - ex: 30(`DD` | `D`)
+			 *   - **時(Hours)** = `hh` | `h`
+			 *     - ex: 13(`hh` | `h`)
+			 *   - **分(Minutes)** = `mm` | `m`
+			 *     - ex: 05(`mm`) | 5(`m`)
+			 *   - **秒(Seconds)** = `ss` | `s`
+			 *     - ex: 00(`ss`) | 0(`s`)
+			 * 
+			 * @type {string}
+			 */
+			this.dateFormat = dateFormat;
+		}
+
+		/**
+		 * 指定されたDateオブジェクトをフォーマットします
+		 * 
+		 * @param {Date} date
+		 * @return {string}
+		 */
+		format (date) {
+			const [ year, month, day, hours, minutes, seconds ] = [ date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds() ];
+			
+			const SYMBOLS = {
+				"YYYY": year, "YY": year.toString().slice(-2),
+				"MM": `0${month}`.slice(-2), "M": month,
+				"DD": `0${day}`.slice(-2), "D": day,
+				"hh": `0${hours}`.slice(-2), "h": hours,
+				"mm": `0${minutes}`.slice(-2), "m": minutes,
+				"ss": `0${seconds}`.slice(-2), "s": seconds
+			};
+
+			return this.dateFormat.replace(new RegExp(`(${Object.keys(SYMBOLS).join("|")})`, "g"), expression => SYMBOLS[expression]);
+		}
 	}
 
 	/** 小規模関数群 */
@@ -561,7 +649,7 @@ const RPGHelper = (() => {
 	 */
 	class Project {
 		/**
-		 * @param {any} obj
+		 * @param {Project} obj
 		 * @return {boolean}
 		 */
 		static isValid (obj) {
@@ -569,7 +657,7 @@ const RPGHelper = (() => {
 
 			// {:Project}.*
 			for (const _1stField of ["id", "title", "version", "directories", "resources", "system"]) if (!(_1stField in obj)) return false;
-			
+
 			// {:Project}.directories.*
 			for (const _2ndField of ["bgm", "se", "world"]) if (!(_2ndField in obj.directories)) return false;
 			for (const _3ndField of ["maps", "tiles"]) if (!(_3ndField in obj.directories.world)) return false;
@@ -580,6 +668,8 @@ const RPGHelper = (() => {
 
 			// {:Project}.system.*
 			for (const _2ndField of ["world"]) if (!(_2ndField in obj.system)) return false;
+
+			if (obj.id.match(/[^a-zA-Z0-9-]/g)) return false;
 
 			return true;
 		}
@@ -606,7 +696,7 @@ const RPGHelper = (() => {
 	 */
 	class AudioObject {
 		/**
-		 * @param {any} obj
+		 * @param {AudioObject} obj
 		 * @return {boolean}
 		 */
 		static isValid (obj) { return Utilizes.getClass(obj) === "Object" && ["id", "file"].every(param => param in obj) }
