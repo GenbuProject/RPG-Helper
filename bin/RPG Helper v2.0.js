@@ -435,6 +435,8 @@ const RPGHelper = (() => {
 				return `${_rpghelper.data.projectField.id}_${new DateFormatter("YYYYMMDD-hhmmss").format(new Date())}.sav`;
 			}
 
+			get defaultFileExtensions () { return [".sav"] }
+
 			/**
 			 * ゲームの進捗状況をLocalStorage内に保存します
 			 * @param {number} [slotId]
@@ -508,8 +510,35 @@ const RPGHelper = (() => {
 			 * ゲームの進捗状況をファイルから読み込みます
 			 * @param {string[]} extensions
 			 */
-			import (extensions) {
-				return new Promise();
+			import (extensions = this.defaultFileExtensions) {
+				const dispatcher = document.createEvent("MouseEvent");
+				dispatcher.initEvent("click", false, true);
+
+				const filePicker = document.createElement("input");
+				filePicker.type = "file";
+				filePicker.accept = extensions.join(",");
+
+				filePicker.addEventListener("change", e => {
+					new Promise(resolve => {
+						const reader = new FileReader();
+						reader.addEventListener("load", () => resolve(reader.result));
+						
+						reader.readAsArrayBuffer(e.target.files[0]);
+					}).then(
+						/** @param {ArrayBuffer} buffer */
+						buffer => {
+							const bufferArray = new Int8Array(buffer);
+							
+							let text = "";
+							for (const buf of bufferArray) text += String.fromCharCode(buf);
+
+							console.log(bufferArray);
+							console.log(text);
+						}
+					);
+				});
+
+				filePicker.dispatchEvent(dispatcher);
 			}
 
 
