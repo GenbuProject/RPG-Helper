@@ -496,11 +496,13 @@ const RPGHelper = (() => {
 			 * 
 			 * @param {string[]} [exts]
 			 * @param { (files: File[]) => {} } [loadCallback]
+			 * 
+			 * @return {Promise<object>}
 			 */
 			import (exts = this.defaultFileExtensions, loadCallback) {
 				if (!Array.isArray(exts)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("exts", "String[]"));
 
-				new Promise(resolve => {
+				return new Promise(resolve => {
 					const filePicker = document.createElement("input");
 					filePicker.type = "file",
 					filePicker.accept = exts.join(",");
@@ -521,6 +523,8 @@ const RPGHelper = (() => {
 					} catch (error) {
 						throw new RPGHelperError(ERRORS.SAVEDATA["FAILURE-COMPILE"]);
 					}
+
+					return this._rpghelper.data.userField;
 				});
 			}
 
