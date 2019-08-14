@@ -503,15 +503,20 @@ const RPGHelper = (() => {
 				if (!Array.isArray(exts)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("exts", "String[]"));
 
 				return new Promise(resolve => {
+					// ToDo: ファイル選択キャンセル時の動作の実装
+
 					const filePicker = document.createElement("input");
 					filePicker.type = "file",
 					filePicker.accept = exts.join(",");
 
 					filePicker.addEventListener("change", () => {
-						if (loadCallback && Utilizes.getClass(loadCallback) === "Function") return loadCallback(filePicker.files);
+						const { files } = filePicker;
+
+						if (!files[0]) return resolve(this._rpghelper.data.userField);
+						if (loadCallback && Utilizes.getClass(loadCallback) === "Function") return loadCallback(files);
 
 						const reader = new FileReader();
-						reader.readAsText(filePicker.files[0]);
+						reader.readAsText(files[0]);
 
 						reader.addEventListener("load", () => resolve(reader.result));
 					});
@@ -637,7 +642,7 @@ const RPGHelper = (() => {
 		static getClass (obj) { return Object.prototype.toString.call(obj).slice(8, -1) }
 
 		/**
-		 * BufferをStringに変換します
+		 * ArrayBufferをStringに変換します
 		 * 
 		 * @param {ArrayBuffer} buffer
 		 * @return {string}
@@ -650,6 +655,14 @@ const RPGHelper = (() => {
 
 			return result;
 		}
+
+		/**
+		 * StringをArrayBufferに変換します
+		 * 
+		 * @param {string} str
+		 * @return {ArrayBuffer}
+		 */
+		static stringToBuffer (str) { return Uint8Array.from(str.split("").map(char => char.charCodeAt())).buffer }
 	}
 
 
