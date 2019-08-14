@@ -37,7 +37,6 @@ const RPGHelper = (() => {
 		},
 
 		SAVEDATA: {
-			"UNACCEPTED_TYPE": "セーブデータの保存形式が無効です",
 			"FAILURE-COMPILE": "セーブデータの読込に失敗しました。セーブデータが破損している可能性があります。",
 		}
 	};
@@ -51,9 +50,9 @@ const RPGHelper = (() => {
 		 */
 		constructor (projectFile) {
 			/** 音源関連の操作を扱うフィールド */
-			this.audio = new AudioManager(this);
+			this.Audio = new AudioManager(this);
 			/** セーブデータの操作を扱うフィールド */
-			this.savedata = new SavedataManager(this);
+			this.Savedata = new SavedataManager(this);
 
 			this.data = {
 				/** ゲームの進捗状況などの格納フィールド */
@@ -79,6 +78,8 @@ const RPGHelper = (() => {
 		 * @return {Promise<void>}
 		 */
 		init (projectFile) {
+			Object.defineProperty(this.data, "projectField", { configurable: true, writable: true });
+
 			return fetch(projectFile, {
 				headers: { "Content-Type": "application/json" }
 			}).then(resp => {
@@ -86,7 +87,9 @@ const RPGHelper = (() => {
 				return resp.json();
 			}).then(data => {
 				if (!Project.isValid(data)) throw new RPGHelperError(ERRORS.PROJECT["FAILURE-COMPILE"]);
-				this.data.projectField = data;
+
+				this.data.projectField = data,
+				Object.defineProperty(this.data, "projectField", { configurable: false, writable: false });
 
 				/** プロジェクトのルートディレクトリ */
 				this.rootDir = Utilizes.getRootDir(projectFile);
@@ -146,14 +149,11 @@ const RPGHelper = (() => {
 	RPGHelper.EVENTTYPE = { INITIALIZED: "initialized" };
 	/** @typedef {"BGM" | "SE"} AudioType */
 	RPGHelper.AUDIOTYPE = { BGM: "BGM", SE: "SE" };
-	/** @typedef {"BINARY" | "JSON"} SavedataType */
-	RPGHelper.SAVEDATA_TYPE = { BINARY: "BINARY", JSON: "JSON" };
 
 	Object.defineProperties(RPGHelper, {
 		VERSION: { configurable: false, writable: false },
 		EVENTTYPE: { configurable: false, writable: false },
-		AUDIOTYPE: { configurable: false, writable: false },
-		SAVEDATA_TYPE: { configurable: false, writable: false }
+		AUDIOTYPE: { configurable: false, writable: false }
 	});
 
 
@@ -441,22 +441,17 @@ const RPGHelper = (() => {
 			 * ゲームの進捗状況をLocalStorage内に保存します
 			 * @param {number} [slotId]
 			 */
-			save (slotId) {
-				const { _rpghelper } = this;
-				localStorage.setItem(this._getStorageId(slotId), JSON.stringify(_rpghelper.data.userField ? _rpghelper.data.userField : {}));
-			}
+			save (slotId) { localStorage.setItem(this._getStorageId(slotId), JSON.stringify(this._rpghelper.data.userField || {})) }
 
 			/**
 			 * ゲームの進捗状況をLocalStorageから読み込みます
-			 * 
 			 * @param {number} [slotId]
-			 * @return {object}
 			 */
 			load (slotId) {
 				const rawGamedata = localStorage.getItem(this._getStorageId(slotId));
 
 				try {
-					return rawGamedata ? JSON.parse(rawGamedata) : {};
+					this._rpghelper.data.userField = rawGamedata ? JSON.parse(rawGamedata) : {};
 				} catch (error) {
 					throw new RPGHelperError(ERRORS.SAVEDATA["FAILURE-COMPILE"]);
 				}
@@ -471,74 +466,62 @@ const RPGHelper = (() => {
 			/**
 			 * ゲームの進捗状況をファイルに書き出します
 			 * 
-			 * @param {SavedataType} savedataType
 			 * @param {string} [filename]
+			 * @param {Blob} [blob] 独自の実装で生成した進捗状況データ
 			 */
-			export (savedataType, filename = this.defaultFilename) {
-				// ToDo: 書き出しタイプの実装(プレーンJson, バイナリデータ)
+			export (filename = this.defaultFilename, blob) {
 				const { _rpghelper } = this;
 				_rpghelper._checkInitialized();
 
-				let blob = null;
-				switch (savedataType) {
-					default:
-						throw new RPGHelperError(ERRORS.SAVEDATA.UNACCEPTED_TYPE);
-					case RPGHelper.SAVEDATA_TYPE.JSON:
-						blob = new Blob(
-							[ JSON.stringify(_rpghelper.data.userField ? _rpghelper.data.userField : {}) ],
-							{ type: "application/json" }
-						);
-
-						break;
-					case RPGHelper.SAVEDATA_TYPE.BINARY:
-						break;
+				if (blob && Utilizes.getClass(blob) !== "Blob") {
+					throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("blob", "Blob"));
+				} else if (!blob) {
+					blob = new Blob(
+						[ JSON.stringify(_rpghelper.data.userField || {}) ],
+						{ type: "application/json" }
+					);
 				}
-
-				const dispatcher = document.createEvent("MouseEvent");
-				dispatcher.initEvent("click", false, true);
 
 				const link = document.createElement("a");
 				link.href = URL.createObjectURL(blob),
 				link.download = filename,
 				link.target = "_blank";
 				
-				link.dispatchEvent(dispatcher);
+				link.dispatchEvent(this._generateClickEvent());
 				URL.revokeObjectURL(link.href);
 			}
 
 			/**
 			 * ゲームの進捗状況をファイルから読み込みます
-			 * @param {string[]} extensions
+			 * 
+			 * @param {string[]} [exts]
+			 * @param { (files: File[]) => {} } [loadCallback]
 			 */
-			import (extensions = this.defaultFileExtensions) {
-				const dispatcher = document.createEvent("MouseEvent");
-				dispatcher.initEvent("click", false, true);
+			import (exts = this.defaultFileExtensions, loadCallback) {
+				if (!Array.isArray(exts)) throw new RPGHelperError(ERRORS.GENERAL["UNACCEPTED-PARAM"]("exts", "String[]"));
 
-				const filePicker = document.createElement("input");
-				filePicker.type = "file";
-				filePicker.accept = extensions.join(",");
+				new Promise(resolve => {
+					const filePicker = document.createElement("input");
+					filePicker.type = "file",
+					filePicker.accept = exts.join(",");
 
-				filePicker.addEventListener("change", e => {
-					new Promise(resolve => {
+					filePicker.addEventListener("change", () => {
+						if (loadCallback && Utilizes.getClass(loadCallback) === "Function") return loadCallback(filePicker.files);
+
 						const reader = new FileReader();
+						reader.readAsText(filePicker.files[0]);
+
 						reader.addEventListener("load", () => resolve(reader.result));
-						
-						reader.readAsArrayBuffer(e.target.files[0]);
-					}).then(
-						/** @param {ArrayBuffer} buffer */
-						buffer => {
-							const bufferArray = new Int8Array(buffer);
-							
-							let text = "";
-							for (const buf of bufferArray) text += String.fromCharCode(buf);
+					});
 
-							console.log(bufferArray);
-							console.log(text);
-						}
-					);
+					filePicker.dispatchEvent(this._generateClickEvent());
+				}).then(data => {
+					try {
+						this._rpghelper.data.userField = JSON.parse(data || "{}");
+					} catch (error) {
+						throw new RPGHelperError(ERRORS.SAVEDATA["FAILURE-COMPILE"]);
+					}
 				});
-
-				filePicker.dispatchEvent(dispatcher);
 			}
 
 
@@ -556,6 +539,14 @@ const RPGHelper = (() => {
 				}
 
 				return storageId;
+			}
+
+			/** @return {MouseEvent} */
+			_generateClickEvent () {
+				const event = document.createEvent("MouseEvent");
+				event.initEvent("click", false, true);
+
+				return event;
 			}
 		}
 
@@ -640,6 +631,21 @@ const RPGHelper = (() => {
 		 * @return {string}
 		 */
 		static getClass (obj) { return Object.prototype.toString.call(obj).slice(8, -1) }
+
+		/**
+		 * BufferをStringに変換します
+		 * 
+		 * @param {ArrayBuffer} buffer
+		 * @return {string}
+		 */
+		static bufferToString (buffer) {
+			const buffers = new Int8Array(buffer);
+
+			let result = "";
+			for (const buf of buffers) result += String.fromCharCode(buf);
+
+			return result;
+		}
 	}
 
 
